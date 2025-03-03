@@ -5,8 +5,17 @@
  */
 
 // Composables
+import AddRocket from '@/pages/AddRocket.vue'
+import RocketDetail from '@/pages/RocketDetail.vue'
+import RocketList from '@/pages/RocketList.vue'
 import { createRouter, createWebHistory } from 'vue-router/auto'
-import { routes } from 'vue-router/auto-routes'
+// import { routes } from 'vue-router/auto-routes'
+
+const routes = [
+  {path: '/', component: RocketList},
+  {path: '/rocket/:id', component: RocketDetail, props: true},
+  {path: '/add-rocket', component: AddRocket},
+]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

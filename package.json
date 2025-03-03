@@ -13,7 +13,10 @@
   },
   "dependencies": {
     "@mdi/font": "7.4.47",
+    "axios": "^1.8.1",
     "core-js": "^3.37.1",
+    "json-server": "^1.0.0-beta.3",
+    "pinia": "^3.0.1",
     "roboto-fontface": "*",
     "vue": "^3.4.31",
     "vuetify": "^3.6.14"
@@ -36,7 +39,7 @@
     "unplugin-vue-router": "^0.10.0",
     "vite": "^5.4.10",
     "vite-plugin-vuetify": "^2.0.3",
-    "vue-router": "^4.4.0",
+    "vue-router": "^4.5.0",
     "vue-tsc": "^2.1.10"
   }
 }
