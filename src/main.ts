@@ -4,6 +4,9 @@
  * Bootstraps Vuetify and other plugins then mounts the App`
  */
 
+// Global styles
+import 'vue-toast-notification/dist/theme-sugar.css';
+
 // Plugins
 import { registerPlugins } from '@/plugins'
 

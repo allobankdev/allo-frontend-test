@@ -6,7 +6,35 @@
 
 // Composables
 import { createRouter, createWebHistory } from 'vue-router/auto'
-import { routes } from 'vue-router/auto-routes'
+import NotFoundView from "@/pages/notFound.vue"
+import RocketView from '@/pages/rocket/index.vue'
+import RocketDetailView from '@/pages/rocket/detail.vue'
+import BaseLayout from '@/layouts/baseLayout.vue';
+
+const routes = [
+  {
+    path: "/",
+    component: BaseLayout,
+    children: [
+      {
+        path: "",
+        component: RocketView,
+      },
+      {
+        path: ":id/detail",
+        component: RocketDetailView,
+      },
+      {
+        path: "404",
+        component: NotFoundView,
+      },
+    ],
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    redirect: "/404",
+  },
+];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
