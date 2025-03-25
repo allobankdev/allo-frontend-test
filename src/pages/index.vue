@@ -1,7 +1,7 @@
 <template>
-  <HelloWorld />
+  <RocketList />
 </template>
 
-<script lang="ts" setup>
-  //
+<script setup>
+  import RocketList from "@/views/RocketList.vue";
 </script>
