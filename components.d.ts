@@ -13,6 +13,7 @@ declare module 'vue' {
     ErrorComponent: typeof import('./src/components/ErrorComponent.vue')['default']
     Footer: typeof import('./src/components/Footer.vue')['default']
     NavigationDrawer: typeof import('./src/components/Navigation-Drawer.vue')['default']
+    PaginationCustom: typeof import('./src/components/Pagination-Custom.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

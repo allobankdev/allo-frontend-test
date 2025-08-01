@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row justify="center" v-if="isLoading">
-      <v-col v-for="n in 8" :key="n" cols="12" sm="6" md="4" lg="3">
+      <v-col v-for="n in 8" :key="n" cols="12" sm="6" md="6">
         <v-skeleton-loader type="card" elevation="2" height="300px" />
       </v-col>
     </v-row>
@@ -20,19 +20,19 @@
 
       <!-- Crew Cards -->
       <v-col
-        v-for="(crew, index) in data?.data"
+        v-for="(crew, index) in data?.data.docs"
         :key="index"
         cols="12"
         sm="6"
-        md="4"
-        lg="3"
+        md="6"
       >
-        <router-link :to="`${crew.id}`" class="text-decoration-none">
+        <router-link :to="`crews/${crew.id}`" class="text-decoration-none">
           <v-card class="crew-card cursor-pointer" elevation="4">
             <v-img
               :src="crew.image"
-              height="250px"
+              height="400px"
               cover
+              position="top"
               class="crew-card__image"
               gradient="to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.5)"
             >
@@ -60,7 +60,7 @@
 
       <!-- Pagination -->
       <v-col cols="12" class="mt-6">
-        <v-pagination :total-visible="5" rounded color="primary"></v-pagination>
+        <pagination-custom />
       </v-col>
     </v-row>
   </v-container>
@@ -69,16 +69,35 @@
 <script setup lang="ts">
 import { useQuery } from "@tanstack/vue-query";
 import apiInstance from "@/utils/api";
-import type { ApiResponse } from "@/types/response.type";
 import type { Crew } from "@/types/crew.type";
+import { useRoute } from "vue-router";
+import { computed } from "vue";
+
+interface ApiResponse<T> {
+  data: {
+    docs: T;
+  };
+}
+
+const route = useRoute();
+
+const page = computed(() => parseInt(route.query.page as string) || 1);
+const limit = computed(() => parseInt(route.query.limit as string) || 4);
 
 const fetchData = async (): Promise<ApiResponse<Crew[]>> => {
-  const response = await apiInstance.get("/v4/crew");
+  const response = await apiInstance.post("/v4/crew/query", {
+    query: {},
+    options: {
+      limit: limit.value,
+      page: page.value,
+    },
+  });
+  console.log(route.query);
   return response;
 };
 
 const { data, isLoading, error, refetch } = useQuery<ApiResponse<Crew[]>>({
-  queryKey: ["crew"],
+  queryKey: ["crew", page, limit],
   queryFn: fetchData,
 });
 </script>
