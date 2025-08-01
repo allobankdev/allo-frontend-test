@@ -37,17 +37,15 @@
 
 <script setup lang="ts">
 import { useQuery } from "@tanstack/vue-query";
-import apiInstance from "@/utils/api";
 import type { Rocket } from "@/types/rocket.type";
+import { fetchData } from "@/api/rockets";
 import type { ApiResponse } from "@/types/response.type";
 
-const fetchData = async (): Promise<ApiResponse<Rocket[]>> => {
-  const response = await apiInstance.get("/v4/rockets");
-  return response;
-};
-
+const rockets = fetchData();
 const { data, isLoading, error, refetch } = useQuery<ApiResponse<Rocket[]>>({
   queryKey: ["rockets"],
-  queryFn: fetchData,
+  queryFn: () => {
+    return rockets;
+  },
 });
 </script>

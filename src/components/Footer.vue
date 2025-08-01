@@ -1,8 +1,5 @@
 <template>
-  <v-footer
-    class="text-center d-flex flex-column ga-2 py-4"
-    color="indigo-lighten-1"
-  >
+  <v-footer class="text-center d-flex flex-column ga-2 py-4 footer">
     <div class="d-flex ga-3">
       <v-btn
         v-for="icon in icons"
@@ -33,3 +30,9 @@
 <script setup>
 const icons = ["mdi-facebook", "mdi-twitter", "mdi-linkedin", "mdi-instagram"];
 </script>
+
+<style lang="scss" scoped>
+.footer {
+  background: linear-gradient(135deg, #1e1e2f, #2b2b45);
+}
+</style>

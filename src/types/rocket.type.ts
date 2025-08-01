@@ -97,7 +97,3 @@ export interface Rocket {
   description: string;
   id: string;
 }
-
-export interface ApiResponse<T> {
-  data: T;
-}
