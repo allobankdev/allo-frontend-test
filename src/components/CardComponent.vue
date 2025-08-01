@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="`/${id}`" class="router-link">
+  <router-link :to="`/rocket/${id}`" class="router-link">
     <v-card class="custom-card" elevation="4">
       <v-img :src="image" height="200px" class="custom-card__image" />
 

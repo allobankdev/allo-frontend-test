@@ -1,15 +1,20 @@
 <template>
   <v-container>
+    <!-- Skeleton Loader saat loading -->
     <v-row justify="center" v-if="isLoading">
-      <v-progress-circular indeterminate color="primary" />
-    </v-row>
-
-    <v-row v-else-if="error">
-      <v-col>
-        <v-alert type="error">Terjadi kesalahan saat memuat data</v-alert>
+      <v-col v-for="n in 8" :key="n" cols="12" sm="6" md="4" lg="3">
+        <v-skeleton-loader type="card" elevation="2" height="300px" />
       </v-col>
     </v-row>
 
+    <!-- Error Handling -->
+    <v-row v-else-if="error">
+      <v-col>
+        <ErrorComponent @refresh="refetch" />
+      </v-col>
+    </v-row>
+
+    <!-- Menampilkan Data -->
     <v-row v-else>
       <v-col
         v-for="(item, index) in data?.data"
@@ -17,9 +22,9 @@
         cols="12"
         sm="6"
         md="4"
-        lg="3"
+        lg="6"
       >
-        <Card
+        <CardComponent
           :id="item.id"
           :title="item.name"
           :image="item.flickr_images[0]"
@@ -33,18 +38,14 @@
 <script setup lang="ts">
 import { useQuery } from "@tanstack/vue-query";
 import apiInstance from "@/utils/api";
-import type { Rocket } from "@/types/rocket.type";
+import type { ApiResponse, Rocket } from "@/types/rocket.type";
 
-interface ApiResponse {
-  data: Rocket[];
-}
-
-const fetchData = async (): Promise<ApiResponse> => {
+const fetchData = async (): Promise<ApiResponse<Rocket[]>> => {
   const response = await apiInstance.get("/v4/rockets");
   return response;
 };
 
-const { data, isLoading, error } = useQuery<ApiResponse>({
+const { data, isLoading, error, refetch } = useQuery<ApiResponse<Rocket[]>>({
   queryKey: ["rockets"],
   queryFn: fetchData,
 });
