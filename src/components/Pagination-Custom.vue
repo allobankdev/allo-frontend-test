@@ -36,6 +36,8 @@ const route = useRoute();
 
 const page = computed(() => parseInt(route.query.page as string) || 1);
 const limit = computed(() => parseInt(route.query.limit as string) || 4);
+const agency = computed(() => (route.query.agency as string) || "");
+const name = computed(() => (route.query.name as string) || "");
 const lastPage = ref(1);
 const currentPage = ref(1);
 function goToPage(newPage: number) {
@@ -50,8 +52,18 @@ function goToPage(newPage: number) {
 }
 
 watchEffect(async () => {
+  const query: any = {
+    name: {
+      $regex: name.value,
+      $options: "i",
+    },
+  };
+
+  if (agency.value && agency.value !== "All") {
+    query.agency = agency.value;
+  }
   const { data } = await apiInstance.post("/v4/crew/query", {
-    query: {},
+    query,
     options: {
       limit: limit.value,
       page: page.value,

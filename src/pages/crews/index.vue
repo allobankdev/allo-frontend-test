@@ -1,4 +1,5 @@
 <template>
+  <form-filter />
   <v-row justify="center" v-if="isLoading">
     <v-col v-for="n in 8" :key="n" cols="12" sm="6" md="6">
       <v-skeleton-loader type="card" elevation="2" height="300px" />
@@ -18,45 +19,56 @@
     </v-col>
 
     <!-- Crew Cards -->
-    <v-col
-      v-for="(crew, index) in data?.data.docs"
-      :key="index"
-      cols="12"
-      sm="6"
-      md="6"
-    >
-      <router-link :to="`crews/${crew.id}`" class="text-decoration-none">
-        <v-card class="crew-card cursor-pointer" elevation="4">
-          <v-img
-            :src="crew.image"
-            height="400px"
-            cover
-            position="top"
-            class="crew-card__image"
-            gradient="to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.5)"
-          >
-            <template v-slot:placeholder>
-              <v-row class="fill-height ma-0" align="center" justify="center">
-                <v-icon size="x-large">mdi-account-astronaut</v-icon>
-              </v-row>
-            </template>
-
-            <v-chip
-              class="status-chip"
-              :color="crew.status === 'active' ? 'success' : 'error'"
-              small
+    <template v-if="data?.docs && data.docs.length">
+      <v-col
+        v-for="(crew, index) in data?.docs"
+        :key="index"
+        cols="12"
+        sm="6"
+        md="6"
+      >
+        <router-link :to="`crews/${crew.id}`" class="text-decoration-none">
+          <v-card class="crew-card cursor-pointer" elevation="4">
+            <v-img
+              :src="crew.image"
+              height="400px"
+              cover
+              position="top"
+              class="crew-card__image"
+              gradient="to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.5)"
             >
-              {{ crew.status }}
-            </v-chip>
-          </v-img>
+              <template v-slot:placeholder>
+                <v-row class="fill-height ma-0" align="center" justify="center">
+                  <v-icon size="x-large">mdi-account-astronaut</v-icon>
+                </v-row>
+              </template>
 
-          <v-card-title class="text-h6 text-center">
-            {{ crew.name }}
-          </v-card-title>
-        </v-card>
-      </router-link>
+              <v-chip
+                class="status-chip"
+                :color="crew.status === 'active' ? 'success' : 'error'"
+                small
+              >
+                {{ crew.status }}
+              </v-chip>
+            </v-img>
+
+            <v-card-title class="text-h6 text-center">
+              {{ crew.name }}
+            </v-card-title>
+          </v-card>
+        </router-link>
+      </v-col>
+    </template>
+
+    <!-- Tampilkan pesan jika data kosong -->
+    <v-col v-else cols="12" class="text-center">
+      <v-card>
+        <v-card-text>
+          <v-icon size="48" color="grey">mdi-alert-circle-outline</v-icon>
+          <div class="text-subtitle-1 mt-2">Data tidak ditemukan</div>
+        </v-card-text>
+      </v-card>
     </v-col>
-
     <!-- Pagination -->
     <v-col cols="12" class="mt-6">
       <pagination-custom />
@@ -72,30 +84,43 @@ import { useRoute } from "vue-router";
 import { computed } from "vue";
 
 interface ApiResponse<T> {
-  data: {
-    docs: T;
-  };
+  docs: T;
 }
 
 const route = useRoute();
 
 const page = computed(() => parseInt(route.query.page as string) || 1);
 const limit = computed(() => parseInt(route.query.limit as string) || 4);
-
+const agency = computed(() => (route.query.agency as string) || "");
+const name = computed(() => (route.query.name as string) || "");
+interface queryData {
+  name: {};
+  agency?: {};
+}
 const fetchData = async (): Promise<ApiResponse<Crew[]>> => {
-  const response = await apiInstance.post("/v4/crew/query", {
-    query: {},
+  const query: queryData = {
+    name: {
+      $regex: name.value,
+      $options: "i",
+    },
+  };
+
+  if (agency.value && agency.value !== "All") {
+    query.agency = agency.value;
+  }
+
+  const { data } = await apiInstance.post("/v4/crew/query", {
+    query,
     options: {
       limit: limit.value,
       page: page.value,
     },
   });
-  console.log(route.query);
-  return response;
+  return data;
 };
 
 const { data, isLoading, error, refetch } = useQuery<ApiResponse<Crew[]>>({
-  queryKey: ["crew", page, limit],
+  queryKey: ["crew", page, limit, agency, name],
   queryFn: fetchData,
 });
 </script>
