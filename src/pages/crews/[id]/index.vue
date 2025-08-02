@@ -3,7 +3,7 @@
     <!-- Loading State -->
     <v-row justify="center" v-if="isLoading">
       <v-col cols="12" md="12">
-        <v-skeleton-loader type="image, article" height="400px" />
+        <SkeletonLoader type="image, article" height="400px" />
       </v-col>
     </v-row>
 

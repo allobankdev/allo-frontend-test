@@ -1,11 +1,11 @@
 <template>
   <v-card>
     <v-layout>
-      <navigation-drawer />
+      <NavigationDrawer />
       <v-main class="main-container">
         <v-container>
           <RouterView />
-          <go-back-button class="mb-10" />
+          <GoBackButton class="mb-10" />
         </v-container>
       </v-main>
     </v-layout>

@@ -2,9 +2,10 @@
   <v-card class="custom-card" elevation="6" :style="{ height: '100%' }">
     <v-img
       :src="image"
-      height="200px"
+      height="400px"
       class="custom-card__image"
       cover
+      position="top"
       gradient="to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.5)"
     >
       <template v-slot:placeholder>
@@ -18,7 +19,7 @@
       {{ title }}
     </v-card-title>
 
-    <v-card-text class="custom-card__description">
+    <v-card-text class="custom-card__description" v-if="description">
       <div class="text-truncate--2-lines">
         {{ description }}
       </div>

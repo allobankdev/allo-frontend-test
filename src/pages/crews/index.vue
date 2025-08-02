@@ -1,8 +1,8 @@
 <template>
-  <form-filter />
+  <FormFilter />
   <v-row justify="center" v-if="isLoading">
     <v-col v-for="n in 8" :key="n" cols="12" sm="6" md="6">
-      <v-skeleton-loader type="card" elevation="2" height="300px" />
+      <SkeletonLoader type="card" elevation="2" height="300px" />
     </v-col>
   </v-row>
 
@@ -27,36 +27,7 @@
         sm="6"
         md="6"
       >
-        <router-link :to="`crews/${crew.id}`" class="text-decoration-none">
-          <v-card class="crew-card cursor-pointer" elevation="4">
-            <v-img
-              :src="crew.image"
-              height="400px"
-              cover
-              position="top"
-              class="crew-card__image"
-              gradient="to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.5)"
-            >
-              <template v-slot:placeholder>
-                <v-row class="fill-height ma-0" align="center" justify="center">
-                  <v-icon size="x-large">mdi-account-astronaut</v-icon>
-                </v-row>
-              </template>
-
-              <v-chip
-                class="status-chip"
-                :color="crew.status === 'active' ? 'success' : 'error'"
-                small
-              >
-                {{ crew.status }}
-              </v-chip>
-            </v-img>
-
-            <v-card-title class="text-h6 text-center">
-              {{ crew.name }}
-            </v-card-title>
-          </v-card>
-        </router-link>
+        <CardComponent :id="crew.id" :title="crew.name" :image="crew.image" />
       </v-col>
     </template>
 
@@ -71,7 +42,7 @@
     </v-col>
     <!-- Pagination -->
     <v-col cols="12" class="mt-6">
-      <pagination-custom />
+      <PaginationCustom />
     </v-col>
   </v-row>
 </template>
