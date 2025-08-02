@@ -49,7 +49,7 @@ const route = useRoute();
 const router = useRouter();
 const titleInput = ref((route.query.title as string) || "");
 const categoryInput = ref(route.query.categoryId as string);
-const categories = ["All", "NASA", "ESA", "JAXA"];
+const categories = ["All", "NASA", "ESA", "JAXA", "SpaceX"];
 
 const handleForm = () => {
   router.push({
