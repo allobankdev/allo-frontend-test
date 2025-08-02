@@ -39,7 +39,14 @@ const limit = computed(() => parseInt(route.query.limit as string) || 4);
 const lastPage = ref(1);
 const currentPage = ref(1);
 function goToPage(newPage: number) {
-  router.push({ query: { ...route.query, page: newPage.toString() } });
+  router
+    .push({ query: { ...route.query, page: newPage.toString() } })
+    .then(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    });
 }
 
 watchEffect(async () => {

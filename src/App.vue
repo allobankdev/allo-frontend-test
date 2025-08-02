@@ -2,7 +2,12 @@
   <v-card>
     <v-layout>
       <navigation-drawer />
-      <v-main class="main-container"> <RouterView /> </v-main>
+      <v-main class="main-container">
+        <v-container>
+          <filter-custom />
+          <RouterView />
+        </v-container>
+      </v-main>
     </v-layout>
   </v-card>
   <Footer />

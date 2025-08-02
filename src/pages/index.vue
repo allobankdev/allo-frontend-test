@@ -1,38 +1,36 @@
 <template>
-  <v-container>
-    <!-- Skeleton Loader saat loading -->
-    <v-row justify="center" v-if="isLoading">
-      <v-col v-for="n in 8" :key="n" cols="12" sm="6" md="4" lg="3">
-        <v-skeleton-loader type="card" elevation="2" height="300px" />
-      </v-col>
-    </v-row>
+  <!-- Skeleton Loader saat loading -->
+  <v-row justify="center" v-if="isLoading">
+    <v-col v-for="n in 8" :key="n" cols="12" sm="6" md="4" lg="3">
+      <v-skeleton-loader type="card" elevation="2" height="300px" />
+    </v-col>
+  </v-row>
 
-    <!-- Error Handling -->
-    <v-row v-else-if="error">
-      <v-col>
-        <ErrorComponent @refresh="refetch" />
-      </v-col>
-    </v-row>
+  <!-- Error Handling -->
+  <v-row v-else-if="error">
+    <v-col>
+      <ErrorComponent @refresh="refetch" />
+    </v-col>
+  </v-row>
 
-    <!-- Menampilkan Data -->
-    <v-row v-else>
-      <v-col
-        v-for="(item, index) in data?.data"
-        :key="index"
-        cols="12"
-        sm="6"
-        md="4"
-        lg="6"
-      >
-        <CardComponent
-          :id="item.id"
-          :title="item.name"
-          :image="item.flickr_images[0]"
-          :description="item.description"
-        />
-      </v-col>
-    </v-row>
-  </v-container>
+  <!-- Menampilkan Data -->
+  <v-row v-else>
+    <v-col
+      v-for="(item, index) in data?.data"
+      :key="index"
+      cols="12"
+      sm="6"
+      md="4"
+      lg="6"
+    >
+      <CardComponent
+        :id="item.id"
+        :title="item.name"
+        :image="item.flickr_images[0]"
+        :description="item.description"
+      />
+    </v-col>
+  </v-row>
 </template>
 
 <script setup lang="ts">
