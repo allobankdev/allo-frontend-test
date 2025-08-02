@@ -7,8 +7,8 @@
   >
     <v-list>
       <v-list-item
-        prepend-avatar="https://randomuser.me/api/portraits/men/85.jpg"
-        title="John Leider"
+        prepend-avatar="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMRrjxgNg8qaHqoQ5JBf_7o23NgV3pa-tunQ&s"
+        title="SpaceX"
       >
         <template v-slot:append>
           <v-btn
@@ -23,27 +23,42 @@
     <v-divider></v-divider>
 
     <v-list density="compact" nav>
-      <v-list-item
-        prepend-icon="mdi-home-city"
-        title="Home"
-        value="home"
-      ></v-list-item>
-      <v-list-item
-        prepend-icon="mdi-account"
-        title="My Account"
-        value="account"
-      ></v-list-item>
-      <v-list-item
-        prepend-icon="mdi-account-group-outline"
-        title="Users"
-        value="users"
-      ></v-list-item>
+      <template
+        v-for="({ url, title, icon }, index) in navigationItems"
+        :key="index"
+      >
+        <router-link :to="url" class="text-decoration-none text-white">
+          <v-list-item
+            :prepend-icon="icon"
+            :title="title"
+            :value="title"
+          ></v-list-item>
+        </router-link>
+      </template>
     </v-list>
   </v-navigation-drawer>
 </template>
 
 <script lang="ts" setup>
 import { ref } from "vue";
+
+const navigationItems = [
+  {
+    url: "/rockets",
+    title: "Rockets",
+    icon: "mdi-rocket",
+  },
+  {
+    url: "/crews",
+    title: "Crew",
+    icon: "mdi-account-group",
+  },
+  {
+    url: "/dragons",
+    title: "Dragon",
+    icon: "mdi-rocket-launch",
+  },
+];
 
 const drawer = ref(true);
 const rail = ref(true);

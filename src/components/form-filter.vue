@@ -64,7 +64,6 @@ const handleForm = () => {
 </script>
 
 <style scoped>
-/* Optional: Tambahkan styling tambahan jika diperlukan */
 .v-card {
   max-width: 600px;
   margin: 0 auto;

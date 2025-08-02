@@ -7,11 +7,12 @@
 // Plugins
 import vuetify from "./vuetify";
 import router from "../router";
+import { VueQueryPlugin } from "@tanstack/vue-query";
+import pinia from "./pinia";
 
 // Types
 import type { App } from "vue";
-import { VueQueryPlugin } from "@tanstack/vue-query";
 
 export function registerPlugins(app: App) {
-  app.use(vuetify).use(router).use(VueQueryPlugin);
+  app.use(vuetify).use(router).use(VueQueryPlugin).use(pinia);
 }
