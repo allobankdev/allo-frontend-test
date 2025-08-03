@@ -18,8 +18,8 @@
       icon
       variant="text"
       size="small"
-      @click="goToPage(page + 1)"
       :disabled="page >= lastPage"
+      @click="goToPage(page + 1)"
     >
       <v-icon>mdi-chevron-right</v-icon>
     </v-btn>
@@ -27,6 +27,7 @@
 </template>
 
 <script setup lang="ts">
+import type { queryData } from "@/types/api.type";
 import apiInstance from "@/utils/api";
 import { computed, ref, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -52,7 +53,7 @@ function goToPage(newPage: number) {
 }
 
 watchEffect(async () => {
-  const query: any = {
+  const query: queryData = {
     name: {
       $regex: name.value,
       $options: "i",

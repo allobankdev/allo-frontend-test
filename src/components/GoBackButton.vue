@@ -1,6 +1,11 @@
 <template>
-  <v-btn @click="goBack" color="primary">
-    <v-icon left>mdi-arrow-left</v-icon>
+  <v-btn
+    color="primary"
+    @click="goBack"
+  >
+    <v-icon left>
+      mdi-arrow-left
+    </v-icon>
     Back
   </v-btn>
 </template>

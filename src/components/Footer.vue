@@ -7,10 +7,14 @@
         :icon="icon"
         density="comfortable"
         variant="text"
-      ></v-btn>
+      />
     </div>
 
-    <v-divider class="my-2" thickness="2" width="50"></v-divider>
+    <v-divider
+      class="my-2"
+      thickness="2"
+      width="50"
+    />
 
     <div class="text-caption font-weight-regular opacity-60">
       Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. Mauris
@@ -22,12 +26,12 @@
       natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
     </div>
 
-    <v-divider></v-divider>
+    <v-divider />
 
     <div>{{ new Date().getFullYear() }} — <strong>Vuetify</strong></div>
   </v-footer>
 </template>
-<script setup>
+<script lang="ts" setup>
 const icons = ["mdi-facebook", "mdi-twitter", "mdi-linkedin", "mdi-instagram"];
 </script>
 

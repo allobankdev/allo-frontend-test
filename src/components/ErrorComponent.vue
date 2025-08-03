@@ -5,7 +5,12 @@
     class="d-flex justify-space-between align-center"
   >
     <span>Terjadi kesalahan saat memuat data.</span>
-    <v-btn color="primary" variant="tonal" @click="handleRefresh" size="small">
+    <v-btn
+      color="primary"
+      variant="tonal"
+      size="small"
+      @click="handleRefresh"
+    >
       Refresh
     </v-btn>
   </v-alert>

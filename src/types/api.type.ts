@@ -7,6 +7,6 @@ export interface queryData {
     $regex: string;
     $options: string;
   };
-  agency?: {};
+  agency?: string;
   active?: boolean;
 }

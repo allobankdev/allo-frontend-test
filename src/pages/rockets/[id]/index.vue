@@ -1,19 +1,30 @@
 <template>
   <v-container class="py-10">
     <v-row justify="center">
-      <v-col cols="12" md="10" lg="8">
+      <v-col
+        cols="12"
+        md="10"
+        lg="8"
+      >
         <!-- Loading -->
         <SkeletonLoader
+          v-if="isLoading"
           type="card, article, article"
           elevation="2"
-          v-if="isLoading"
         />
 
         <!-- Error -->
-        <ErrorComponent v-else-if="error" @refresh="refetch" />
+        <ErrorComponent
+          v-else-if="error"
+          @refresh="refetch"
+        />
 
         <!-- Data Loaded -->
-        <v-card v-else-if="data" elevation="2" class="rounded-xl">
+        <v-card
+          v-else-if="data"
+          elevation="2"
+          class="rounded-xl"
+        >
           <!-- Image Gallery -->
           <v-carousel
             v-if="data.data.flickr_images.length > 0"
@@ -27,14 +38,14 @@
               :key="i"
               :src="image"
               cover
-            ></v-carousel-item>
+            />
           </v-carousel>
           <v-img
             v-else
             src="https://via.placeholder.com/800x400?text=No+Image+Available"
             height="400"
             cover
-          ></v-img>
+          />
 
           <v-card-title class="text-h4 font-weight-bold pt-6">
             {{ data.data.name }}
@@ -52,10 +63,15 @@
           </v-card-subtitle>
 
           <v-card-text>
-            <p class="text-body-1 mb-6">{{ data.data.description }}</p>
+            <p class="text-body-1 mb-6">
+              {{ data.data.description }}
+            </p>
 
             <v-row>
-              <v-col cols="6" sm="4">
+              <v-col
+                cols="6"
+                sm="4"
+              >
                 <div
                   class="stat-card"
                   title="First Flight"
@@ -63,7 +79,10 @@
                   icon="mdi-calendar"
                 />
               </v-col>
-              <v-col cols="6" sm="4">
+              <v-col
+                cols="6"
+                sm="4"
+              >
                 <div
                   class="stat-card"
                   title="Cost per Launch"
@@ -71,7 +90,10 @@
                   icon="mdi-cash"
                 />
               </v-col>
-              <v-col cols="6" sm="4">
+              <v-col
+                cols="6"
+                sm="4"
+              >
                 <div
                   class="stat-card"
                   title="Success Rate"
@@ -102,7 +124,11 @@
                 >
                   Active
                 </v-chip>
-                <v-chip v-else color="error" prepend-icon="mdi-close-circle">
+                <v-chip
+                  v-else
+                  color="error"
+                  prepend-icon="mdi-close-circle"
+                >
                   Inactive
                 </v-chip>
                 <v-chip prepend-icon="mdi-calendar">

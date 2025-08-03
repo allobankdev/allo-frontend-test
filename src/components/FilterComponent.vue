@@ -1,7 +1,12 @@
 <template>
   <v-container>
-    <v-card class="pa-4" elevation="2">
-      <v-card-title class="text-h5">Filter Data</v-card-title>
+    <v-card
+      class="pa-4"
+      elevation="2"
+    >
+      <v-card-title class="text-h5">
+        Filter Data
+      </v-card-title>
 
       <v-card-text>
         <v-form @submit.prevent="handleForm">
@@ -12,7 +17,7 @@
             clearable
             outlined
             prepend-inner-icon="mdi-magnify"
-          ></v-text-field>
+          />
 
           <v-select
             v-model="categoryInput"
@@ -20,15 +25,27 @@
             :label="filterLabel"
             outlined
             prepend-inner-icon="mdi-shape"
-          ></v-select>
+          />
 
           <v-row class="mt-2">
             <v-col cols="6">
-              <v-btn type="submit" block color="primary">Terapkan Filter</v-btn>
+              <v-btn
+                type="submit"
+                block
+                color="primary"
+              >
+                Terapkan Filter
+              </v-btn>
             </v-col>
             <v-col cols="6">
               <router-link :to="resetRoute">
-                <v-btn block color="error" outlined>Reset</v-btn>
+                <v-btn
+                  block
+                  color="error"
+                  outlined
+                >
+                  Reset
+                </v-btn>
               </router-link>
             </v-col>
           </v-row>

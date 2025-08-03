@@ -1,5 +1,9 @@
 <template>
-  <v-card class="custom-card" elevation="6" :style="{ height: '100%' }">
+  <v-card
+    class="custom-card"
+    elevation="6"
+    :style="{ height: '100%' }"
+  >
     <v-img
       :src="image"
       height="400px"
@@ -8,9 +12,15 @@
       position="top"
       gradient="to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.5)"
     >
-      <template v-slot:placeholder>
-        <v-row class="fill-height ma-0" align="center" justify="center">
-          <v-icon size="x-large">mdi-rocket</v-icon>
+      <template #placeholder>
+        <v-row
+          class="fill-height ma-0"
+          align="center"
+          justify="center"
+        >
+          <v-icon size="x-large">
+            mdi-rocket
+          </v-icon>
         </v-row>
       </template>
     </v-img>
@@ -19,13 +29,16 @@
       {{ title }}
     </v-card-title>
 
-    <v-card-text class="custom-card__description" v-if="description">
+    <v-card-text
+      v-if="description"
+      class="custom-card__description"
+    >
       <div class="text-truncate--2-lines">
         {{ description }}
       </div>
     </v-card-text>
 
-    <v-spacer></v-spacer>
+    <v-spacer />
 
     <v-card-actions class="px-4 pb-4">
       <router-link
@@ -50,13 +63,28 @@
   </v-card>
 </template>
 
-<script setup>
+<script setup lang="ts">
 defineProps({
-  id: String,
-  title: String,
-  image: String,
-  description: String,
-  path: String,
+  id: {
+    type: String,
+    default: new Date(),
+  },
+  title: {
+    type: String,
+    default: "Rocket",
+  },
+  image: {
+    type: String,
+    default: "https://placehold.co/600x400",
+  },
+  description: {
+    type: String,
+    default: "Lorem Ipsum Dolor Amet",
+  },
+  path: {
+    type: String,
+    default: "/rockets",
+  },
 });
 </script>
 
