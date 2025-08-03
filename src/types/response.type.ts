@@ -1,3 +1,12 @@
 export interface ApiResponse<T> {
-  data: T;
+  docs: T;
+}
+
+export interface queryData {
+  name?: {
+    $regex: string;
+    $options: string;
+  };
+  agency?: {};
+  active?: boolean;
 }

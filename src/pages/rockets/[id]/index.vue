@@ -119,6 +119,7 @@ import { useRoute } from "vue-router";
 import { useQuery } from "@tanstack/vue-query";
 import apiInstance from "@/utils/api";
 import type { Rocket } from "@/types/rocket.type";
+import { formatDate } from "@/utils/helper";
 
 const route = useRoute();
 const rocketId = route.params.id;
@@ -132,14 +133,6 @@ const { data, isLoading, error, refetch } = useQuery({
   queryKey: ["rocket"],
   queryFn: fetchRocket,
 });
-
-const formatDate = (date: Date | string) => {
-  return new Date(date).toLocaleDateString("en-US", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-};
 </script>
 
 <style lang="scss" scoped>

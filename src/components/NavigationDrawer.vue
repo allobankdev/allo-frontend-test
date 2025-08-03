@@ -53,11 +53,6 @@ const navigationItems = [
     title: "Crew",
     icon: "mdi-account-group",
   },
-  {
-    url: "/dragons",
-    title: "Dragon",
-    icon: "mdi-rocket-launch",
-  },
 ];
 
 const drawer = ref(true);

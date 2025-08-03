@@ -21,8 +21,6 @@ declare module 'vue-router/auto-routes' {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
     '/crews/': RouteRecordInfo<'/crews/', '/crews', Record<never, never>, Record<never, never>>,
     '/crews/[id]/': RouteRecordInfo<'/crews/[id]/', '/crews/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
-    '/dragons/': RouteRecordInfo<'/dragons/', '/dragons', Record<never, never>, Record<never, never>>,
-    '/dragons/[id]/': RouteRecordInfo<'/dragons/[id]/', '/dragons/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/rockets/': RouteRecordInfo<'/rockets/', '/rockets', Record<never, never>, Record<never, never>>,
     '/rockets/[id]/': RouteRecordInfo<'/rockets/[id]/', '/rockets/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
   }

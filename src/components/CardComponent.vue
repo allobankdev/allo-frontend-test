@@ -29,13 +29,15 @@
 
     <v-card-actions class="px-4 pb-4">
       <router-link
-        :to="`/rockets/${id}`"
+        :to="`${path}/${id}`"
         class="router-link"
         style="width: 100%"
       >
         <v-btn
           color="blue-darken-3"
-          prepend-icon="mdi-rocket-launch"
+          :prepend-icon="
+            path === '/rockets' ? 'mdi-rocket-launch' : 'mdi-account'
+          "
           size="large"
           class="custom-card__button"
           elevation="2"
@@ -54,6 +56,7 @@ defineProps({
   title: String,
   image: String,
   description: String,
+  path: String,
 });
 </script>
 

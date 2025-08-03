@@ -1,5 +1,11 @@
 <template>
-  <FormFilter />
+  <FilterComponent
+    filter-type="agency"
+    filter-label="Pilih Agency"
+    :resetRoute="path"
+  />
+
+  <!-- Skeleton Loader saat loading -->
   <v-row justify="center" v-if="isLoading">
     <v-col v-for="n in 8" :key="n" cols="12" sm="6" md="6">
       <SkeletonLoader type="card" elevation="2" height="300px" />
@@ -27,18 +33,18 @@
         sm="6"
         md="6"
       >
-        <CardComponent :id="crew.id" :title="crew.name" :image="crew.image" />
+        <CardComponent
+          :path="path"
+          :id="crew.id"
+          :title="crew.name"
+          :image="crew.image"
+        />
       </v-col>
     </template>
 
     <!-- Tampilkan pesan jika data kosong -->
     <v-col v-else cols="12" class="text-center">
-      <v-card>
-        <v-card-text>
-          <v-icon size="48" color="grey">mdi-alert-circle-outline</v-icon>
-          <div class="text-subtitle-1 mt-2">Data tidak ditemukan</div>
-        </v-card-text>
-      </v-card>
+      <CardNotFound />
     </v-col>
     <!-- Pagination -->
     <v-col cols="12" class="mt-6">
@@ -53,10 +59,7 @@ import apiInstance from "@/utils/api";
 import type { Crew } from "@/types/crew.type";
 import { useRoute } from "vue-router";
 import { computed } from "vue";
-
-interface ApiResponse<T> {
-  docs: T;
-}
+import type { ApiResponse, queryData } from "@/types/response.type";
 
 const route = useRoute();
 
@@ -64,10 +67,8 @@ const page = computed(() => parseInt(route.query.page as string) || 1);
 const limit = computed(() => parseInt(route.query.limit as string) || 4);
 const agency = computed(() => (route.query.agency as string) || "");
 const name = computed(() => (route.query.name as string) || "");
-interface queryData {
-  name: {};
-  agency?: {};
-}
+const { path } = useRoute();
+
 const fetchData = async (): Promise<ApiResponse<Crew[]>> => {
   const query: queryData = {
     name: {

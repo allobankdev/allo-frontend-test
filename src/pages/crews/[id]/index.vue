@@ -158,6 +158,7 @@ import { useRoute } from "vue-router";
 import { useQuery } from "@tanstack/vue-query";
 import apiInstance from "@/utils/api";
 import type { Crew } from "@/types/crew.type";
+import { formatStatus, getStatusColor } from "@/utils/helper";
 
 const route = useRoute();
 const crewId = route.params.id;
@@ -171,27 +172,9 @@ const { data, isLoading, error, refetch } = useQuery({
   queryKey: ["crew-detail"],
   queryFn: fetchCrew,
 });
-
-// Helper functions
-const getStatusColor = (status: string) => {
-  switch (status) {
-    case "active":
-      return "success";
-    case "inactive":
-      return "error";
-    case "retired":
-      return "warning";
-    default:
-      return "grey";
-  }
-};
-
-const formatStatus = (status: string) => {
-  return status.charAt(0).toUpperCase() + status.slice(1);
-};
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .crew-card {
   border-radius: 12px;
   overflow: hidden;

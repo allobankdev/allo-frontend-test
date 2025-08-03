@@ -8,10 +8,14 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     CardComponent: typeof import('./src/components/CardComponent.vue')['default']
+    CardNotFound: typeof import('./src/components/CardNotFound.vue')['default']
+    copy: typeof import('./src/components/FormFilter copy.vue')['default']
     ErrorComponent: typeof import('./src/components/ErrorComponent.vue')['default']
+    FilterComponent: typeof import('./src/components/FilterComponent.vue')['default']
     FilterCustom: typeof import('./src/components/Filter-Custom.vue')['default']
     Footer: typeof import('./src/components/Footer.vue')['default']
     FormFilter: typeof import('./src/components/FormFilter.vue')['default']
+    FormFilterRocket: typeof import('./src/components/FormFilterRocket.vue')['default']
     GoBackButton: typeof import('./src/components/GoBackButton.vue')['default']
     NavigationDrawer: typeof import('./src/components/NavigationDrawer.vue')['default']
     PaginationCustom: typeof import('./src/components/PaginationCustom.vue')['default']
