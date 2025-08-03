@@ -6,9 +6,23 @@
       :reset-route="path"
     />
     <!-- Skeleton Loader saat loading -->
-    <v-row v-if="isLoading" justify="center">
-      <v-col v-for="n in 8" :key="n" cols="12" sm="6" md="4" lg="3">
-        <SkeletonLoader type="card" elevation="2" height="300px" />
+    <v-row
+      v-if="isLoading"
+      justify="center"
+    >
+      <v-col
+        v-for="n in 8"
+        :key="n"
+        cols="12"
+        sm="6"
+        md="4"
+        lg="3"
+      >
+        <SkeletonLoader
+          type="card"
+          elevation="2"
+          height="300px"
+        />
       </v-col>
     </v-row>
 
@@ -39,7 +53,11 @@
           />
         </v-col>
       </template>
-      <v-col v-else cols="12" class="text-center">
+      <v-col
+        v-else
+        cols="12"
+        class="text-center"
+      >
         <CardNotFound />
       </v-col>
     </v-row>
@@ -49,7 +67,7 @@
 <script setup lang="ts">
 import { useQuery } from "@tanstack/vue-query";
 import type { Rocket } from "@/types/rocket.type";
-import type { ApiResponse, queryData } from "@/types/api.type";
+import type { ApiResponse } from "@/types/api.type";
 import { useRoute } from "vue-router";
 import { computed } from "vue";
 import { useRocketsStore } from "@/store/rockets.store";
