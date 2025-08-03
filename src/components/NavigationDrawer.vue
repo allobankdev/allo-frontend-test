@@ -22,23 +22,13 @@
 
     <v-divider />
 
-    <v-list
-      density="compact"
-      nav
-    >
+    <v-list density="compact" nav>
       <template
         v-for="({ url, title, icon }, index) in navigationItems"
         :key="index"
       >
-        <router-link
-          :to="url"
-          class="text-decoration-none text-white"
-        >
-          <v-list-item
-            :prepend-icon="icon"
-            :title="title"
-            :value="title"
-          />
+        <router-link :to="url" class="text-decoration-none text-white">
+          <v-list-item :prepend-icon="icon" :title="title" :value="title" />
         </router-link>
       </template>
     </v-list>

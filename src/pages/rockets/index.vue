@@ -6,23 +6,9 @@
       :reset-route="path"
     />
     <!-- Skeleton Loader saat loading -->
-    <v-row
-      v-if="isLoading"
-      justify="center"
-    >
-      <v-col
-        v-for="n in 8"
-        :key="n"
-        cols="12"
-        sm="6"
-        md="4"
-        lg="3"
-      >
-        <SkeletonLoader
-          type="card"
-          elevation="2"
-          height="300px"
-        />
+    <v-row v-if="isLoading" justify="center">
+      <v-col v-for="n in 8" :key="n" cols="12" sm="6" md="4" lg="3">
+        <SkeletonLoader type="card" elevation="2" height="300px" />
       </v-col>
     </v-row>
 
@@ -53,11 +39,7 @@
           />
         </v-col>
       </template>
-      <v-col
-        v-else
-        cols="12"
-        class="text-center"
-      >
+      <v-col v-else cols="12" class="text-center">
         <CardNotFound />
       </v-col>
     </v-row>
@@ -70,34 +52,21 @@ import type { Rocket } from "@/types/rocket.type";
 import type { ApiResponse, queryData } from "@/types/api.type";
 import { useRoute } from "vue-router";
 import { computed } from "vue";
-import apiInstance from "@/utils/api";
+import apiInstance from "@/lib/api";
+import { getRocketByFilter } from "@/api/rockets.api";
+import { useRocketsStore } from "@/store/rockets.store";
 
+const rocketsStore = useRocketsStore();
 const route = useRoute();
 const name = computed(() => (route.query.name as string) || "");
 const active = computed(() => (route.query.active as string) || "");
 const { path } = useRoute();
 
-const fetchData = async (): Promise<ApiResponse<Rocket[]>> => {
-  const query: queryData = {
-    name: {
-      $regex: name.value,
-      $options: "i",
-    },
-  };
-
-  if (active.value && active.value !== "All") {
-    query.active = active.value === "active";
-  }
-
-  const { data } = await apiInstance.post("/v4/rockets/query", {
-    query,
-    options: {},
-  });
-  return data;
-};
-
 const { data, isLoading, error, refetch } = useQuery<ApiResponse<Rocket[]>>({
   queryKey: ["rockets", name, active],
-  queryFn: fetchData,
+  queryFn: () => {
+    rocketsStore.getRockets(name.value, active.value);
+    return getRocketByFilter(name.value, active.value);
+  },
 });
 </script>

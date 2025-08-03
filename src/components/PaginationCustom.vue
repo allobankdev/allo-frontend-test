@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import type { queryData } from "@/types/api.type";
-import apiInstance from "@/utils/api";
+import apiInstance from "@/lib/api";
 import { computed, ref, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
