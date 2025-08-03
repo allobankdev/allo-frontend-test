@@ -52,8 +52,6 @@ import type { Rocket } from "@/types/rocket.type";
 import type { ApiResponse, queryData } from "@/types/api.type";
 import { useRoute } from "vue-router";
 import { computed } from "vue";
-import apiInstance from "@/lib/api";
-import { getRocketByFilter } from "@/api/rockets.api";
 import { useRocketsStore } from "@/store/rockets.store";
 
 const rocketsStore = useRocketsStore();
@@ -64,9 +62,6 @@ const { path } = useRoute();
 
 const { data, isLoading, error, refetch } = useQuery<ApiResponse<Rocket[]>>({
   queryKey: ["rockets", name, active],
-  queryFn: () => {
-    rocketsStore.getRockets(name.value, active.value);
-    return getRocketByFilter(name.value, active.value);
-  },
+  queryFn: () => rocketsStore.getRockets(name.value, active.value),
 });
 </script>

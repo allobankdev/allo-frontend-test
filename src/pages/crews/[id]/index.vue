@@ -159,14 +159,15 @@
 import { useRoute } from "vue-router";
 import { useQuery } from "@tanstack/vue-query";
 import { formatStatus, getStatusColor } from "@/utils/helper";
-import { getCrewById } from "@/api/crews.api";
+import { useCrewsStore } from "@/store/crews.store";
 
 const route = useRoute();
 const crewId = route.params.id as string;
+const crewsStore = useCrewsStore();
 
 const { data, isLoading, error, refetch } = useQuery({
   queryKey: ["crew-detail"],
-  queryFn: () => getCrewById(crewId),
+  queryFn: () => crewsStore.getCrewById(crewId),
 });
 </script>
 

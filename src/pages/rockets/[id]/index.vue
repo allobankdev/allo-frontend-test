@@ -123,14 +123,15 @@
 import { useRoute } from "vue-router";
 import { useQuery } from "@tanstack/vue-query";
 import { formatDate } from "@/utils/helper";
-import { getRocketById } from "@/api/rockets.api";
+import { useRocketsStore } from "@/store/rockets.store";
 
 const route = useRoute();
 const rocketId = route.params.id as string;
+const rocketsStore = useRocketsStore();
 
 const { data, isLoading, error, refetch } = useQuery({
-  queryKey: ["rocket"],
-  queryFn: () => getRocketById(rocketId),
+  queryKey: ["rocket", rocketId],
+  queryFn: () => rocketsStore.getRocketById(rocketId),
 });
 </script>
 

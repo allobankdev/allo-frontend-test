@@ -58,11 +58,11 @@ import { useQuery } from "@tanstack/vue-query";
 import type { Crew } from "@/types/crew.type";
 import { useRoute } from "vue-router";
 import { computed } from "vue";
-import type { ApiResponse, queryData } from "@/types/api.type";
-import { getCrewByFilter } from "@/api/crews.api";
+import type { ApiResponse } from "@/types/api.type";
+import { useCrewsStore } from "@/store/crews.store";
 
 const route = useRoute();
-
+const crewsStore = useCrewsStore();
 const page = computed(() => parseInt(route.query.page as string) || 1);
 const limit = computed(() => parseInt(route.query.limit as string) || 4);
 const agency = computed(() => (route.query.agency as string) || "");
@@ -72,7 +72,7 @@ const { path } = useRoute();
 const { data, isLoading, error, refetch } = useQuery<ApiResponse<Crew[]>>({
   queryKey: ["crew", page, limit, agency, name],
   queryFn: () =>
-    getCrewByFilter(name.value, agency.value, limit.value, page.value),
+    crewsStore.getCrews(name.value, agency.value, limit.value, page.value),
 });
 </script>
 
