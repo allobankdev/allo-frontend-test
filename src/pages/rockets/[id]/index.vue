@@ -56,21 +56,24 @@
 
             <v-row>
               <v-col cols="6" sm="4">
-                <stat-card
+                <div
+                  class="stat-card"
                   title="First Flight"
                   :value="formatDate(data.data.first_flight)"
                   icon="mdi-calendar"
                 />
               </v-col>
               <v-col cols="6" sm="4">
-                <stat-card
+                <div
+                  class="stat-card"
                   title="Cost per Launch"
                   :value="'$' + data.data.cost_per_launch.toLocaleString()"
                   icon="mdi-cash"
                 />
               </v-col>
               <v-col cols="6" sm="4">
-                <stat-card
+                <div
+                  class="stat-card"
                   title="Success Rate"
                   :value="data.data.success_rate_pct + '%'"
                   icon="mdi-trending-up"
