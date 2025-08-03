@@ -15,7 +15,7 @@
             :label="searchLabel"
             :placeholder="searchPlaceholder"
             clearable
-            outlined
+            variant="outlined"
             prepend-inner-icon="mdi-magnify"
           />
 
@@ -23,7 +23,7 @@
             v-model="categoryInput"
             :items="filterItems"
             :label="filterLabel"
-            outlined
+            variant="outlined"
             prepend-inner-icon="mdi-shape"
           />
 
@@ -42,7 +42,7 @@
                 <v-btn
                   block
                   color="error"
-                  outlined
+                  variant="outlined"
                 >
                   Reset
                 </v-btn>
@@ -56,8 +56,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { ref, watch, computed } from "vue";
+import { useRoute, useRouter, type LocationQueryRaw } from "vue-router";
 
 const props = defineProps({
   filterType: {
@@ -79,7 +79,7 @@ const props = defineProps({
   },
   resetRoute: {
     type: String,
-    default: "/crews",
+    default: "/rockets",
   },
 });
 
@@ -87,40 +87,61 @@ const route = useRoute();
 const router = useRouter();
 
 const titleInput = ref((route.query.name as string) || "");
-const categoryInput = ref(
-  (route.query[
-    props.filterType === "status" ? "active" : "agency"
-  ] as string) || ""
-);
 
-const filterItems =
-  props.filterType === "status"
-    ? ["All", "active", "non-active"]
-    : ["All", "NASA", "ESA", "JAXA", "SpaceX"];
+const getInitialCategoryValue = () => {
+  if (props.filterType === "status") {
+    const activeQuery = route.query.active as string;
+    return activeQuery || "";
+  } else {
+    return (route.query.agency as string) || "";
+  }
+};
+const categoryInput = ref(getInitialCategoryValue());
+
+const filterItems = computed(() => {
+  if (props.filterType === "status") {
+    return [
+      { title: "All", value: "" },
+      { title: "Active", value: "true" },
+      { title: "Inactive", value: "false" },
+    ];
+  } else {
+    return [
+      { title: "All", value: "" },
+      { title: "NASA", value: "NASA" },
+      { title: "ESA", value: "ESA" },
+      { title: "JAXA", value: "JAXA" },
+      { title: "SpaceX", value: "SpaceX" },
+    ];
+  }
+});
 
 const handleForm = () => {
-  const queryParam = props.filterType === "status" ? "active" : "agency";
+  const query: LocationQueryRaw = {
+    ...route.query,
+    name: titleInput.value as string,
+  };
 
-  router.push({
-    query: {
-      ...route.query,
-      [queryParam]:
-        categoryInput.value === "All" ? undefined : categoryInput.value,
-      name: titleInput.value || undefined,
-      page: 1,
-    },
-  });
+  if (props.filterType === "status") {
+    query.active = categoryInput.value || undefined;
+  } else {
+    query.agency = categoryInput.value || undefined;
+  }
+
+  router.push({ query });
 };
 
 watch(
   () => route.query,
   (newQuery) => {
     titleInput.value = (newQuery.name as string) || "";
-    categoryInput.value =
-      (newQuery[
-        props.filterType === "status" ? "active" : "agency"
-      ] as string) || "";
-  }
+    if (props.filterType === "status") {
+      categoryInput.value = (newQuery.active as string) || "";
+    } else {
+      categoryInput.value = (newQuery.agency as string) || "";
+    }
+  },
+  { immediate: true }
 );
 </script>
 

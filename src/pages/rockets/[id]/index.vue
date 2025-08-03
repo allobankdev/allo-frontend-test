@@ -25,6 +25,16 @@
           elevation="2"
           class="rounded-xl"
         >
+          <!-- Custom rocket badge -->
+          <v-chip
+            v-if="data.data.id.startsWith('custom_')"
+            class="custom-rocket-badge"
+            color="secondary"
+            prepend-icon="mdi-star"
+          >
+            Custom Rocket
+          </v-chip>
+
           <!-- Image Gallery -->
           <v-carousel
             v-if="data.data.flickr_images.length > 0"
@@ -60,6 +70,14 @@
 
           <v-card-subtitle class="text-h6">
             {{ data.data.country }}
+            <v-chip
+              v-if="data.data.company"
+              class="ml-2"
+              size="small"
+              variant="outlined"
+            >
+              {{ data.data.company }}
+            </v-chip>
           </v-card-subtitle>
 
           <v-card-text>
@@ -72,8 +90,7 @@
                 cols="6"
                 sm="4"
               >
-                <div
-                  class="stat-card"
+                <StatCard
                   title="First Flight"
                   :value="formatDate(data.data.first_flight)"
                   icon="mdi-calendar"
@@ -83,8 +100,7 @@
                 cols="6"
                 sm="4"
               >
-                <div
-                  class="stat-card"
+                <StatCard
                   title="Cost per Launch"
                   :value="'$' + data.data.cost_per_launch.toLocaleString()"
                   icon="mdi-cash"
@@ -94,8 +110,7 @@
                 cols="6"
                 sm="4"
               >
-                <div
-                  class="stat-card"
+                <StatCard
                   title="Success Rate"
                   :value="data.data.success_rate_pct + '%'"
                   icon="mdi-trending-up"
@@ -105,8 +120,11 @@
 
             <v-divider class="my-4" />
 
-            <div class="d-flex justify-space-between align-center">
+            <div
+              class="d-flex justify-space-between align-center flex-wrap gap-3"
+            >
               <v-btn
+                v-if="data.data.wikipedia"
                 color="primary"
                 :href="data.data.wikipedia"
                 target="_blank"
@@ -115,6 +133,7 @@
               >
                 Wikipedia Page
               </v-btn>
+              <div v-else />
 
               <v-chip-group>
                 <v-chip
@@ -163,10 +182,18 @@ const { data, isLoading, error, refetch } = useQuery({
 <style lang="scss" scoped>
 .v-card {
   overflow: hidden;
+  position: relative;
 
   &-title {
     word-break: break-word;
   }
+}
+
+.custom-rocket-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 3;
 }
 
 .v-carousel {
@@ -175,23 +202,36 @@ const { data, isLoading, error, refetch } = useQuery({
 
 .stat-card {
   border-radius: 8px;
-  padding: 12px;
+  padding: 16px;
   background: rgba(0, 0, 0, 0.02);
   height: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.05);
 
   &__title {
-    font-size: 0.8rem;
+    font-size: 0.875rem;
     color: rgba(0, 0, 0, 0.6);
+    font-weight: 500;
   }
 
   &__value {
-    font-size: 1.2rem;
+    font-size: 1.25rem;
     font-weight: bold;
+    color: rgba(0, 0, 0, 0.87);
   }
 }
 
-.v-expansion-panel-title {
-  display: flex;
-  gap: 1rem;
+.gap-3 {
+  gap: 12px;
+}
+
+@media (max-width: 600px) {
+  .d-flex.justify-space-between {
+    flex-direction: column;
+    align-items: stretch;
+
+    .v-btn {
+      margin-bottom: 16px;
+    }
+  }
 }
 </style>

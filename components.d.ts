@@ -15,8 +15,10 @@ declare module 'vue' {
     GoBackButton: typeof import('./src/components/GoBackButton.vue')['default']
     NavigationDrawer: typeof import('./src/components/NavigationDrawer.vue')['default']
     PaginationCustom: typeof import('./src/components/PaginationCustom.vue')['default']
+    RocketFormComponent: typeof import('./src/components/RocketFormComponent.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SkeletonLoader: typeof import('./src/components/SkeletonLoader.vue')['default']
+    StatCard: typeof import('./src/components/StatCard.vue')['default']
   }
 }
