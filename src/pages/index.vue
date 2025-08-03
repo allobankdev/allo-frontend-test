@@ -1,15 +1,26 @@
 <template>
   <v-container class="my-8">
     <v-row justify="center">
-      <template v-for="item in navigationItems" :key="item.name">
-        <v-col cols="12" sm="6" md="4">
+      <template
+        v-for="item in navigationItems"
+        :key="item.name"
+      >
+        <v-col
+          cols="12"
+          sm="6"
+          md="4"
+        >
           <v-card
             class="mx-auto"
             max-width="344"
             hover
             @click="navigateTo(item.url)"
           >
-            <v-img :src="item.image" height="400px" cover></v-img>
+            <v-img
+              :src="item.image"
+              height="400px"
+              cover
+            />
 
             <v-card-title>{{ item.title }} </v-card-title>
             <v-card-actions>
