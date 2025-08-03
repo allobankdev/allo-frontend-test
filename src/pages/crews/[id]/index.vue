@@ -1,18 +1,9 @@
 <template>
   <v-container class="py-8">
     <!-- Loading State -->
-    <v-row
-      v-if="isLoading"
-      justify="center"
-    >
-      <v-col
-        cols="12"
-        md="12"
-      >
-        <SkeletonLoader
-          type="image, article"
-          height="400px"
-        />
+    <v-row v-if="isLoading" justify="center">
+      <v-col cols="12" md="12">
+        <SkeletonLoader type="image, article" height="400px" />
       </v-col>
     </v-row>
 
@@ -24,30 +15,17 @@
     </v-row>
 
     <!-- Data Loaded -->
-    <v-row
-      v-else-if="data"
-      justify="center"
-    >
-      <v-col
-        cols="12"
-        md="12"
-      >
-        <v-card
-          class="crew-card"
-          elevation="4"
-        >
+    <v-row v-else-if="data" justify="center">
+      <v-col cols="12" md="12">
+        <v-card class="crew-card" elevation="4">
           <v-row no-gutters>
             <!-- Image Column (Left) -->
-            <v-col
-              cols="12"
-              md="5"
-              class="image-col"
-            >
+            <v-col cols="12" md="5" class="image-col">
               <div class="crew-image-container">
                 <v-img
                   :src="
                     data.data.image ||
-                      'https://via.placeholder.com/500x700?text=No+Image'
+                    'https://via.placeholder.com/500x700?text=No+Image'
                   "
                   height="100%"
                   min-height="500px"
@@ -61,9 +39,7 @@
                       align="center"
                       justify="center"
                     >
-                      <v-icon size="x-large">
-                        mdi-account-astronaut
-                      </v-icon>
+                      <v-icon size="x-large"> mdi-account-astronaut </v-icon>
                     </v-row>
                   </template>
 
@@ -79,20 +55,13 @@
             </v-col>
 
             <!-- Information Column (Right) -->
-            <v-col
-              cols="12"
-              md="7"
-              class="info-col"
-            >
+            <v-col cols="12" md="7" class="info-col">
               <v-card-text class="pa-6">
                 <v-card-title class="text-h3 mb-4">
                   {{ data.data.name || "Unknown Astronaut" }}
                 </v-card-title>
 
-                <v-card-subtitle
-                  v-if="data.data.agency"
-                  class="text-h5 mb-6"
-                >
+                <v-card-subtitle v-if="data.data.agency" class="text-h5 mb-6">
                   {{ data.data.agency }}
                 </v-card-subtitle>
 
@@ -100,20 +69,12 @@
 
                 <!-- Details Section -->
                 <div class="mb-8">
-                  <h3 class="text-h5 mb-4">
-                    Crew Information
-                  </h3>
+                  <h3 class="text-h5 mb-4">Crew Information</h3>
 
-                  <v-list
-                    density="comfortable"
-                    class="transparent"
-                  >
+                  <v-list density="comfortable" class="transparent">
                     <v-list-item>
                       <template #prepend>
-                        <v-icon
-                          size="large"
-                          color="primary"
-                        >
+                        <v-icon size="large" color="primary">
                           mdi-badge-account
                         </v-icon>
                       </template>
@@ -127,10 +88,7 @@
 
                     <v-list-item>
                       <template #prepend>
-                        <v-icon
-                          size="large"
-                          color="primary"
-                        >
+                        <v-icon size="large" color="primary">
                           mdi-account-group
                         </v-icon>
                       </template>
@@ -144,10 +102,7 @@
 
                     <v-list-item>
                       <template #prepend>
-                        <v-icon
-                          size="large"
-                          color="primary"
-                        >
+                        <v-icon size="large" color="primary">
                           mdi-rocket-launch
                         </v-icon>
                       </template>
@@ -162,13 +117,8 @@
                 </div>
 
                 <!-- Launches Section -->
-                <div
-                  v-if="data.data.launches.length > 0"
-                  class="mb-8"
-                >
-                  <h3 class="text-h5 mb-4">
-                    Participated Launches
-                  </h3>
+                <div v-if="data.data.launches.length > 0" class="mb-8">
+                  <h3 class="text-h5 mb-4">Participated Launches</h3>
                   <div class="chips-container">
                     <v-chip
                       v-for="(launch, index) in data.data.launches"
@@ -200,6 +150,7 @@
             </v-col>
           </v-row>
         </v-card>
+        <GoBackButton class="my-5" />
       </v-col>
     </v-row>
   </v-container>
@@ -209,7 +160,7 @@
 import { useRoute } from "vue-router";
 import { useQuery } from "@tanstack/vue-query";
 import { formatStatus, getStatusColor } from "@/utils/helper";
-import { useCrewsStore } from "@/store/crews.store";
+import { useCrewsStore } from "@/stores/crews.store";
 
 const route = useRoute();
 const crewId = route.params.id as string;

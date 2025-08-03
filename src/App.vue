@@ -5,7 +5,6 @@
       <v-main class="main-container">
         <v-container>
           <RouterView />
-          <GoBackButton class="mb-10" />
         </v-container>
       </v-main>
     </v-layout>

@@ -1,11 +1,7 @@
 <template>
   <v-container class="py-10">
     <v-row justify="center">
-      <v-col
-        cols="12"
-        md="10"
-        lg="8"
-      >
+      <v-col cols="12" md="10" lg="8">
         <!-- Loading -->
         <SkeletonLoader
           v-if="isLoading"
@@ -14,17 +10,10 @@
         />
 
         <!-- Error -->
-        <ErrorComponent
-          v-else-if="error"
-          @refresh="refetch"
-        />
+        <ErrorComponent v-else-if="error" @refresh="refetch" />
 
         <!-- Data Loaded -->
-        <v-card
-          v-else-if="data"
-          elevation="2"
-          class="rounded-xl"
-        >
+        <v-card v-else-if="data" elevation="2" class="rounded-xl">
           <!-- Image Gallery -->
           <v-carousel
             v-if="data.data.flickr_images.length > 0"
@@ -68,10 +57,7 @@
             </p>
 
             <v-row>
-              <v-col
-                cols="6"
-                sm="4"
-              >
+              <v-col cols="6" sm="4">
                 <div
                   class="stat-card"
                   title="First Flight"
@@ -79,10 +65,7 @@
                   icon="mdi-calendar"
                 />
               </v-col>
-              <v-col
-                cols="6"
-                sm="4"
-              >
+              <v-col cols="6" sm="4">
                 <div
                   class="stat-card"
                   title="Cost per Launch"
@@ -90,10 +73,7 @@
                   icon="mdi-cash"
                 />
               </v-col>
-              <v-col
-                cols="6"
-                sm="4"
-              >
+              <v-col cols="6" sm="4">
                 <div
                   class="stat-card"
                   title="Success Rate"
@@ -124,11 +104,7 @@
                 >
                   Active
                 </v-chip>
-                <v-chip
-                  v-else
-                  color="error"
-                  prepend-icon="mdi-close-circle"
-                >
+                <v-chip v-else color="error" prepend-icon="mdi-close-circle">
                   Inactive
                 </v-chip>
                 <v-chip prepend-icon="mdi-calendar">
@@ -138,6 +114,7 @@
             </div>
           </v-card-text>
         </v-card>
+        <GoBackButton class="my-5" />
       </v-col>
     </v-row>
   </v-container>
@@ -147,7 +124,7 @@
 import { useRoute } from "vue-router";
 import { useQuery } from "@tanstack/vue-query";
 import { formatDate } from "@/utils/helper";
-import { useRocketsStore } from "@/store/rockets.store";
+import { useRocketsStore } from "@/stores/rockets.store";
 
 const route = useRoute();
 const rocketId = route.params.id as string;
