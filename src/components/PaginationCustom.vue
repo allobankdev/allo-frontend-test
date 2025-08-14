@@ -27,52 +27,26 @@
 </template>
 
 <script setup lang="ts">
-import type { queryData } from "@/types/api.type";
-import apiInstance from "@/lib/api";
-import { computed, ref, watchEffect } from "vue";
+import { computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
+
+const props = defineProps<{
+  lastPage: number;
+  currentPage: number;
+}>();
 
 const router = useRouter();
 const route = useRoute();
 
 const page = computed(() => parseInt(route.query.page as string) || 1);
-const limit = computed(() => parseInt(route.query.limit as string) || 4);
-const agency = computed(() => (route.query.agency as string) || "");
-const name = computed(() => (route.query.name as string) || "");
-const lastPage = ref(1);
-const currentPage = ref(1);
+
 function goToPage(newPage: number) {
   router
     .push({ query: { ...route.query, page: newPage.toString() } })
     .then(() => {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     });
 }
-
-watchEffect(async () => {
-  const query: queryData = {
-    name: {
-      $regex: name.value,
-      $options: "i",
-    },
-  };
-
-  if (agency.value && agency.value !== "All") {
-    query.agency = agency.value;
-  }
-  const { data } = await apiInstance.post("/v4/crew/query", {
-    query,
-    options: {
-      limit: limit.value,
-      page: page.value,
-    },
-  });
-  lastPage.value = data.totalPages;
-  currentPage.value = data.page;
-});
 </script>
 
 <style scoped>

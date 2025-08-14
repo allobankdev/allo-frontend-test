@@ -6,22 +6,9 @@
   />
 
   <!-- Skeleton Loader saat loading -->
-  <v-row
-    v-if="isLoading"
-    justify="center"
-  >
-    <v-col
-      v-for="n in 8"
-      :key="n"
-      cols="12"
-      sm="6"
-      md="6"
-    >
-      <SkeletonLoader
-        type="card"
-        elevation="2"
-        height="300px"
-      />
+  <v-row v-if="isLoading" justify="center">
+    <v-col v-for="n in 8" :key="n" cols="12" sm="6" md="6">
+      <SkeletonLoader type="card" elevation="2" height="300px" />
     </v-col>
   </v-row>
 
@@ -34,9 +21,7 @@
 
   <v-row v-else>
     <v-col cols="12">
-      <h1 class="text-h4 mb-6">
-        SpaceX Crew Members
-      </h1>
+      <h1 class="text-h4 mb-6">SpaceX Crew Members</h1>
     </v-col>
 
     <!-- Crew Cards -->
@@ -58,20 +43,16 @@
     </template>
 
     <!-- Tampilkan pesan jika data kosong -->
-    <v-col
-      v-else
-      cols="12"
-      class="text-center"
-    >
+    <v-col v-else cols="12" class="text-center">
       <CardNotFound />
     </v-col>
     <!-- Pagination -->
-    <v-col
-      cols="12"
-      class="mt-6"
-    >
+    <v-col cols="12" class="mt-6">
       <GoBackButton class="my-5" />
-      <PaginationCustom />
+      <PaginationCustom
+        :last-page="data?.totalPages || 1"
+        :current-page="data?.page || 1"
+      />
     </v-col>
   </v-row>
 </template>

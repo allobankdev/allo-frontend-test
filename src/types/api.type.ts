@@ -1,6 +1,8 @@
 export interface ApiResponse<T> {
   docs: T;
   totalDocs?: number;
+  totalPages?: string;
+  page?: string;
 }
 
 export interface queryData {
