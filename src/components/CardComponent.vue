@@ -1,5 +1,9 @@
 <template>
-  <v-card class="custom-card" elevation="6" :style="{ height: '100%' }">
+  <v-card
+    class="custom-card"
+    elevation="6"
+    :style="{ height: '100%' }"
+  >
     <v-img
       :src="image"
       height="400px"
@@ -9,8 +13,14 @@
       gradient="to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.5)"
     >
       <template #placeholder>
-        <v-row class="fill-height ma-0" align="center" justify="center">
-          <v-icon size="x-large"> mdi-rocket </v-icon>
+        <v-row
+          class="fill-height ma-0"
+          align="center"
+          justify="center"
+        >
+          <v-icon size="x-large">
+            mdi-rocket
+          </v-icon>
         </v-row>
       </template>
     </v-img>
@@ -19,7 +29,10 @@
       {{ title }}
     </v-card-title>
 
-    <v-card-text v-if="description" class="custom-card__description">
+    <v-card-text
+      v-if="description"
+      class="custom-card__description"
+    >
       <div class="text-truncate--2-lines">
         {{ description }}
       </div>
