@@ -86,7 +86,7 @@ const filtered = computed(() => {
 
 .img-rocket {
   position: absolute;
-  right: 86px;
+  right: 200px;
   top: 188px;
   width: 300px;
   height: 299px;

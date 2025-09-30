@@ -1,8 +1,8 @@
 <template>
   <div v-if="rocket" class="page">
-    <button class="btn-back" @click="$router.back()">&#128281; Back</button>
-    <img :src="rocket.flickr_images" alt="rocket" />
     <div class="grid-col">
+      <button class="btn-back" @click="$router.back()">&#128281; Back</button>
+      <img :src="rocket.flickr_images" alt="rocket" />
       <div class="txt-name">{{ rocket.name }}</div>
       <div class="txt-desc">{{ rocket.description }}</div>
       <div>
@@ -52,7 +52,7 @@ onMounted(async () => {
     font-weight: 800;
     font-size: 28px;
   }
-  .txt-desc{
+  .txt-desc {
     font-weight: 500;
   }
 }
