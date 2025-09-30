@@ -13,6 +13,7 @@ declare module 'vue' {
     Landing: typeof import('./src/components/landing/index.vue')['default']
     LandingPage: typeof import('./src/components/landing/LandingPage.vue')['default']
     NCircle: typeof import('./src/components/NCircle/NCircle.vue')['default']
+    NDashboard: typeof import('./src/components/NDashboard.vue')['default']
     Nloading: typeof import('./src/components/Nloading/Nloading.vue')['default']
     RocketItem: typeof import('./src/components/landing/components/rocket-item/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
