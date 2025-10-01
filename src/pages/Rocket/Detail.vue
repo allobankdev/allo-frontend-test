@@ -48,8 +48,13 @@ const route = useRoute();
 const store = useRocketStore();
 const rocket = ref<IDataRocket | null>(null);
 
-onMounted(() => {
+onMounted(async() => {
   const id = route.params.id as string;
+
+  if (store.rockets.length === 0) {
+    await store.loadRockets();
+  }
+
   rocket.value = store.rockets.find(r => r.id === id) || null;
 });
 </script>
