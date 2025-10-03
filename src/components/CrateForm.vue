@@ -11,7 +11,7 @@ const form = ref<Rocket>({
   rocket_name: "",
   description: "",
   cost_per_launch: 0,
-//   country: "",
+  country: "",
   company: "",
   first_flight: "",
   flickr_images: [],
@@ -103,13 +103,13 @@ function saveRocket() {
       />
 
       <!-- Company -->
-      <!-- <v-text-field
+      <v-text-field
         v-model="form.company"
         label="Company"
         variant="outlined"
         required
         class="mb-3"
-      /> -->
+      />
 
       <!-- First Flight -->
       <v-text-field
