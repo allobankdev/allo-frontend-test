@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     Card: typeof import('./src/components/Card.vue')['default']
     CrateForm: typeof import('./src/components/CrateForm.vue')['default']
+    CreateForm: typeof import('./src/components/CreateForm.vue')['default']
     Empty: typeof import('./src/components/Empty.vue')['default']
     Error: typeof import('./src/components/Error.vue')['default']
     Filter: typeof import('./src/components/Filter.vue')['default']

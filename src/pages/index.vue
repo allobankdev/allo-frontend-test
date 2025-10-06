@@ -17,7 +17,6 @@ const rocketData = computed(() => {return rocketStore.filteredRockets});
 async function getAllRockets() {
   try {
     loading.value = true
-    error.value = null
     const res = await rocketStore.fetchAllRockets()
     rocketStore.$patch({ rocketData: res });
   } catch (err: any) {

@@ -33,7 +33,7 @@ function saveRocket() {
       rocket_name: "",
       description: "",
       cost_per_launch: 0,
-    //   country: "",
+      country: "",
       company: "",
       first_flight: "",
       flickr_images: [],
@@ -102,7 +102,7 @@ function saveRocket() {
         class="mb-3"
       />
 
-      <!-- Company -->
+      <!-- Country -->
       <v-text-field
         v-model="form.company"
         label="Company"
