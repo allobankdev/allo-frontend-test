@@ -20,7 +20,7 @@
     </v-img>
 
     <v-card-title class="d-flex align-center justify-space-between">
-      <div class="text-subtitle-1 font-weight-bold">
+      <div class="text-subtitle-1 font-weight-bold text-truncate-2">
         {{ rocket.name }}
       </div>
       <v-chip
@@ -33,15 +33,19 @@
       </v-chip>
     </v-card-title>
 
-    <v-card-subtitle class="d-flex gap-2 align-center">
-      <v-icon icon="mdi-flag" size="small" />
-      <span>{{ rocket.country || 'Unknown' }}</span>
-      <v-divider vertical class="mx-2" />
-      <v-icon icon="mdi-cash" size="small" />
-      <span>{{ formattedCost }}</span>
+    <v-card-subtitle class="d-flex gap-2 align-center flex-wrap">
+      <div class="d-flex align-center gap-1 text-body-2">
+        <v-icon icon="mdi-flag" size="small" />
+        <span class="text-truncate-1">{{ rocket.country || 'Unknown' }}</span>
+      </div>
+      <v-divider vertical class="mx-1" />
+      <div class="d-flex align-center gap-1 text-body-2">
+        <v-icon icon="mdi-cash" size="small" />
+        <span>{{ formattedCost }}</span>
+      </div>
     </v-card-subtitle>
 
-    <v-card-text class="text-body-2 text-truncate-3">
+    <v-card-text class="text-body-2 text-medium-emphasis text-truncate-3">
       {{ rocket.description }}
     </v-card-text>
 
@@ -93,10 +97,7 @@ function handleClick () {
   transform: translateY(-2px);
 }
 
-.text-truncate-3 {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  overflow: hidden;
-}
+.text-truncate-1 { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden; }
+.text-truncate-2 { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.text-truncate-3 { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
 </style>

@@ -20,7 +20,10 @@
 
     <v-card title="Add Rocket">
       <v-card-text>
-        <v-form ref="formRef" @submit.prevent="handleSubmit">
+        <v-form
+          ref="formRef"
+          @submit.prevent="handleSubmit"
+        >
           <v-text-field
             v-model="form.name"
             label="Name"
@@ -126,14 +129,15 @@ function close () {
   isOpen.value = false
 }
 
-function handleSubmit () {
-  const valid = formRef.value?.validate?.()
-  if (valid === false) return
+async function handleSubmit () {
+  const result = await formRef.value?.validate?.()
+  const isValid = typeof result === 'boolean' ? result : result?.valid
+  if (!isValid) return
   emit('save', { ...form })
   close()
 }
 
-const requiredRule = (value: string) => !!value || 'Required'
+const requiredRule = (value: string) => !!value?.trim?.() || 'Required'
 const numberRule = (value?: number | string) => {
   if (value === undefined || value === '' || value === null) return true
   return Number(value) >= 0 || 'Must be >= 0'

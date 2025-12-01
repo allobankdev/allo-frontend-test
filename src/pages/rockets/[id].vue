@@ -33,7 +33,7 @@
       type="card-avatar, article, actions"
     />
 
-    <div v-else-if="rocket" class="d-flex flex-column gap-6">
+    <div v-else-if="rocket" class="d-flex flex-column gap-6 detail-wrapper">
       <v-row>
         <v-col cols="12" md="6">
           <v-img
@@ -68,15 +68,15 @@
               SpaceX
             </v-chip>
           </div>
-          <h1 class="text-h4 font-weight-bold mb-2">{{ rocket.name }}</h1>
-          <p class="text-body-1 text-medium-emphasis mb-4">
+          <h1 class="text-h4 font-weight-bold mb-2 detail-title">{{ rocket.name }}</h1>
+          <p class="text-body-1 text-medium-emphasis mb-4 detail-description">
             {{ rocket.description }}
           </p>
-          <div class="d-flex flex-wrap gap-3 mb-4">
-            <v-chip prepend-icon="mdi-flag">{{ rocket.country || 'Unknown' }}</v-chip>
-            <v-chip prepend-icon="mdi-domain">{{ rocket.company }}</v-chip>
-            <v-chip prepend-icon="mdi-calendar">{{ rocket.first_flight || 'TBD' }}</v-chip>
-            <v-chip prepend-icon="mdi-cash" variant="tonal">{{ formattedCost }}</v-chip>
+          <div class="d-flex flex-wrap gap-3 mb-4 chip-row">
+            <v-chip prepend-icon="mdi-flag" size="small">{{ rocket.country || 'Unknown' }}</v-chip>
+            <v-chip prepend-icon="mdi-domain" size="small">{{ rocket.company }}</v-chip>
+            <v-chip prepend-icon="mdi-calendar" size="small">{{ rocket.first_flight || 'TBD' }}</v-chip>
+            <v-chip prepend-icon="mdi-cash" size="small" variant="tonal">{{ formattedCost }}</v-chip>
           </div>
           <div class="d-flex gap-2 align-center text-body-2">
             <v-icon :color="rocket.active ? 'success' : 'error'" icon="mdi-circle" size="small" />
@@ -133,3 +133,21 @@ function reload () {
   store.loadRocketDetail(rocketId.value)
 }
 </script>
+
+<style scoped>
+.detail-wrapper {
+  max-width: 1200px;
+}
+
+.detail-title {
+  text-wrap: balance;
+}
+
+.detail-description {
+  line-height: 1.6;
+}
+
+.chip-row {
+  row-gap: 8px;
+}
+</style>

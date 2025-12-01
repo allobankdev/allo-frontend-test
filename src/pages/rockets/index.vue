@@ -1,5 +1,5 @@
 <template>
-  <v-container class="py-8">
+  <v-container class="py-8 rocket-page">
     <v-row class="align-center mb-6">
       <v-col cols="12" md="6" class="d-flex align-center gap-3">
         <v-icon icon="mdi-rocket-launch-outline" size="x-large" color="primary" />
@@ -154,3 +154,20 @@ function resetFilter () {
   store.setFilter('')
 }
 </script>
+
+<style scoped>
+.rocket-page {
+  max-width: 1280px;
+}
+
+.rocket-page :deep(.v-card-title),
+.rocket-page :deep(.v-card-subtitle),
+.rocket-page :deep(.v-card-text) {
+  padding-inline: 20px;
+}
+
+.rocket-page :deep(.v-card-actions) {
+  padding-inline: 20px;
+  padding-bottom: 16px;
+}
+</style>
