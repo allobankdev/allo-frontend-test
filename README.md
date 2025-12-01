@@ -45,7 +45,8 @@ Good luck with your assignment! Don't hesitate to contact us if you have any que
 - `npm run lint` – ESLint (no auto-fix, fails on warnings)
 - `npm run type-check` – Vue TSC project build
 - `npm run build` – type-check + production build
-- `npm run check` / `npm run ci` – lint + type-check + build-only (CI-friendly)
+- `npm run test` – Vitest (store tests)
+- `npm run check` / `npm run ci` – lint + type-check + build-only + tests (CI-friendly)
 
 ## Env
 

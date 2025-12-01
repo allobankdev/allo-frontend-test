@@ -4,6 +4,28 @@ import { defineStore } from 'pinia'
 
 type LoadStatus = 'idle' | 'loading' | 'success' | 'error'
 
+const LOCAL_STORAGE_KEY = 'rockets:local'
+
+function loadLocalRocketsFromStorage (): RocketListItem[] {
+  if (typeof localStorage === 'undefined') return []
+  try {
+    const raw = localStorage.getItem(LOCAL_STORAGE_KEY)
+    return raw ? JSON.parse(raw) as RocketListItem[] : []
+  } catch (e) {
+    console.warn('Failed to load local rockets from storage', e)
+    return []
+  }
+}
+
+function persistLocalRockets (rockets: RocketListItem[]) {
+  if (typeof localStorage === 'undefined') return
+  try {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(rockets))
+  } catch (e) {
+    console.warn('Failed to persist local rockets', e)
+  }
+}
+
 interface State {
   rockets: RocketListItem[]
   localRockets: RocketListItem[]
@@ -15,7 +37,7 @@ interface State {
 export const useRocketsStore = defineStore('rockets', {
   state: (): State => ({
     rockets: [],
-    localRockets: [],
+    localRockets: loadLocalRocketsFromStorage(),
     status: 'idle',
     error: null,
     filter: '',
@@ -32,7 +54,7 @@ export const useRocketsStore = defineStore('rockets', {
       const query = this.filter.toLowerCase()
       return this.allRockets.filter(rocket => rocket.name.toLowerCase().includes(query))
     },
-    getRocketById (state) {
+    getRocketById () {
       return (id: string): RocketListItem | undefined => {
         return this.allRockets.find(rocket => rocket.id === id)
       }
@@ -100,6 +122,7 @@ export const useRocketsStore = defineStore('rockets', {
         isLocal: true,
       }
       this.localRockets.unshift(rocket)
+      persistLocalRockets(this.localRockets)
     },
     clearError () {
       this.error = null
