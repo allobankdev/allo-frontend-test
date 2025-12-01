@@ -9,7 +9,9 @@
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
-    "lint": "eslint . --fix"
+    "lint": "eslint . --max-warnings=0",
+    "check": "npm run lint && npm run type-check && npm run build-only",
+    "ci": "npm run check"
   },
   "dependencies": {
     "@mdi/font": "7.4.47",

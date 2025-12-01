@@ -24,3 +24,29 @@ Responsive design
 You don’t need to worry about the detailed design, we’re not interested in your artistic prowess (for now), put your efforts on creating a readable/clean/maintainable source code.
 
 Good luck with your assignment! Don't hesitate to contact us if you have any questions about the assignment process.
+
+---
+
+## Implementation Notes
+
+- Stack: Vite + Vue 3 + TypeScript + Vuetify + Pinia + Vue Router.
+- Rockets data fetched from SpaceX API v4; local additions stored client-side.
+- UI states covered: loading skeletons, error + retry, success, empty state with filter hint.
+
+## Getting Started
+
+1. Install deps: `npm install`
+2. Copy env example: `cp .env.example .env` (edit `VITE_SPACEX_API` if needed)
+3. Run dev server: `npm run dev`
+
+## Scripts
+
+- `npm run dev` – start development server
+- `npm run lint` – ESLint (no auto-fix, fails on warnings)
+- `npm run type-check` – Vue TSC project build
+- `npm run build` – type-check + production build
+- `npm run check` / `npm run ci` – lint + type-check + build-only (CI-friendly)
+
+## Env
+
+`VITE_SPACEX_API` defaults to `https://api.spacexdata.com/v4` (see `.env.example`).

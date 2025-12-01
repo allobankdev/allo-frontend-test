@@ -72,11 +72,33 @@
 
     <v-empty-state
       v-else
-      headline="No rockets found"
-      title="Try adjusting the filter or add a new rocket"
+      :headline="filter ? 'No rockets match your filter' : 'No rockets found'"
+      :title="filter ? 'Try adjusting the filter or add a new rocket' : 'Add your first rocket'"
       action-text="Reset filter"
       @click:action="resetFilter"
-    />
+    >
+      <template #actions>
+        <v-btn
+          v-if="filter"
+          variant="outlined"
+          color="primary"
+          prepend-icon="mdi-filter-remove"
+          @click="resetFilter"
+        >
+          Clear filter
+        </v-btn>
+        <RocketAddDialog @save="handleAdd" />
+      </template>
+    </v-empty-state>
+
+    <v-snackbar
+      v-model="snackbar"
+      location="top right"
+      color="success"
+      timeout="2500"
+    >
+      {{ snackbarMessage }}
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -95,6 +117,9 @@ const { filteredRockets, status, error, filter } = storeToRefs(store)
 
 const dialog = ref(false)
 const localFilter = ref(filter.value)
+const snackbar = ref(false)
+const snackbarMessage = ref('')
+let filterTimer: number | undefined
 
 const isLoading = computed(() => status.value === 'loading')
 const rockets = computed(() => filteredRockets.value)
@@ -104,8 +129,11 @@ onMounted(() => {
 })
 
 watch(localFilter, (value) => {
-  store.setFilter(value || '')
-})
+  if (filterTimer) window.clearTimeout(filterTimer)
+  filterTimer = window.setTimeout(() => {
+    store.setFilter(value || '')
+  }, 250)
+}, { immediate: true })
 
 function openDetail (id: string) {
   router.push({ path: `/rockets/${id}` })
@@ -113,6 +141,8 @@ function openDetail (id: string) {
 
 function handleAdd (payload: RocketCreateInput) {
   store.addRocket(payload)
+  snackbarMessage.value = 'Rocket added'
+  snackbar.value = true
 }
 
 function retry () {

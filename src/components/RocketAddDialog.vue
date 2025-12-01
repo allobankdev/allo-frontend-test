@@ -26,6 +26,7 @@
             label="Name"
             prepend-inner-icon="mdi-rocket-outline"
             required
+            :rules="[requiredRule]"
           />
           <v-textarea
             v-model="form.description"
@@ -33,6 +34,7 @@
             auto-grow
             rows="2"
             required
+            :rules="[requiredRule]"
           />
           <v-text-field
             v-model="form.image"
@@ -55,6 +57,7 @@
             prepend-inner-icon="mdi-cash"
             type="number"
             min="0"
+            :rules="[numberRule]"
           />
         </v-form>
       </v-card-text>
@@ -124,10 +127,15 @@ function close () {
 }
 
 function handleSubmit () {
-  if (!form.name || !form.description) {
-    return
-  }
+  const valid = formRef.value?.validate?.()
+  if (valid === false) return
   emit('save', { ...form })
   close()
+}
+
+const requiredRule = (value: string) => !!value || 'Required'
+const numberRule = (value?: number | string) => {
+  if (value === undefined || value === '' || value === null) return true
+  return Number(value) >= 0 || 'Must be >= 0'
 }
 </script>
