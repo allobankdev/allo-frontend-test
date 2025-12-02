@@ -23,4 +23,12 @@ In this assignment, you’re assigned to create a website that displays rockets.
 Responsive design
 You don’t need to worry about the detailed design, we’re not interested in your artistic prowess (for now), put your efforts on creating a readable/clean/maintainable source code.
 
+### Submission
+
+1.  **Fork** this repository.
+
+2.  Implement your solution on a dedicated feature branch (e.g., `feat/allo-spacex`).
+
+3.  When complete, submit your solution via a **Pull Request (PR)** back to the main repository.
+
 Good luck with your assignment! Don't hesitate to contact us if you have any questions about the assignment process.
