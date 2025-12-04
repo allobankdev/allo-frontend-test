@@ -1,21 +1,14 @@
 <template>
-  <HelloWorld />
-  <li v-for="(rocket, idx) in data" :key="idx">
-    {{ rocket.height }}
-  </li>
+  <RocketList :data="data" :is-loading="isLoading" />
 </template>
 
 <script lang="ts" setup>
-import { getRockets } from "@/services/rocket";
-import type { Rocket } from "@/types/rockets";
+import { getAllRockets } from "@/services/rocket";
 import { useQuery } from "@tanstack/vue-query";
-import {  ref, } from "vue";
 
-const rockets = ref<Rocket[]>([]);
-
-const { isPending, isError, data, error } = useQuery({
+const { data, isLoading } = useQuery({
   queryKey: ["rockets"],
-  queryFn: getRockets,
+  queryFn: getAllRockets,
 });
 // watch(data, (val) => {
 //   console.log("ROCKETS FETCHED:", val);

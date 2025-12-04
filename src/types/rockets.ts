@@ -6,6 +6,7 @@ interface PayloadWeight {
 }
 
 export interface Rocket {
+  id: string;
   name: string;
   type: string;
   active: boolean;
