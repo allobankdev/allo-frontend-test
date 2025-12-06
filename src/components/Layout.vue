@@ -1,18 +1,11 @@
 <template>
-  <v-app class="w-100">
+  <v-app>
     <!-- NAVBAR -->
-    <v-app-bar color="primary" dark>
+    <v-app-bar color="primary" dark class="pr-6 position-fixed top-0">
       <v-toolbar-title>SpaceX Explorer</v-toolbar-title>
 
-      <v-spacer />
-
-      <!-- Link ke Home -->
-      <v-btn v-if="isHomePage" to="/" text>Home</v-btn>
-
       <!-- Tampil hanya jika bukan di halaman Home -->
-      <v-btn v-if="!isHomePage" text color="yellow" @click="goHome">
-        Back to Home
-      </v-btn>
+      <v-btn v-if="!isHomePage" text @click="goHome"> Back to Home </v-btn>
     </v-app-bar>
 
     <!-- MAIN CONTENT -->

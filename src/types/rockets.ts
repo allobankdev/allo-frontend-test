@@ -1,4 +1,4 @@
-interface PayloadWeight {
+export interface PayloadWeight {
   id: string;
   name: string;
   kg: number;
@@ -96,4 +96,28 @@ export interface Rocket {
   flickr_images: string[];
   wikipedia: string;
   description: string;
+}
+
+export interface QueryRocket {
+  docs: Rocket[];
+}
+
+export type RocketPayload = Pick<
+  Rocket,
+  | "name"
+  | "description"
+  | "cost_per_launch"
+  | "country"
+  | "first_flight"
+  | "active"
+> & {
+  id?: string;
+  image: string;
+};
+
+export interface RocketFilter {
+  search?: string;
+  active?: boolean;
+
+  sortBy?: "asc" | "desc";
 }
