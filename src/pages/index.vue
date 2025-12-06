@@ -1,5 +1,5 @@
 <template>
-  <HelloWorld />
+  <RocketList />
 </template>
 
 <script lang="ts" setup>
