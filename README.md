@@ -1,34 +1,28 @@
 # Allo Bank Frontend Technical Assignment
 
-In this assignment, you’re assigned to create a website that displays rockets. This website only has two screens: rocket list screen and rocket detail screen. Here are the requirements:
+This project is built as part of the Allo Bank Frontend Technical Test.
 
-### Functional Requirements
-- As a user, I want to see a list of rockets in the rocket list screen (Show each rocket image, rocket name, and rocket description)
-- As a user, I want to be able to filter the rockets in the rocket list screen
-- As a user, I want to be able to add the new rocket in the rocket list screen
-- As a user, I want to be able to see the rocket detail by clicking a rocket in the rocket list screen (Show rocket image, rocket name, rocket description, cost per launch, country, first flight)
+A lightweight Vue 3 + TypeScript + Vuetify application that displays a list of SpaceX rockets, provides rocket details, and allows users to add custom rockets.
+The app demonstrates clean architecture, state management, componentization, and UI state handling (loading, error, retry flow).
 
-### Non-Functional Requirements
-- Use Space-X API (https://github.com/r-spacex/SpaceX-API) for getting the rocket data
-- Implement routers
-- Implement state management
-- Implement lifecycles
-- Create components based will be + points
-- UI states (Loading, Fail/Retry, and Success)
-- Show loading when waiting response from API
-- If an error occurred, user can retry by pressing retry button
-- Show result when get response from API
+This application communicates with the SpaceX public API (https://api.spacexdata.com/v4/rockets) to retrieve a list of rockets and their details.
 
-### Nice to have characteristics
-Responsive design
-You don’t need to worry about the detailed design, we’re not interested in your artistic prowess (for now), put your efforts on creating a readable/clean/maintainable source code.
+### Run Instruction
 
-### Submission
+1.  Install dependencies
 
-1.  **Fork** this repository.
+```bash
+npm install
+```
 
-2.  Implement your solution on a dedicated feature branch (e.g., `feat/allo-spacex`).
+2.  Run dev server
 
-3.  When complete, submit your solution via a **Pull Request (PR)** back to the main repository.
+```bash
+npm run dev
+```
 
-Good luck with your assignment! Don't hesitate to contact us if you have any questions about the assignment process.
+The application will start at:
+
+```bash
+http://localhost:3000
+```

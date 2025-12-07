@@ -1,11 +1,16 @@
 <template>
   <v-app>
     <v-main>
-      <router-view />
+      <v-container class="py-6">
+        <v-app-bar
+          flat
+          color="transparent"
+        >
+          <v-app-bar-title>Allo SpaceX</v-app-bar-title>
+        </v-app-bar>
+
+        <router-view />
+      </v-container>
     </v-main>
   </v-app>
 </template>
-
-<script lang="ts" setup>
-  //
-</script>
