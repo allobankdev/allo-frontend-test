@@ -28,24 +28,11 @@
         md="6"
         lg="4"
       >
-        <v-card
-          class="h-100 d-flex flex-column"
+        <RocketCard
+          :rocket="rocket"
           @click="goToDetail(rocket.id)"
-          hover
-        >
-          <v-img
-            :src="rocket.images[0]"
-            height="200"
-            cover
-          />
-          <v-card-item>
-            <v-card-title>{{ rocket.name }}</v-card-title>
-            <v-card-subtitle>{{ rocket.country }}</v-card-subtitle>
-          </v-card-item>
-          <v-card-text>
-            {{ rocket.description }}
-          </v-card-text>
-        </v-card>
+          class="cursor-pointer"
+        />
       </v-col>
     </v-row>
   </div>
@@ -55,6 +42,7 @@
   import { onMounted } from 'vue'
   import { useRocketsStore } from '@/stores/rockets'
   import { useRouter } from 'vue-router'
+  import RocketCard from '@/components/RocketCard.vue'
   
   const store = useRocketsStore()
   const router = useRouter()
