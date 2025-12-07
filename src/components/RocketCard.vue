@@ -7,20 +7,23 @@
 </script>
     
 <template>
-    <v-card class="h-100 d-flex flex-column" hover>
-        <v-img
-            :src="rocket.images[0]"
-            height="200"
-            cover
-        />
-        <v-card-item>
-            <v-card-title>{{ rocket.name }}</v-card-title>
-            <v-card-subtitle>{{ rocket.country }}</v-card-subtitle>
-        </v-card-item>
-        <v-card-text class="text-truncate-3-lines">
-            {{ rocket.description }}
-        </v-card-text>
-    </v-card>
+  <v-card
+    class="h-100 d-flex flex-column"
+    hover
+  >
+    <v-img
+      :src="rocket.images[0]"
+      height="200"
+      cover
+    />
+    <v-card-item>
+      <v-card-title>{{ rocket.name }}</v-card-title>
+      <v-card-subtitle>{{ rocket.country }}</v-card-subtitle>
+    </v-card-item>
+    <v-card-text class="text-truncate-3-lines">
+      {{ rocket.description }}
+    </v-card-text>
+  </v-card>
 </template>
     
 <style scoped>

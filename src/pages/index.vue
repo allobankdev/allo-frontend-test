@@ -2,7 +2,10 @@
   <div class="d-flex flex-column gap-4">
     <div class="d-flex justify-space-between align-center mb-4">
       <h1>Rockets</h1>
-      <v-btn color="primary" @click="toggleForm">
+      <v-btn
+        color="primary"
+        @click="toggleForm"
+      >
         {{ showForm ? 'Close Form' : 'Add Rocket' }}
       </v-btn>
     </div>
@@ -20,13 +23,24 @@
       class="mb-4"
     />
 
-    <div v-if="store.loading" class="d-flex justify-center my-10">
+    <div
+      v-if="store.loading"
+      class="d-flex justify-center my-10"
+    >
       <v-progress-circular indeterminate />
     </div>
 
-    <div v-else-if="store.error" class="text-center my-10">
-      <p class="mb-4">Failed to load rockets: {{ store.error }}</p>
-      <v-btn color="primary" @click="store.loadRockets">
+    <div
+      v-else-if="store.error"
+      class="text-center my-10"
+    >
+      <p class="mb-4">
+        Failed to load rockets: {{ store.error }}
+      </p>
+      <v-btn
+        color="primary"
+        @click="store.loadRockets"
+      >
         Retry
       </v-btn>
     </div>
@@ -39,7 +53,10 @@
         md="6"
         lg="4"
       >
-        <div @click="goToDetail(rocket.id)" class="cursor-pointer">
+        <div
+          class="cursor-pointer"
+          @click="goToDetail(rocket.id)"
+        >
           <RocketCard :rocket="rocket" />
         </div>
       </v-col>
