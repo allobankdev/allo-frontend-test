@@ -43,9 +43,7 @@
           />
         </v-col>
       </v-row>
-      <pre>{{ modalAddRocket }}</pre>
     </div>
-    <pre>rocket length: {{ rocketStore.rockets.length }}</pre>
   </v-container>
 </template>
 
@@ -53,24 +51,11 @@
 import { useRocketStore } from "../store/rocket-store/useRocketStore";
 import { useRouter } from "vue-router";
 import { onMounted } from "vue";
-import type { Rocket } from "@/features/rocket/types/rocket.dto";
+import { type Rocket } from "../features/rocket/types/rocket.dto";
 
 const router = useRouter();
 const rocketStore = useRocketStore();
 
-const formRocket: Rocket = ref({
-  id: "",
-  name: "",
-  description: "",
-  flickr_images: [],
-  type: "",
-  active: false,
-  first_flight: "",
-  country: "",
-  company: "",
-  cost_per_launch: 0,
-  success_rate_pct: 0,
-});
 const modalAddRocket = ref(false);
 
 onMounted(() => {
@@ -81,9 +66,12 @@ const goToDetail = (id: string) => {
   router.push(`/rocket/${id}`);
 };
 
-const addRocket = (data: Rocket) => {
-  // formRocket.flickr_images = [convertImgToUrl("rocket-placeholder")];
-  rocketStore.addRocket(data);
+const addRocket = async (data: Rocket) => {
+  const payload: Rocket = {
+    ...data,
+    id: new Date().getTime().toString(),
+  };
+  rocketStore.addRocket(payload);
 };
 
 const openModalAddRocket = () => {

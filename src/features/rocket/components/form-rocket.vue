@@ -1,12 +1,10 @@
 <template>
-  <!-- <p>isOpen: {{ isOpen }}</p>
-  <p>props: {{ $props.isOpen }}</p> -->
   <v-dialog
     :model-value="$props.isOpen"
     @update:model-value="closeModal"
-    max-width="500"
+    max-width="700"
   >
-    <v-card class="pa-4">
+    <v-card>
       <v-card-title>Add New Rocket</v-card-title>
       <v-card-item>
         <form action="">
@@ -15,42 +13,37 @@
               <v-text-field
                 label="Rocket Name"
                 v-model="formRocket.name"
-                variant="outlined"
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
                 label="First Flight"
                 v-model="formRocket.first_flight"
-                variant="outlined"
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
                 label="Country"
                 v-model="formRocket.country"
-                variant="outlined"
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field
                 label="Cost Per Launch"
                 v-model="formRocket.cost_per_launch"
-                variant="outlined"
               ></v-text-field>
             </v-col>
             <v-col cols="12">
               <input
                 type="file"
                 accept="image/jpeg, image/png"
-                v-model="fileInput"
+                @change="handleFileChange"
               />
             </v-col>
             <v-col cols="12">
               <v-textarea
                 label="Description"
                 v-model="formRocket.description"
-                variant="outlined"
               ></v-textarea>
             </v-col>
           </v-row>
@@ -61,11 +54,7 @@
         <v-btn color="error" variant="outlined" @click="closeModal">
           Cancel
         </v-btn>
-        <v-btn
-          color="primary"
-          variant="flat"
-          @click="$emit('handleSubmit', formRocket)"
-        >
+        <v-btn color="primary" variant="flat" @click="handleSubmit">
           Save
         </v-btn>
       </v-card-actions>
@@ -76,6 +65,7 @@
 <script lang="ts" setup>
 import type { Rocket } from "../types/rocket.dto";
 import { useRocketStore } from "../../../store/rocket-store/useRocketStore";
+import { convertImgToUrl } from "../../../lib/utils";
 interface Props {
   isOpen: boolean;
 }
@@ -84,13 +74,24 @@ const $emit = defineEmits<{
   (e: "closeModal"): void;
   (e: "handleSubmit", data: Rocket): void;
 }>();
+
 const rocketStore = useRocketStore();
 const formRocket = ref<Rocket>({} as Rocket);
-const fileInput = ref<File | null>(null);
+
+const handleFileChange = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  if (target.files && target.files.length > 0) {
+    formRocket.value.flickr_images = [convertImgToUrl(target.files[0])];
+  }
+};
 
 const closeModal = () => {
   formRocket.value = {} as Rocket;
   $emit("closeModal");
-  $emit("handleSubmit", { ...formRocket.value });
+};
+
+const handleSubmit = () => {
+  $emit("handleSubmit", formRocket.value);
+  closeModal();
 };
 </script>

@@ -8,17 +8,18 @@ export const formatCurrency = (
   );
 };
 
-export const convertImgToUrl = (image: File): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      resolve(reader.result as string);
-    };
+export const convertImgToUrl = (image: File): string => {
+  return URL.createObjectURL(image);
+  // return new Promise((resolve, reject) => {
+  //   const reader = new FileReader();
+  //   reader.onload = () => {
+  //     resolve(reader.result as string);
+  //   };
 
-    reader.onerror = (error) => {
-      reject(error);
-    };
+  //   reader.onerror = (error) => {
+  //     reject(error);
+  //   };
 
-    reader.readAsDataURL(image);
-  });
+  //   reader.readAsDataURL(image);
+  // });
 };
