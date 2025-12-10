@@ -2,7 +2,11 @@
   <v-container>
     <h1>Rocket List</h1>
     <FilterRocket />
-    <FormRocket :isOpen="modalAddRocket" @closeModal="closeModalAddRocket" />
+    <FormRocket
+      :isOpen="modalAddRocket"
+      @closeModal="closeModalAddRocket"
+      @handleSubmit="addRocket"
+    />
     <v-row v-if="rocketStore.isLoading">
       <v-col v-for="n in 6" :key="n" cols="12" md="6">
         <v-skeleton-loader
@@ -39,9 +43,9 @@
           />
         </v-col>
       </v-row>
-      <FormRocket />
       <pre>{{ modalAddRocket }}</pre>
     </div>
+    <pre>rocket length: {{ rocketStore.rockets.length }}</pre>
   </v-container>
 </template>
 
@@ -77,9 +81,9 @@ const goToDetail = (id: string) => {
   router.push(`/rocket/${id}`);
 };
 
-const addRocket = () => {
+const addRocket = (data: Rocket) => {
   // formRocket.flickr_images = [convertImgToUrl("rocket-placeholder")];
-  rocketStore.addRocket(formRocket);
+  rocketStore.addRocket(data);
 };
 
 const openModalAddRocket = () => {

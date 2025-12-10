@@ -40,7 +40,11 @@
               ></v-text-field>
             </v-col>
             <v-col cols="12">
-              <input type="file" accept="image/jpeg, image/png" />
+              <input
+                type="file"
+                accept="image/jpeg, image/png"
+                v-model="fileInput"
+              />
             </v-col>
             <v-col cols="12">
               <v-textarea
@@ -57,7 +61,13 @@
         <v-btn color="error" variant="outlined" @click="closeModal">
           Cancel
         </v-btn>
-        <v-btn color="primary" variant="flat"> Save </v-btn>
+        <v-btn
+          color="primary"
+          variant="flat"
+          @click="$emit('handleSubmit', formRocket)"
+        >
+          Save
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -65,17 +75,22 @@
 
 <script lang="ts" setup>
 import type { Rocket } from "../types/rocket.dto";
+import { useRocketStore } from "../../../store/rocket-store/useRocketStore";
 interface Props {
   isOpen: boolean;
 }
 const $props = defineProps<Props>();
 const $emit = defineEmits<{
   (e: "closeModal"): void;
+  (e: "handleSubmit", data: Rocket): void;
 }>();
+const rocketStore = useRocketStore();
 const formRocket = ref<Rocket>({} as Rocket);
+const fileInput = ref<File | null>(null);
 
 const closeModal = () => {
   formRocket.value = {} as Rocket;
   $emit("closeModal");
+  $emit("handleSubmit", { ...formRocket.value });
 };
 </script>
