@@ -1,7 +1,16 @@
 <template>
-  <HelloWorld />
+  <div class="home-page">
+    <RocketList />
+  </div>
 </template>
 
-<script lang="ts" setup>
-  //
+<script setup lang="ts">
+import RocketList from '@/components/RocketList.vue'
 </script>
+
+<style scoped>
+.home-page {
+  min-height: 100vh;
+  background-color: #fafafa;
+}
+</style>
