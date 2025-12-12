@@ -32,3 +32,8 @@ You don’t need to worry about the detailed design, we’re not interested in y
 3.  When complete, submit your solution via a **Pull Request (PR)** back to the main repository.
 
 Good luck with your assignment! Don't hesitate to contact us if you have any questions about the assignment process.
+
+### Run Space X Project
+- npm i
+- npm run dev
+- http://localhost:3000/rocket
