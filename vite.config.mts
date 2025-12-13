@@ -19,9 +19,7 @@ export default defineConfig({
     // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#readme
     Vuetify({
       autoImport: true,
-      styles: {
-        configFile: 'src/styles/settings.scss',
-      },
+      styles: 'sass',
     }),
     Components(),
     ViteFonts({
@@ -33,6 +31,9 @@ export default defineConfig({
       },
     }),
   ],
+  optimizeDeps: {
+    include: ['vuetify'],
+  },
   define: { 'process.env': {} },
   resolve: {
     alias: {
@@ -54,6 +55,9 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       sass: {
+        api: 'modern-compiler',
+      },
+      scss: {
         api: 'modern-compiler',
       },
     },
