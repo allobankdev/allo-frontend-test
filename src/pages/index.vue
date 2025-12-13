@@ -3,5 +3,5 @@
 </template>
 
 <script setup lang="ts">
-import Rockets from "@/pages/rockets/Rockets.vue";
+import Rockets from '@/pages/rockets/Rockets.vue';
 </script>

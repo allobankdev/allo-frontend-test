@@ -1,6 +1,6 @@
-import type { Module } from "vuex";
-import type { RocketEntity } from "@/core/entities/rocket.entity";
-import { RocketListState } from "@/pages/rockets/states/rocket-list.state";
+import type { Module } from 'vuex';
+import type { RocketEntity } from '@/core/entities/rocket.entity';
+import { RocketListState } from '@/pages/rockets/states/rocket-list.state';
 
 export interface RocketListStateType {
   rockets: RocketEntity[];
@@ -14,7 +14,7 @@ export const rocketListModule: Module<RocketListStateType, any> = {
   state: () => new RocketListState(),
   mutations: {
     SET_LOADING(state) {
-      state.errorMessage = "";
+      state.errorMessage = '';
       state.isLoading = true;
       state.isError = false;
     },
@@ -24,7 +24,7 @@ export const rocketListModule: Module<RocketListStateType, any> = {
       state.isError = true;
     },
     SET_SUCCESS(state) {
-      state.errorMessage = "";
+      state.errorMessage = '';
       state.isLoading = false;
       state.isError = false;
     },
@@ -40,28 +40,28 @@ export const rocketListModule: Module<RocketListStateType, any> = {
   },
   actions: {
     markAsLoading({ commit }) {
-      commit("SET_LOADING");
+      commit('SET_LOADING');
     },
     markAsError({ commit }, errorMessage: string) {
-      commit("SET_ERROR", errorMessage);
+      commit('SET_ERROR', errorMessage);
     },
     markAsSuccess({ commit }) {
-      commit("SET_SUCCESS");
+      commit('SET_SUCCESS');
     },
     loadRockets({ commit }, rockets: RocketEntity[]) {
-      commit("SET_ROCKETS", rockets);
+      commit('SET_ROCKETS', rockets);
     },
     clearRockets({ commit }) {
-      commit("CLEAR_ROCKETS");
+      commit('CLEAR_ROCKETS');
     },
     reset({ commit }) {
-      commit("RESET");
+      commit('RESET');
     },
   },
   getters: {
-    rockets: (state) => state.rockets,
-    isLoading: (state) => state.isLoading,
-    isError: (state) => state.isError,
-    errorMessage: (state) => state.errorMessage,
+    rockets: state => state.rockets,
+    isLoading: state => state.isLoading,
+    isError: state => state.isError,
+    errorMessage: state => state.errorMessage,
   },
 };

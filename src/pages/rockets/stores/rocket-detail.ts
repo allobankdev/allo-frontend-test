@@ -1,6 +1,6 @@
-import type { Module } from "vuex";
-import type { RocketEntity } from "@/core/entities/rocket.entity";
-import { RocketDetailState } from "@/pages/rockets/states/rocket-detail.state";
+import type { Module } from 'vuex';
+import type { RocketEntity } from '@/core/entities/rocket.entity';
+import { RocketDetailState } from '@/pages/rockets/states/rocket-detail.state';
 
 export interface RocketDetailStateType {
   selectedRocket: RocketEntity | null;
@@ -14,7 +14,7 @@ export const rocketDetailModule: Module<RocketDetailStateType, any> = {
   state: () => new RocketDetailState(),
   mutations: {
     SET_LOADING(state) {
-      state.errorMessage = "";
+      state.errorMessage = '';
       state.isLoading = true;
       state.isError = false;
     },
@@ -24,7 +24,7 @@ export const rocketDetailModule: Module<RocketDetailStateType, any> = {
       state.isError = true;
     },
     SET_SUCCESS(state) {
-      state.errorMessage = "";
+      state.errorMessage = '';
       state.isLoading = false;
       state.isError = false;
     },
@@ -40,28 +40,28 @@ export const rocketDetailModule: Module<RocketDetailStateType, any> = {
   },
   actions: {
     markAsLoading({ commit }) {
-      commit("SET_LOADING");
+      commit('SET_LOADING');
     },
     markAsError({ commit }, errorMessage: string) {
-      commit("SET_ERROR", errorMessage);
+      commit('SET_ERROR', errorMessage);
     },
     markAsSuccess({ commit }) {
-      commit("SET_SUCCESS");
+      commit('SET_SUCCESS');
     },
     loadRocket({ commit }, rocket: RocketEntity) {
-      commit("SET_ROCKET", rocket);
+      commit('SET_ROCKET', rocket);
     },
     clearRocket({ commit }) {
-      commit("CLEAR_ROCKET");
+      commit('CLEAR_ROCKET');
     },
     reset({ commit }) {
-      commit("RESET");
+      commit('RESET');
     },
   },
   getters: {
-    selectedRocket: (state) => state.selectedRocket,
-    isLoading: (state) => state.isLoading,
-    isError: (state) => state.isError,
-    errorMessage: (state) => state.errorMessage,
+    selectedRocket: state => state.selectedRocket,
+    isLoading: state => state.isLoading,
+    isError: state => state.isError,
+    errorMessage: state => state.errorMessage,
   },
 };

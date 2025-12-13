@@ -1,6 +1,6 @@
-import { createStore } from "vuex";
-import { rocketListModule } from "../pages/rockets/stores/rocket-list";
-import { rocketDetailModule } from "../pages/rockets/stores/rocket-detail";
+import { createStore } from 'vuex';
+import { rocketListModule } from '../pages/rockets/stores/rocket-list';
+import { rocketDetailModule } from '../pages/rockets/stores/rocket-detail';
 
 export const store = createStore({
   modules: {

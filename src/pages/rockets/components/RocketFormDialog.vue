@@ -57,19 +57,13 @@
                 <div class="d-flex align-center justify-space-between">
                   <div class="d-flex align-center">
                     <v-icon
-                      :icon="
-                        formData.isActive
-                          ? 'mdi-check-circle'
-                          : 'mdi-close-circle'
-                      "
+                      :icon="formData.isActive ? 'mdi-check-circle' : 'mdi-close-circle'"
                       :color="formData.isActive ? 'success' : 'error'"
                       size="28"
                       class="mr-3"
                     ></v-icon>
                     <div>
-                      <div class="text-subtitle-1 font-weight-bold">
-                        Active Status
-                      </div>
+                      <div class="text-subtitle-1 font-weight-bold">Active Status</div>
                     </div>
                   </div>
                   <v-switch
@@ -114,15 +108,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed } from "vue";
-import type { RocketEntity } from "@/core/entities/rocket.entity";
+import { ref, watch, computed } from 'vue';
+import type { RocketEntity } from '@/core/entities/rocket.entity';
 
 const props = defineProps<{
   modelValue: boolean;
 }>();
 
 const emit = defineEmits<{
-  "update:modelValue": [value: boolean];
+  'update:modelValue': [value: boolean];
   submit: [data: Partial<RocketEntity>];
 }>();
 
@@ -130,19 +124,19 @@ const isOpen = ref(props.modelValue);
 const formRef = ref();
 
 const formData = ref<Partial<RocketEntity>>({
-  name: "",
-  description: "",
+  name: '',
+  description: '',
   costPerLaunch: 0,
-  country: "",
-  firstFlight: "",
+  country: '',
+  firstFlight: '',
   flickrImages: [],
-  type: "rocket",
+  type: 'rocket',
   isActive: true,
-  company: "SpaceX",
+  company: 'SpaceX',
 });
 
 const rules = {
-  required: (v: string) => !!v || "This field is required",
+  required: (v: string) => !!v || 'This field is required',
 };
 
 const isFormValid = computed(() => {
@@ -151,13 +145,13 @@ const isFormValid = computed(() => {
 
 watch(
   () => props.modelValue,
-  (newVal) => {
+  newVal => {
     isOpen.value = newVal;
   }
 );
 
-watch(isOpen, (newVal) => {
-  emit("update:modelValue", newVal);
+watch(isOpen, newVal => {
+  emit('update:modelValue', newVal);
   if (!newVal) {
     resetForm();
   }
@@ -170,15 +164,15 @@ const updateImageUrl = (val: string) => {
 
 const resetForm = () => {
   formData.value = {
-    name: "",
-    description: "",
+    name: '',
+    description: '',
     costPerLaunch: 0,
-    country: "",
-    firstFlight: "",
+    country: '',
+    firstFlight: '',
     flickrImages: [],
-    type: "rocket",
+    type: 'rocket',
     isActive: true,
-    company: "SpaceX",
+    company: 'SpaceX',
   };
   if (formRef.value) {
     formRef.value.reset();
@@ -187,7 +181,7 @@ const resetForm = () => {
 
 const handleSubmit = () => {
   if (isFormValid.value) {
-    emit("submit", { ...formData.value });
+    emit('submit', { ...formData.value });
     isOpen.value = false;
   }
 };

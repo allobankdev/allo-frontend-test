@@ -1,4 +1,4 @@
-import type { RocketEntity } from "../entities/rocket.entity";
+import type { RocketEntity } from '../entities/rocket.entity';
 
 export interface QueryOptions {
   query?: Record<string, any>;

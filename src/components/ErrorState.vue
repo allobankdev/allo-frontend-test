@@ -1,13 +1,7 @@
 <template>
   <v-row justify="center" class="mt-4">
     <v-col cols="12">
-      <v-alert
-        type="error"
-        prominent
-        variant="tonal"
-        border="start"
-        class="rounded-lg"
-      >
+      <v-alert type="error" prominent variant="tonal" border="start" class="rounded-lg">
         <v-alert-title class="text-h6 mb-2">
           {{ title }}
         </v-alert-title>
@@ -16,12 +10,7 @@
           {{ message }}
         </div>
 
-        <v-btn
-          color="error"
-          variant="elevated"
-          prepend-icon="mdi-refresh"
-          @click="handleRetry"
-        >
+        <v-btn color="error" variant="elevated" prepend-icon="mdi-refresh" @click="handleRetry">
           Retry
         </v-btn>
       </v-alert>
@@ -30,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from "vue-router";
+import { useRouter } from 'vue-router';
 
 interface Props {
   title?: string;
@@ -44,8 +33,8 @@ const handleRetry = () => {
 };
 
 withDefaults(defineProps<Props>(), {
-  title: "Error",
-  message: "An error occurred",
+  title: 'Error',
+  message: 'An error occurred',
 });
 </script>
 

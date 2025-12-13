@@ -1,11 +1,7 @@
 <template>
   <v-row>
     <v-col cols="12" class="text-center">
-      <v-progress-circular
-        indeterminate
-        color="primary"
-        :size="size"
-      ></v-progress-circular>
+      <v-progress-circular indeterminate color="primary" :size="size"></v-progress-circular>
       <p class="mt-4">{{ message }}</p>
     </v-col>
   </v-row>
@@ -18,7 +14,7 @@ interface Props {
 }
 
 withDefaults(defineProps<Props>(), {
-  message: "Loading...",
+  message: 'Loading...',
   size: 64,
 });
 </script>

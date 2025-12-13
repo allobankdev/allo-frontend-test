@@ -1,11 +1,9 @@
-import type { RocketEntity } from "@/core/entities/rocket.entity";
-import { type EntityMapper, type DtoMapper } from "@/data/mapper";
-import type { RocketDtoSpaceX } from "./rocket.dto.spacex";
+import type { RocketEntity } from '@/core/entities/rocket.entity';
+import { type EntityMapper, type DtoMapper } from '@/data/mapper';
+import type { RocketDtoSpaceX } from './rocket.dto.spacex';
 
 export class RocketMapper
-  implements
-    EntityMapper<RocketDtoSpaceX, RocketEntity>,
-    DtoMapper<RocketDtoSpaceX, RocketEntity>
+  implements EntityMapper<RocketDtoSpaceX, RocketEntity>, DtoMapper<RocketDtoSpaceX, RocketEntity>
 {
   toEntity(dto: RocketDtoSpaceX): RocketEntity {
     return {
