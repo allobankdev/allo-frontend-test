@@ -26,6 +26,9 @@ importers:
       vuetify:
         specifier: ^3.6.14
         version: 3.11.3(typescript@5.6.3)(vite-plugin-vuetify@2.1.2)(vue@3.5.25(typescript@5.6.3))
+      vuex:
+        specifier: ^4.0.2
+        version: 4.0.2(vue@3.5.25(typescript@5.6.3))
     devDependencies:
       '@eslint/js':
         specifier: ^9.14.0
@@ -1667,6 +1670,11 @@ packages:
       webpack-plugin-vuetify:
         optional: true
 
+  vuex@4.0.2:
+    resolution: {integrity: sha512-M6r8uxELjZIK8kTKDGgZTYX/ahzblnzC4isU1tpmEuOIIKmV+TRdc+H4s8ds2NuZ7wpUTdGRzJRtoj+lI+pc0Q==}
+    peerDependencies:
+      vue: ^3.0.2
+
   webpack-virtual-modules@0.6.2:
     resolution: {integrity: sha512-66/V2i5hQanC51vBQKPH4aI8NMAcBW59FVBs+rC7eGHupMyfn34q7rZIE+ETlJ+XTevqfUhVVBgSUNSW2flEUQ==}
 
@@ -3198,6 +3206,11 @@ snapshots:
     optionalDependencies:
       typescript: 5.6.3
       vite-plugin-vuetify: 2.1.2(vite@5.4.21(@types/node@22.19.2)(sass-embedded@1.96.0)(sass@1.77.8))(vue@3.5.25(typescript@5.6.3))(vuetify@3.11.3)
+
+  vuex@4.0.2(vue@3.5.25(typescript@5.6.3)):
+    dependencies:
+      '@vue/devtools-api': 6.6.4
+      vue: 3.5.25(typescript@5.6.3)
 
   webpack-virtual-modules@0.6.2: {}
 
