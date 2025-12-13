@@ -19,5 +19,9 @@ declare module 'vue-router/auto-routes' {
    */
   export interface RouteNamedMap {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
+    '/rockets/[id]': RouteRecordInfo<'/rockets/[id]', '/rockets/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    '/rockets/components/EmptyState': RouteRecordInfo<'/rockets/components/EmptyState', '/rockets/components/EmptyState', Record<never, never>, Record<never, never>>,
+    '/rockets/components/RocketFormDialog': RouteRecordInfo<'/rockets/components/RocketFormDialog', '/rockets/components/RocketFormDialog', Record<never, never>, Record<never, never>>,
+    '/rockets/Rockets': RouteRecordInfo<'/rockets/Rockets', '/rockets/Rockets', Record<never, never>, Record<never, never>>,
   }
 }
