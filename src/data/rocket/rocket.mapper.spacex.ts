@@ -1,5 +1,5 @@
 import type { RocketEntity } from "@/core/entities/rocket.entity";
-import { type EntityMapper, type DtoMapper } from "@/shared/base/mapper";
+import { type EntityMapper, type DtoMapper } from "@/data/mapper";
 import type { RocketDtoSpaceX } from "./rocket.dto.spacex";
 
 export class RocketMapper

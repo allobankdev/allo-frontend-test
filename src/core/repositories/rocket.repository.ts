@@ -25,9 +25,7 @@ export interface QueryResponse<T> {
   nextPage: number;
 }
 
-export abstract class RocketRepository {
-  abstract fetchOne(rocketId: string): Promise<RocketEntity>;
-  abstract fetchAll(
-    queryOptions: QueryOptions
-  ): Promise<QueryResponse<RocketEntity>>;
+export interface RocketRepository {
+  fetchAll(queryOptions: QueryOptions): Promise<QueryResponse<RocketEntity>>;
+  fetchOne(rocketId: string): Promise<RocketEntity>;
 }
