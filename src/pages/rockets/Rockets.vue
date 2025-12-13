@@ -10,35 +10,12 @@
           </v-btn>
         </div>
 
-        <v-card class="mb-6">
-          <v-card-title>Filters</v-card-title>
-          <v-card-text>
-            <v-row>
-              <v-col cols="12" md="6">
-                <v-text-field
-                  v-model="searchName"
-                  label="Search by name"
-                  prepend-inner-icon="mdi-magnify"
-                  clearable
-                  variant="outlined"
-                  density="compact"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" md="3">
-                <v-select
-                  v-model="filterStatus"
-                  :items="statusOptions"
-                  label="Status"
-                  variant="outlined"
-                  density="compact"
-                ></v-select>
-              </v-col>
-              <v-col cols="12" md="3">
-                <v-btn block color="primary" @click="clearFilters">Clear Filters</v-btn>
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
+        <RocketFilter
+          v-model:search-name="searchName"
+          v-model:filter-status="filterStatus"
+          :status-options="statusOptions"
+          @clear="clearFilters"
+        />
       </v-col>
     </v-row>
 
@@ -46,30 +23,9 @@
 
     <ErrorState v-else-if="isError" :message="errorMessage" />
 
-    <v-row v-else-if="rockets.length > 0">
+    <v-row v-else-if="hasRockets">
       <v-col v-for="rocket in rockets" :key="rocket.id" cols="12" md="6" lg="4">
-        <v-card class="h-100">
-          <v-img
-            v-if="rocket.flickrImages.length > 0"
-            :src="rocket.flickrImages[0]"
-            height="200"
-            cover
-          >
-            <v-chip :color="rocket.isActive ? 'success' : 'error'" class="ma-2" size="small">
-              {{ rocket.isActive ? 'Active' : 'Inactive' }}
-            </v-chip>
-          </v-img>
-
-          <v-card-title>{{ rocket.name }}</v-card-title>
-
-          <v-card-text>
-            <p class="text-body-2">{{ rocket.description }}</p>
-          </v-card-text>
-
-          <v-card-actions>
-            <v-btn :to="`/rockets/${rocket.id}`" variant="text" color="primary">View Detail</v-btn>
-          </v-card-actions>
-        </v-card>
+        <RocketCard :rocket="rocket" />
       </v-col>
     </v-row>
 
@@ -90,6 +46,8 @@ import type { QueryOptions } from '@/core/repositories/rocket.repository';
 import { RocketRepositorySpaceX } from '@/data/rocket/rocket.repository.spacex';
 import EmptyState from './components/EmptyState.vue';
 import RocketDialog from './components/RocketFormDialog.vue';
+import RocketCard from './components/RocketCard.vue';
+import RocketFilter from './components/RocketFilter.vue';
 import { DEBOUNCE_DELAY } from './constants/rocket.constant';
 
 const repository = new RocketRepositorySpaceX();
@@ -109,6 +67,7 @@ const rockets = computed(() => store.getters['rocketList/rockets']);
 const isLoading = computed(() => store.getters['rocketList/isLoading']);
 const isError = computed(() => store.getters['rocketList/isError']);
 const errorMessage = computed(() => store.getters['rocketList/errorMessage']);
+const hasRockets = computed(() => rockets.value.length > 0);
 
 const buildQueryOptions = (): QueryOptions => {
   const query: Record<string, any> = {};
@@ -181,9 +140,3 @@ onMounted(() => {
   loadRockets();
 });
 </script>
-
-<style scoped>
-.h-100 {
-  height: 100%;
-}
-</style>
