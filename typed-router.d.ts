@@ -21,6 +21,8 @@ declare module 'vue-router/auto-routes' {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
     '/rockets/[id]': RouteRecordInfo<'/rockets/[id]', '/rockets/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/rockets/components/EmptyState': RouteRecordInfo<'/rockets/components/EmptyState', '/rockets/components/EmptyState', Record<never, never>, Record<never, never>>,
+    '/rockets/components/RocketCard': RouteRecordInfo<'/rockets/components/RocketCard', '/rockets/components/RocketCard', Record<never, never>, Record<never, never>>,
+    '/rockets/components/RocketFilter': RouteRecordInfo<'/rockets/components/RocketFilter', '/rockets/components/RocketFilter', Record<never, never>, Record<never, never>>,
     '/rockets/components/RocketFormDialog': RouteRecordInfo<'/rockets/components/RocketFormDialog', '/rockets/components/RocketFormDialog', Record<never, never>, Record<never, never>>,
     '/rockets/Rockets': RouteRecordInfo<'/rockets/Rockets', '/rockets/Rockets', Record<never, never>, Record<never, never>>,
   }
