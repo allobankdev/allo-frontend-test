@@ -24,7 +24,6 @@ const handleInput = (): void => {
 </script>
 
 <style scoped>
-/* CSS sama seperti sebelumnya */
 .filter-container {
   position: relative;
   margin-bottom: 30px;

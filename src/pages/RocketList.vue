@@ -57,7 +57,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* CSS sama seperti sebelumnya */
 .rocket-list-page {
   max-width: 1200px;
   margin: 0 auto;

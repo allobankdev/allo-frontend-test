@@ -114,7 +114,6 @@ const resetForm = (): void => {
 </script>
 
 <style scoped>
-/* CSS sama seperti sebelumnya */
 .form-container {
   background: #f8f9fa;
   padding: 25px;

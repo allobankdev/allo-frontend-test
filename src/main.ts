@@ -4,9 +4,9 @@ import App from './App.vue'
 import router from './router'
 
 const app = createApp(App)
-const pinia = createPinia()  // Nama variabel: "pinia"
+const pinia = createPinia()  
 
-app.use(pinia)  // Gunakan variabel "pinia"
+app.use(pinia)  
 app.use(router)
 
 app.mount('#app')
