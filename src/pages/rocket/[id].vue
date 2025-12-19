@@ -26,27 +26,30 @@ onMounted(fetchRocket);
 </script>
 
 <template>
-  <section>
-    <div v-if="loading">Loading rocket details...</div>
+<v-container>
+  <div v-if="loading">Loading rocket details...</div>
 
-    <div v-else-if="error">
-      <p>{{ error }}</p>
-    </div>
+  <div v-else-if="error">
+    <p>{{ error }}</p>
+  </div>
 
-    <div v-else-if="rocket">
-      <img
-        v-if="rocket.flickr_images.length"
-        :src="rocket.flickr_images[0]"
-        width="300"
-      />
-      <h1>{{ rocket.name }}</h1>
-      <p>{{ rocket.description }}</p>
+  <v-card v-else-if="rocket" class="pa-4">
+    <img
+      v-if="rocket.flickr_images.length"
+      :src="rocket.flickr_images[0]"
+      style="max-width: 100%; margin-bottom: 16px"
+    />
+    <h1>{{ rocket.name }}</h1>
+    <p>{{ rocket.description }}</p>
 
-      <ul>
-        <li><strong>Country:</strong> {{ rocket.country }}</li>
-        <li><strong>First flight:</strong> {{ rocket.first_flight }}</li>
-        <li><strong>Cost per launch:</strong> ${{ rocket.cost_per_launch.toLocaleString() }}</li>
-      </ul>
-    </div>
-  </section>
+    <ul>
+      <li><strong>Country:</strong> {{ rocket.country }}</li>
+      <li><strong>First flight:</strong> {{ rocket.first_flight }}</li>
+      <li>
+        <strong>Cost per launch:</strong>
+        ${{ rocket.cost_per_launch?.toLocaleString() }}
+      </li>
+    </ul>
+  </v-card>
+</v-container>
 </template>
