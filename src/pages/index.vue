@@ -2,6 +2,7 @@
 import { ref, onMounted, computed } from "vue";
 import { getRockets } from "@/services/rocketService";
 import type { Rocket } from "@/types/rocket";
+import RocketCard from "@/components/RocketCard.vue";
 
 const rockets = ref<Rocket[]>([]);
 const loading = ref(false);
@@ -96,33 +97,12 @@ const addRocket = () => {
       <v-btn @click="fetchRockets">Retry</v-btn>
     </div>
 
-    <v-card
+    <RocketCard
       v-for="rocket in filteredRockets"
       :key="rocket.id"
-      class="mb-4 pa-4 card-clickable"
-      style="cursor: pointer"
+      :rocket="rocket"
+      :clickable="!rocket.isLocal"
       @click="!rocket.isLocal && $router.push(`/rocket/${rocket.id}`)"
-    >
-      <img
-        v-if="rocket.flickr_images.length"
-        :src="rocket.flickr_images[0]"
-        class="rocket-image"
-        style="max-width: 100%; margin-bottom: 8px"
-      />
-      <h3>{{ rocket.name }}</h3>
-      <p>{{ rocket.description }}</p>
-    </v-card>
+    />
   </v-container>
 </template>
-
-<style scoped>
-.card-clickable {
-  cursor: pointer;
-}
-
-.rocket-image {
-  max-width: 100%;
-  margin-bottom: 8px;
-}
-</style>
-
