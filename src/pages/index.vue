@@ -51,7 +51,8 @@ const filteredRockets = computed(() =>
       <li
         v-for="rocket in filteredRockets"
         :key="rocket.id"
-        style="margin-bottom: 16px;"
+        style="margin-bottom: 16px; cursor: pointer;"
+        @click="$router.push(`/rocket/${rocket.id}`)"
       >
         <img
           v-if="rocket.flickr_images.length"
