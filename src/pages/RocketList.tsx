@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useRocketStore } from '../store/rocketStore'
 import type { Rocket } from '../types/rocket.ts'
-import { Link } from 'react-router-dom'
+import Loading from '../components/Loading.tsx'
+import ErrorState from '../components/ErrorState.tsx'
+import RocketCard from '../components/RocketCard.tsx'
 
 const RocketList = () => {
     const { rockets, loading, error, getRockets, addRocket } = useRocketStore()
@@ -31,16 +33,9 @@ const RocketList = () => {
         addRocket(newRocket)
     }
 
-    if (loading) return <p>Loading...</p>
+    if (loading) return <Loading />
 
-    if (error) {
-        return (
-            <div>
-                <p>{error}</p>
-                <button onClick={getRockets}>Retry</button>
-            </div>
-        )
-    }
+    if (error) return <ErrorState message={error} onRetry={getRockets} />
 
     return (
         <div>
@@ -56,9 +51,7 @@ const RocketList = () => {
 
             <ul>
                 {filteredRockets.map((rocket) => (
-                    <li key={rocket.id}>
-                        <Link to={`/rockets/${rocket.id}`}>{rocket.name}</Link>
-                    </li>
+                    <RocketCard key={rocket.id} rocket={rocket} />
                 ))}
             </ul>
         </div>

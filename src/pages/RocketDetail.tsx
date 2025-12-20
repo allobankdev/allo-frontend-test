@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useRocketStore } from '../store/rocketStore'
+import Loading from '../components/Loading.tsx'
+import ErrorState from '../components/ErrorState.tsx'
 
 const RocketDetailPage = () => {
     const { id } = useParams<{ id: string }>()
@@ -14,18 +16,9 @@ const RocketDetailPage = () => {
         }
     }, [rockets.length, getRockets])
 
-    if (loading) {
-        return <p>Loading...</p>
-    }
+    if (loading) return <Loading />
 
-    if (error) {
-        return (
-            <div>
-                <p>{error}</p>
-                <button onClick={getRockets}>Retry</button>
-            </div>
-        )
-    }
+    if (error) return <ErrorState message={error} onRetry={getRockets} />
 
     const rocket = rockets.find((r) => r.id === id)
 
