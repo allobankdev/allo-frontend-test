@@ -18,7 +18,7 @@ npm install --save-dev --save-exact prettier
 npm install tailwindcss @tailwindcss/vite
 ```
 ```terminal
-npm install react-router-dom axios zustand
+npm install react-router-dom axios zustand react-hot-toast
 ```
 
 ## Run Project
