@@ -4,6 +4,7 @@ import type { Rocket } from '../types/rocket.ts'
 import Loading from '../components/Loading.tsx'
 import ErrorState from '../components/ErrorState.tsx'
 import Header from '../components/Header.tsx'
+import { truncateText } from '../utils/truncate'
 
 const RocketList = () => {
     const { rockets, loading, error, getRockets, addRocket } = useRocketStore()
@@ -78,7 +79,12 @@ const RocketList = () => {
                                                 />
                                             </td>
                                             <td>{rocket.name}</td>
-                                            <td>{rocket.description}</td>
+                                            <td>
+                                                {truncateText(
+                                                    rocket.description,
+                                                    80
+                                                )}
+                                            </td>
                                             <td>
                                                 <button
                                                     type="button"
