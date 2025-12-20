@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import type { Rocket } from '../types/rocket.ts'
 import { fetchRockets } from '../api/rocketApi.ts'
+import toast from 'react-hot-toast'
 
 interface RocketState {
     rockets: Rocket[]
@@ -8,7 +9,6 @@ interface RocketState {
     error: string | null
 
     getRockets: () => Promise<void>
-    resetError: () => void
 }
 
 export const useRocketStore = create<RocketState>((set) => ({
@@ -22,11 +22,13 @@ export const useRocketStore = create<RocketState>((set) => ({
         try {
             const rockets = await fetchRockets()
             set({ rockets, loading: false })
+            toast.success('Rockets loaded successfully')
         } catch (err) {
             set({
                 loading: false,
                 error: 'Failed to fetch rockets. Please try again.',
             })
+            toast.error('Failed to load rockets')
         }
     },
 
