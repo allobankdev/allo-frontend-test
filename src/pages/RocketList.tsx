@@ -10,8 +10,10 @@ const RocketList = () => {
     const [filter, setFilter] = useState('')
 
     useEffect(() => {
-        getRockets()
-    }, [getRockets])
+        if (rockets.length === 0) {
+            getRockets()
+        }
+    }, [rockets.length, getRockets])
 
     const filteredRockets = useMemo(() => {
         return rockets.filter((rocket) =>
