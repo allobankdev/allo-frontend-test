@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useRocketStore } from '../store/rocketStore'
 import type { Rocket } from '../types/rocket.ts'
+import { Link } from 'react-router-dom'
 
 const RocketList = () => {
     const { rockets, loading, error, getRockets, addRocket } = useRocketStore()
@@ -55,7 +56,9 @@ const RocketList = () => {
 
             <ul>
                 {filteredRockets.map((rocket) => (
-                    <li key={rocket.id}>{rocket.name}</li>
+                    <li key={rocket.id}>
+                        <Link to={`/rockets/${rocket.id}`}>{rocket.name}</Link>
+                    </li>
                 ))}
             </ul>
         </div>
