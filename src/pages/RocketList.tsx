@@ -1,16 +1,18 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useRocketStore } from '../store/rocketStore'
-import type { Rocket } from '../types/rocket.ts'
 import Loading from '../components/Loading.tsx'
 import ErrorState from '../components/ErrorState.tsx'
 import Header from '../components/Header.tsx'
 import { truncateText } from '../utils/truncate'
 import { Link } from 'react-router-dom'
 import Button from '../components/Button.tsx'
+import AddRocketForm from '../components/AddRocketForm.tsx'
+import Modal from '../components/Modal.tsx'
 
 const RocketList = () => {
     const { rockets, loading, error, getRockets, addRocket } = useRocketStore()
     const [filter, setFilter] = useState('')
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
     useEffect(() => {
         if (rockets.length === 0) {
@@ -24,23 +26,6 @@ const RocketList = () => {
         )
     }, [rockets, filter])
 
-    const handleAddRocket = () => {
-        const newRocket: Rocket = {
-            id: crypto.randomUUID(),
-            name: 'My Custom Rocket',
-            description: 'This is a custom rocket added locally',
-            country: 'Indonesia',
-            cost_per_launch: 0,
-            first_flight: '2025-01-01',
-            flickr_images: [
-                'https://farm5.staticflickr.com/4696/40126460511_b15bf84c85_b.jpg',
-                'https://farm5.staticflickr.com/4711/40126461411_aabc643fd8_b.jpg',
-            ],
-        }
-
-        addRocket(newRocket)
-    }
-
     if (loading) return <Loading />
 
     if (error) return <ErrorState message={error} onRetry={getRockets} />
@@ -48,6 +33,16 @@ const RocketList = () => {
     return (
         <>
             <Header />
+            <Modal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                title="Add New Rocket"
+            >
+                <AddRocketForm
+                    onSubmit={addRocket}
+                    onClose={() => setIsModalOpen(false)}
+                />
+            </Modal>
 
             <div className="mb-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div id="input-group">
@@ -80,7 +75,7 @@ const RocketList = () => {
                 <div className="sm:flex sm:justify-end">
                     <Button
                         label="Add Rocket"
-                        onClick={handleAddRocket}
+                        onClick={() => setIsModalOpen(true)}
                         className="btn-custom w-full sm:w-[200px]"
                     />
                 </div>
