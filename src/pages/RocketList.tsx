@@ -3,7 +3,6 @@ import { useRocketStore } from '../store/rocketStore'
 import type { Rocket } from '../types/rocket.ts'
 import Loading from '../components/Loading.tsx'
 import ErrorState from '../components/ErrorState.tsx'
-import RocketCard from '../components/RocketCard.tsx'
 import Header from '../components/Header.tsx'
 
 const RocketList = () => {
@@ -52,11 +51,50 @@ const RocketList = () => {
 
             <button onClick={handleAddRocket}>Add Rocket</button>
 
-            <ul>
-                {filteredRockets.map((rocket) => (
-                    <RocketCard key={rocket.id} rocket={rocket} />
-                ))}
-            </ul>
+            <div className="flex flex-col">
+                <div className="-m-1.5 overflow-x-auto">
+                    <div className="p-1.5 min-w-full inline-block align-middle">
+                        <div className="overflow-hidden">
+                            <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
+                                <thead className="bg-blue-100 font-bold">
+                                    <tr>
+                                        <th scope="col">Image</th>
+                                        <th scope="col">Rocket Name</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-gray-200 dark:divide-neutral-700">
+                                    {filteredRockets.map((rocket) => (
+                                        <tr key={rocket.id}>
+                                            <td>
+                                                <img
+                                                    src={
+                                                        rocket.flickr_images[0]
+                                                    }
+                                                    alt={rocket.name}
+                                                    width={300}
+                                                    className="w-[40px] h-[40px] rounded-full"
+                                                />
+                                            </td>
+                                            <td>{rocket.name}</td>
+                                            <td>{rocket.description}</td>
+                                            <td>
+                                                <button
+                                                    type="button"
+                                                    className="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-hidden focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400"
+                                                >
+                                                    Detail
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }
