@@ -1,5 +1,5 @@
 interface ErrorStateProps {
-    message: string
+    message: string | null
     onRetry: () => void
 }
 
