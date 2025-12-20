@@ -1,16 +1,36 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useRocketStore } from '../store/rocketStore'
+import type { Rocket } from '../types/rocket.ts'
 
 const RocketList = () => {
-    const { rockets, loading, error, getRockets } = useRocketStore()
+    const { rockets, loading, error, getRockets, addRocket } = useRocketStore()
+    const [filter, setFilter] = useState('')
 
     useEffect(() => {
         getRockets()
     }, [getRockets])
 
-    if (loading) {
-        return <p>Loading...</p>
+    const filteredRockets = useMemo(() => {
+        return rockets.filter((rocket) =>
+            rocket.name.toLowerCase().includes(filter.toLowerCase())
+        )
+    }, [rockets, filter])
+
+    const handleAddRocket = () => {
+        const newRocket: Rocket = {
+            id: crypto.randomUUID(),
+            name: 'My Custom Rocket',
+            description: 'This is a custom rocket added locally',
+            country: 'Indonesia',
+            cost_per_launch: 0,
+            first_flight: '2025-01-01',
+            flickr_images: [],
+        }
+
+        addRocket(newRocket)
     }
+
+    if (loading) return <p>Loading...</p>
 
     if (error) {
         return (
@@ -24,8 +44,17 @@ const RocketList = () => {
     return (
         <div>
             <h1>Rocket List</h1>
+            <input
+                type="text"
+                placeholder="Filter rocket by name"
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+            />
+
+            <button onClick={handleAddRocket}>Add Rocket</button>
+
             <ul>
-                {rockets.map((rocket) => (
+                {filteredRockets.map((rocket) => (
                     <li key={rocket.id}>{rocket.name}</li>
                 ))}
             </ul>

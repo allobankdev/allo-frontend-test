@@ -9,9 +9,10 @@ interface RocketState {
     error: string | null
 
     getRockets: () => Promise<void>
+    addRocket: (rocket: Rocket) => void
 }
 
-export const useRocketStore = create<RocketState>((set) => ({
+export const useRocketStore = create<RocketState>((set, get) => ({
     rockets: [],
     loading: false,
     error: null,
@@ -32,5 +33,9 @@ export const useRocketStore = create<RocketState>((set) => ({
         }
     },
 
-    resetError: () => set({ error: null }),
+    addRocket: (rocket) => {
+        const current = get().rockets
+        set({ rockets: [rocket, ...current] })
+        toast.success('Rocket added')
+    },
 }))
