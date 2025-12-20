@@ -1,14 +1,14 @@
 import { create } from 'zustand'
 import type { Rocket } from '../types/rocket.ts'
+import { fetchRockets } from '../api/rocketApi.ts'
 
 interface RocketState {
     rockets: Rocket[]
     loading: boolean
     error: string | null
 
-    setRockets: (rockets: Rocket[]) => void
-    setLoading: (loading: boolean) => void
-    setError: (error: string | null) => void
+    getRockets: () => Promise<void>
+    resetError: () => void
 }
 
 export const useRocketStore = create<RocketState>((set) => ({
@@ -16,7 +16,19 @@ export const useRocketStore = create<RocketState>((set) => ({
     loading: false,
     error: null,
 
-    setRockets: (rockets) => set({ rockets }),
-    setLoading: (loading) => set({ loading }),
-    setError: (error) => set({ error }),
+    getRockets: async () => {
+        set({ loading: true, error: null })
+
+        try {
+            const rockets = await fetchRockets()
+            set({ rockets, loading: false })
+        } catch (err) {
+            set({
+                loading: false,
+                error: 'Failed to fetch rockets. Please try again.',
+            })
+        }
+    },
+
+    resetError: () => set({ error: null }),
 }))
