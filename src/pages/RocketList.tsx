@@ -4,6 +4,7 @@ import type { Rocket } from '../types/rocket.ts'
 import Loading from '../components/Loading.tsx'
 import ErrorState from '../components/ErrorState.tsx'
 import RocketCard from '../components/RocketCard.tsx'
+import Header from '../components/Header.tsx'
 
 const RocketList = () => {
     const { rockets, loading, error, getRockets, addRocket } = useRocketStore()
@@ -41,7 +42,7 @@ const RocketList = () => {
 
     return (
         <div>
-            <h1>Rocket List</h1>
+            <Header />
             <input
                 type="text"
                 placeholder="Filter rocket by name"

@@ -4,7 +4,9 @@ import { Toaster } from 'react-hot-toast'
 function App() {
     return (
         <>
-            <AppRouter />
+            <div className="container mx-auto">
+                <AppRouter />
+            </div>
             <Toaster position="top-right" reverseOrder={false} />
         </>
     )
