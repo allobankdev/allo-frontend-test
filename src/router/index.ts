@@ -7,6 +7,7 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router/auto'
 import { routes } from 'vue-router/auto-routes'
+import { isGlobalLoading } from '@/stores/loading'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,5 +32,17 @@ router.onError((err, to) => {
 router.isReady().then(() => {
   localStorage.removeItem('vuetify:dynamic-reload')
 })
+
+router.beforeResolve((to, from, next) => {
+  isGlobalLoading.value = true
+  next();
+});
+
+router.afterEach(() => {
+  setTimeout(() => {
+    isGlobalLoading.value = false
+  }, 300);
+});
+
 
 export default router
