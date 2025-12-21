@@ -1,8 +1,12 @@
 import spaceXClient from "@/service/api.js";
 
 const getListRockets =  async function() {
-  const response = await spaceXClient.get("/v4/rockets");
-  return response.data;
+  try {
+    const response = await spaceXClient.get("/v4/rockets");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 }
 
 export {getListRockets};

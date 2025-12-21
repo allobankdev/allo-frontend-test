@@ -22,13 +22,13 @@ export const rocketStore = defineStore('rocketStore', () => {
       .then(function (response) {
         listRockets.value = response
       })
-      .catch(function (error) {
-        console.log("Fetch Rockets Error : ", error)
-        // alert("Fetch Rockets Error : " + error)
-      })
+  }
+
+  function removeAll() {
+    listRockets.value = []
   }
 
   return {
-    listRockets, addRocket, removeRocket, getRocket, fetchRockets
+    listRockets, addRocket, removeRocket, getRocket, fetchRockets, removeAll
   }
 }, { persist: true })

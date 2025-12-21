@@ -1,8 +1,11 @@
 <template>
   <v-container>
     <v-row>
-      <v-col align="end">
-        <v-btn class="bg-blue mb-4" rounded @click="addRocket">
+      <v-col style="padding: 0">
+        <v-checkbox label="Simulate Error" v-model="errorSimulation"></v-checkbox>
+      </v-col>
+      <v-col align="end" v-if="!errorLoad && !loading">
+        <v-btn class="bg-blue mb-4" rounded value="true" @click="addRocket">
           <v-icon icon="mdi-plus"></v-icon> &nbsp; Add
         </v-btn>
       </v-col>
@@ -29,6 +32,7 @@
       <v-divider></v-divider>
 
       <v-data-table
+        v-if="!errorLoad"
         v-model:items-per-page="itemsPerPage"
         :headers="headers"
         :items="datas"
@@ -68,6 +72,15 @@
           </div>
         </template>
       </v-data-table>
+
+      <v-col v-else style="margin: 50px; text-align: center">
+        <p>Failed to fetch rocket. Would you like to Retry ?</p>
+        <v-col align="center">
+          <v-btn class="bg-blue mb-4" rounded @click="loadItems">
+            <v-icon icon="mdi-refresh"></v-icon> &nbsp; Retry
+          </v-btn>
+        </v-col>
+      </v-col>
     </v-card>
   </v-container>
 
@@ -174,7 +187,9 @@ const loading = ref(true);
 const itemsPerPage = ref(3);
 const search = ref("");
 const dialog = ref(false);
-// const record = ref({ ...initialState });
+const errorLoad = ref(false);
+
+const errorSimulation = ref(false);
 
 const initialState = {
   id: "",
@@ -205,7 +220,12 @@ onMounted(() => {
 });
 
 watch(search, () => {
+  console.log("Test");
   setDatas();
+});
+
+watch(errorSimulation, () => {
+  loadItems();
 });
 
 const v$ = useVuelidate(rules, state);
@@ -219,20 +239,39 @@ const headers = ref([
   { title: "First Flight", key: "first_flight", sortable: false },
 ]);
 
-function loadItems() {
+async function loadItems() {
+  errorLoad.value = false;
   loading.value = true;
-  if (rocketStore().listRockets.length === 0) {
-    console.log("Fetching rockets from store...");
-    rocketStore()
-      .fetchRockets()
-      .then(() => {
+
+  if (errorSimulation.value) {
+    rocketStore().removeAll();
+    setDatas();
+    setTimeout(() => {
+      errorLoad.value = true;
+      loading.value = false;
+      return;
+    }, 1000);
+  } else {
+    setTimeout(() => {
+      if (rocketStore().listRockets.length === 0) {
+        console.log("Fetching rockets from store...");
+        rocketStore()
+          .fetchRockets()
+          .then(() => {
+            setDatas();
+            console.log("Fetched datas", datas);
+            loading.value = false;
+          })
+          .catch((error) => {
+            console.log("Fetched datas error", error);
+            errorLoad.value = true;
+            loading.value = false;
+          });
+      } else {
         setDatas();
         loading.value = false;
-        console.log("Fetched datas", datas);
-      });
-  } else {
-    setDatas();
-    loading.value = false;
+      }
+    }, 1000);
   }
 }
 
@@ -263,7 +302,7 @@ function resetForm() {
 function submitForm() {
   state.flickr_images = state.flickr_images.filter((url) => url !== "");
 
-  console.log("state : ", state)
+  console.log("state : ", state);
   if (state.flickr_images.length < 1) {
     alert("Must have at least 1 image");
     return;
