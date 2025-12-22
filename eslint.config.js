@@ -23,6 +23,8 @@ export default [
 
   {
     rules: {
+      "no-alert": "off",
+      "no-console": "off",
       '@typescript-eslint/no-unused-expressions': [
         'error',
         {
@@ -31,6 +33,15 @@ export default [
         },
       ],
       'vue/multi-word-component-names': 'off',
-    }
+      "vue/html-closing-bracket-newline": "off",
+      "vue/singleline-html-element-content-newline": "off",
+      "vue/valid-v-slot": ['error', { allowModifiers: true, },],
+    },
+    "vue/block-lang": ["error", {
+      "script": {
+        "lang": "js"
+      },
+      "allowNoLang": true
+    }]
   }
 ]
