@@ -25,11 +25,22 @@ export const useRocketStore = defineStore('rocket', () => {
     }
     
     const query = filterQuery.value.toLowerCase()
-    return rockets.value.filter(rocket =>
-      rocket.name.toLowerCase().includes(query) ||
-      rocket.description.toLowerCase().includes(query) ||
-      rocket.country.toLowerCase().includes(query)
-    )
+    const matches = rockets.value.map(rocket => {
+      const nameMatch = rocket.name.toLowerCase().includes(query)
+      const descriptionMatch = rocket.description.toLowerCase().includes(query)
+      const countryMatch = rocket.country.toLowerCase().includes(query)
+      
+      return {
+        rocket,
+        priority: nameMatch ? 1 : (descriptionMatch ? 2 : (countryMatch ? 3 : 0)),
+        matches: nameMatch || descriptionMatch || countryMatch,
+      }
+    }).filter(item => item.matches)
+    
+    // Sort by priority (name matches first, then description, then country)
+    matches.sort((a, b) => a.priority - b.priority)
+    
+    return matches.map(item => item.rocket)
   })
 
   const isLoading = computed(() => loadingState.value === 'loading')
