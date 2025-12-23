@@ -1,0 +1,170 @@
+<template>
+  <v-dialog
+    v-model="localDialog"
+    max-width="600"
+    persistent
+  >
+    <v-card>
+      <v-card-title class="text-h5">
+        Add New Rocket
+      </v-card-title>
+      <v-card-text>
+        <v-form ref="formRef" v-model="valid">
+          <v-text-field
+            v-model="form.name"
+            label="Rocket Name"
+            :rules="[rules.required]"
+            variant="outlined"
+            class="mb-3"
+          />
+          <v-textarea
+            v-model="form.description"
+            label="Description"
+            :rules="[rules.required]"
+            variant="outlined"
+            rows="3"
+            class="mb-3"
+          />
+          <v-text-field
+            v-model.number="form.cost_per_launch"
+            label="Cost per Launch (USD)"
+            type="number"
+            :rules="[rules.required, rules.positive]"
+            variant="outlined"
+            class="mb-3"
+          />
+          <v-text-field
+            v-model="form.country"
+            label="Country"
+            :rules="[rules.required]"
+            variant="outlined"
+            class="mb-3"
+          />
+          <v-text-field
+            v-model="form.first_flight"
+            label="First Flight (YYYY-MM-DD)"
+            :rules="[rules.required, rules.date]"
+            variant="outlined"
+            class="mb-3"
+          />
+          <v-text-field
+            v-model="form.imageUrl"
+            label="Image URL"
+            :rules="[rules.required, rules.url]"
+            variant="outlined"
+            class="mb-3"
+          />
+        </v-form>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer />
+        <v-btn
+          variant="text"
+          @click="handleCancel"
+        >
+          Cancel
+        </v-btn>
+        <v-btn
+          color="primary"
+          :disabled="!valid"
+          @click="handleSubmit"
+        >
+          Add Rocket
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+</template>
+
+<script lang="ts" setup>
+import { ref, watch } from 'vue'
+import type { Rocket } from '@/services/spacexApi'
+import { useRocketStore } from '@/stores/rocket'
+
+const props = defineProps<{
+  modelValue: boolean
+}>()
+
+const emit = defineEmits<{
+  'update:modelValue': [value: boolean]
+}>()
+
+const rocketStore = useRocketStore()
+const formRef = ref()
+const valid = ref(false)
+
+const form = ref({
+  name: '',
+  description: '',
+  cost_per_launch: 0,
+  country: '',
+  first_flight: '',
+  imageUrl: '',
+})
+
+const localDialog = ref(props.modelValue)
+
+watch(() => props.modelValue, (newValue) => {
+  localDialog.value = newValue
+  if (!newValue) {
+    resetForm()
+  }
+})
+
+watch(localDialog, (newValue) => {
+  emit('update:modelValue', newValue)
+})
+
+const rules = {
+  required: (value: any) => !!value || 'This field is required',
+  positive: (value: number) => value > 0 || 'Must be a positive number',
+  url: (value: string) => {
+    try {
+      new URL(value)
+      return true
+    } catch {
+      return 'Must be a valid URL'
+    }
+  },
+  date: (value: string) => {
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/
+    return dateRegex.test(value) || 'Must be in YYYY-MM-DD format'
+  },
+}
+
+function resetForm() {
+  form.value = {
+    name: '',
+    description: '',
+    cost_per_launch: 0,
+    country: '',
+    first_flight: '',
+    imageUrl: '',
+  }
+  formRef.value?.resetValidation()
+}
+
+function handleCancel() {
+  localDialog.value = false
+}
+
+function handleSubmit() {
+  if (!valid.value) return
+
+  const newRocket: Rocket = {
+    id: `custom-${Date.now()}`,
+    name: form.value.name,
+    description: form.value.description,
+    cost_per_launch: form.value.cost_per_launch,
+    country: form.value.country,
+    first_flight: form.value.first_flight,
+    flickr_images: [form.value.imageUrl],
+    active: true,
+    type: 'Custom',
+  }
+
+  rocketStore.addRocket(newRocket)
+  localDialog.value = false
+}
+</script>
+
