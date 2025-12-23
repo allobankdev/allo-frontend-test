@@ -27,11 +27,14 @@
           />
           <v-text-field
             v-model.number="form.cost_per_launch"
-            label="Cost per Launch (USD)"
+            label="Cost per Launch"
             type="number"
             :rules="[rules.required, rules.positive]"
             variant="outlined"
             class="mb-3"
+            prefix="$"
+            hint="Enter amount in USD"
+            persistent-hint
           />
           <v-text-field
             v-model="form.country"
@@ -40,10 +43,35 @@
             variant="outlined"
             class="mb-3"
           />
-          <v-text-field
-            v-model="form.first_flight"
-            label="First Flight (YYYY-MM-DD)"
-            :rules="[rules.required, rules.date]"
+          <v-menu
+            v-model="dateMenu"
+            :close-on-content-click="false"
+            transition="scale-transition"
+            offset-y
+            min-width="auto"
+          >
+            <template #activator="{ props: menuProps }">
+              <v-text-field
+                v-model="form.first_flight"
+                label="First Flight"
+                :rules="[rules.required]"
+                variant="outlined"
+                class="mb-3"
+                readonly
+                v-bind="menuProps"
+                prepend-inner-icon="mdi-calendar"
+              />
+            </template>
+            <v-date-picker
+              v-model="form.first_flight"
+              @update:model-value="dateMenu = false"
+            />
+          </v-menu>
+          <v-select
+            v-model="form.active"
+            label="Status"
+            :items="statusOptions"
+            :rules="[rules.required]"
             variant="outlined"
             class="mb-3"
           />
@@ -92,6 +120,7 @@ const emit = defineEmits<{
 const rocketStore = useRocketStore()
 const formRef = ref()
 const valid = ref(false)
+const dateMenu = ref(false)
 
 const form = ref({
   name: '',
@@ -99,8 +128,14 @@ const form = ref({
   cost_per_launch: 0,
   country: '',
   first_flight: '',
+  active: true,
   imageUrl: '',
 })
+
+const statusOptions = [
+  { title: 'Active', value: true },
+  { title: 'Inactive', value: false },
+]
 
 const localDialog = ref(props.modelValue)
 
@@ -116,7 +151,12 @@ watch(localDialog, (newValue) => {
 })
 
 const rules = {
-  required: (value: any) => !!value || 'This field is required',
+  required: (value: any) => {
+    if (value === null || value === undefined) return 'This field is required'
+    if (typeof value === 'string' && !value.trim()) return 'This field is required'
+    if (typeof value === 'boolean') return true
+    return !!value || 'This field is required'
+  },
   positive: (value: number) => value > 0 || 'Must be a positive number',
   url: (value: string) => {
     try {
@@ -125,10 +165,6 @@ const rules = {
     } catch {
       return 'Must be a valid URL'
     }
-  },
-  date: (value: string) => {
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/
-    return dateRegex.test(value) || 'Must be in YYYY-MM-DD format'
   },
 }
 
@@ -139,8 +175,10 @@ function resetForm() {
     cost_per_launch: 0,
     country: '',
     first_flight: '',
+    active: true,
     imageUrl: '',
   }
+  dateMenu.value = false
   formRef.value?.resetValidation()
 }
 
@@ -159,7 +197,7 @@ function handleSubmit() {
     country: form.value.country,
     first_flight: form.value.first_flight,
     flickr_images: [form.value.imageUrl],
-    active: true,
+    active: form.value.active,
     type: 'Custom',
   }
 
