@@ -43,30 +43,15 @@
             variant="outlined"
             class="mb-3"
           />
-          <v-menu
-            v-model="dateMenu"
-            :close-on-content-click="false"
-            transition="scale-transition"
-            offset-y
-            min-width="auto"
-          >
-            <template #activator="{ props: menuProps }">
-              <v-text-field
-                v-model="form.first_flight"
-                label="First Flight"
-                :rules="[rules.required]"
-                variant="outlined"
-                class="mb-3"
-                readonly
-                v-bind="menuProps"
-                prepend-inner-icon="mdi-calendar"
-              />
-            </template>
-            <v-date-picker
-              v-model="form.first_flight"
-              @update:model-value="dateMenu = false"
-            />
-          </v-menu>
+          <v-text-field
+            v-model="form.first_flight"
+            label="First Flight"
+            type="date"
+            :rules="[rules.required]"
+            variant="outlined"
+            class="mb-3"
+            prepend-inner-icon="mdi-calendar"
+          />
           <v-select
             v-model="form.active"
             label="Status"
@@ -120,7 +105,6 @@ const emit = defineEmits<{
 const rocketStore = useRocketStore()
 const formRef = ref()
 const valid = ref(false)
-const dateMenu = ref(false)
 
 const form = ref({
   name: '',
@@ -178,7 +162,6 @@ function resetForm() {
     active: true,
     imageUrl: '',
   }
-  dateMenu.value = false
   formRef.value?.resetValidation()
 }
 
