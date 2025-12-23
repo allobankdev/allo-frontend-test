@@ -47,7 +47,7 @@
                 <div class="mb-4">
                   <div class="text-caption text-grey mb-1">Cost per Launch</div>
                   <div class="text-h6">
-                    ${{ rocketStore.selectedRocket.cost_per_launch.toLocaleString() }}
+                    {{ formatCurrency(rocketStore.selectedRocket.cost_per_launch) }}
                   </div>
                 </div>
               </v-col>
@@ -126,6 +126,15 @@ function formatDate(dateString: string): string {
   } catch {
     return dateString
   }
+}
+
+function formatCurrency(amount: number): string {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amount)
 }
 </script>
 
