@@ -1,21 +1,23 @@
 <template>
   <v-dialog
     v-model="localDialog"
-    max-width="600"
+    max-width="640"
     persistent
+    scrollable
   >
-    <v-card>
-      <v-card-title class="text-h5">
+    <v-card class="add-rocket-dialog">
+      <v-card-title class="text-h4 font-weight-light pa-6 pb-4">
         Add New Rocket
       </v-card-title>
-      <v-card-text>
+      <v-card-text class="pa-6 pt-2">
         <v-form ref="formRef" v-model="valid">
           <v-text-field
             v-model="form.name"
             label="Rocket Name"
             :rules="[rules.required]"
             variant="outlined"
-            class="mb-3"
+            density="comfortable"
+            class="mb-4"
           />
           <v-textarea
             v-model="form.description"
@@ -23,63 +25,84 @@
             :rules="[rules.required]"
             variant="outlined"
             rows="3"
-            class="mb-3"
+            density="comfortable"
+            class="mb-4"
           />
-          <v-text-field
-            v-model.number="form.cost_per_launch"
-            label="Cost per Launch"
-            type="number"
-            :rules="[rules.required, rules.positive]"
-            variant="outlined"
-            class="mb-3"
-            prefix="$"
-            hint="Enter amount in USD"
-            persistent-hint
-          />
-          <v-text-field
-            v-model="form.country"
-            label="Country"
-            :rules="[rules.required]"
-            variant="outlined"
-            class="mb-3"
-          />
-          <v-text-field
-            v-model="form.first_flight"
-            label="First Flight"
-            type="date"
-            :rules="[rules.required]"
-            variant="outlined"
-            class="mb-3"
-            prepend-inner-icon="mdi-calendar"
-          />
-          <v-select
-            v-model="form.active"
-            label="Status"
-            :items="statusOptions"
-            :rules="[rules.required]"
-            variant="outlined"
-            class="mb-3"
-          />
+          <v-row>
+            <v-col cols="12" sm="6">
+              <v-text-field
+                v-model.number="form.cost_per_launch"
+                label="Cost per Launch"
+                type="number"
+                :rules="[rules.required, rules.positive]"
+                variant="outlined"
+                density="comfortable"
+                prefix="$"
+                hint="USD"
+                persistent-hint
+                class="mb-4"
+              />
+            </v-col>
+            <v-col cols="12" sm="6">
+              <v-text-field
+                v-model="form.country"
+                label="Country"
+                :rules="[rules.required]"
+                variant="outlined"
+                density="comfortable"
+                class="mb-4"
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" sm="6">
+              <v-text-field
+                v-model="form.first_flight"
+                label="First Flight"
+                type="date"
+                :rules="[rules.required]"
+                variant="outlined"
+                density="comfortable"
+                prepend-inner-icon="mdi-calendar"
+                class="mb-4"
+              />
+            </v-col>
+            <v-col cols="12" sm="6">
+              <v-select
+                v-model="form.active"
+                label="Status"
+                :items="statusOptions"
+                :rules="[rules.required]"
+                variant="outlined"
+                density="comfortable"
+                class="mb-4"
+              />
+            </v-col>
+          </v-row>
           <v-text-field
             v-model="form.imageUrl"
             label="Image URL"
             :rules="[rules.required, rules.url]"
             variant="outlined"
-            class="mb-3"
+            density="comfortable"
+            class="mb-2"
           />
         </v-form>
       </v-card-text>
-      <v-card-actions>
+      <v-card-actions class="pa-6 pt-2">
         <v-spacer />
         <v-btn
           variant="text"
+          size="large"
           @click="handleCancel"
         >
           Cancel
         </v-btn>
         <v-btn
-          color="primary"
+          variant="outlined"
+          size="large"
           :disabled="!valid"
+          class="submit-btn"
           @click="handleSubmit"
         >
           Add Rocket
@@ -188,4 +211,38 @@ function handleSubmit() {
   localDialog.value = false
 }
 </script>
+
+<style scoped>
+.add-rocket-dialog {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.add-rocket-dialog :deep(.v-card-title) {
+  border-bottom: 1px solid rgba(var(--v-border-opacity), var(--v-border-opacity));
+}
+
+.add-rocket-dialog :deep(.v-field) {
+  border-radius: 12px;
+}
+
+.add-rocket-dialog :deep(.v-field__input) {
+  border-radius: 12px;
+}
+
+.add-rocket-dialog :deep(.v-select__selection) {
+  border-radius: 12px;
+}
+
+.submit-btn {
+  border-width: 1.5px;
+  border-radius: 8px;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.submit-btn:disabled {
+  opacity: 0.4;
+}
+</style>
 

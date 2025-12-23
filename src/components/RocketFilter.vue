@@ -1,11 +1,13 @@
 <template>
   <v-text-field
     v-model="localQuery"
-    label="Filter rockets"
+    label="Search rockets..."
     prepend-inner-icon="mdi-magnify"
     variant="outlined"
     clearable
     hide-details
+    density="comfortable"
+    class="filter-input"
     @update:model-value="handleInput"
   />
 </template>
@@ -25,4 +27,14 @@ function handleInput(value: string | null) {
   rocketStore.setFilterQuery(value || '')
 }
 </script>
+
+<style scoped>
+.filter-input {
+  max-width: 400px;
+}
+
+.filter-input :deep(.v-field) {
+  border-radius: 8px;
+}
+</style>
 

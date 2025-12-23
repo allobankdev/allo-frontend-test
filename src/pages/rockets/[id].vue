@@ -1,89 +1,87 @@
 <template>
-  <v-container class="py-8">
-    <v-btn
-      class="mb-4"
-      prepend-icon="mdi-arrow-left"
-      variant="text"
-      @click="router.push('/')"
-    >
-      Back to List
-    </v-btn>
+  <div class="rocket-detail-page">
+    <v-container class="py-6">
+      <v-btn
+        class="back-button"
+        prepend-icon="mdi-arrow-left"
+        variant="text"
+        size="large"
+        @click="router.push('/')"
+      >
+        Back
+      </v-btn>
 
-    <div v-if="rocketStore.isLoading">
-      <LoadingState />
-    </div>
+      <div v-if="rocketStore.isLoading" class="loading-container">
+        <LoadingState />
+      </div>
 
-    <div v-else-if="rocketStore.isError">
-      <ErrorState
-        :message="rocketStore.error || 'Failed to load rocket details'"
-        @retry="handleRetry"
-      />
-    </div>
+      <div v-else-if="rocketStore.isError" class="error-container">
+        <ErrorState
+          :message="rocketStore.error || 'Failed to load rocket details'"
+          @retry="handleRetry"
+        />
+      </div>
 
-    <v-card v-else-if="rocketStore.selectedRocket" class="rocket-detail-card">
-      <v-row no-gutters>
-        <v-col cols="12" md="6">
-          <v-img
-            :src="rocketStore.selectedRocket.flickr_images?.[0] || 'https://via.placeholder.com/600x400?text=No+Image'"
-            :alt="rocketStore.selectedRocket.name"
-            height="100%"
-            min-height="400"
-            cover
-          />
-        </v-col>
-        <v-col cols="12" md="6">
-          <v-card-title class="text-h4 pa-6">
-            {{ rocketStore.selectedRocket.name }}
-          </v-card-title>
-          <v-card-text class="pa-6">
-            <p class="text-body-1 mb-6">
+      <div v-else-if="rocketStore.selectedRocket" class="rocket-detail-content">
+        <div class="detail-grid">
+          <div class="detail-image">
+            <v-img
+              :src="rocketStore.selectedRocket.flickr_images?.[0] || 'https://via.placeholder.com/600x400?text=No+Image'"
+              :alt="rocketStore.selectedRocket.name"
+              height="100%"
+              min-height="500"
+              cover
+              class="rounded-lg"
+            />
+          </div>
+          <div class="detail-info">
+            <h1 class="text-h3 font-weight-light mb-3">
+              {{ rocketStore.selectedRocket.name }}
+            </h1>
+            <p class="text-body-1 text-medium-emphasis mb-8 line-height-relaxed">
               {{ rocketStore.selectedRocket.description }}
             </p>
 
-            <v-divider class="my-4" />
-
-            <v-row>
-              <v-col cols="12" sm="6">
-                <div class="mb-4">
-                  <div class="text-caption text-grey mb-1">Cost per Launch</div>
-                  <div class="text-h6">
-                    {{ formatCurrency(rocketStore.selectedRocket.cost_per_launch) }}
-                  </div>
+            <div class="detail-specs">
+              <div class="spec-item">
+                <div class="spec-label">Cost per Launch</div>
+                <div class="spec-value">
+                  {{ formatCurrency(rocketStore.selectedRocket.cost_per_launch) }}
                 </div>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <div class="mb-4">
-                  <div class="text-caption text-grey mb-1">Country</div>
-                  <div class="text-h6">
-                    {{ rocketStore.selectedRocket.country }}
-                  </div>
+              </div>
+              <div class="spec-item">
+                <div class="spec-label">Country</div>
+                <div class="spec-value">
+                  {{ rocketStore.selectedRocket.country }}
                 </div>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <div class="mb-4">
-                  <div class="text-caption text-grey mb-1">First Flight</div>
-                  <div class="text-h6">
-                    {{ formatDate(rocketStore.selectedRocket.first_flight) }}
-                  </div>
+              </div>
+              <div class="spec-item">
+                <div class="spec-label">First Flight</div>
+                <div class="spec-value">
+                  {{ formatDate(rocketStore.selectedRocket.first_flight) }}
                 </div>
-              </v-col>
-              <v-col cols="12" sm="6" v-if="rocketStore.selectedRocket.active !== undefined">
-                <div class="mb-4">
-                  <div class="text-caption text-grey mb-1">Status</div>
+              </div>
+              <div
+                v-if="rocketStore.selectedRocket.active !== undefined"
+                class="spec-item"
+              >
+                <div class="spec-label">Status</div>
+                <div class="spec-value">
                   <v-chip
                     :color="rocketStore.selectedRocket.active ? 'success' : 'error'"
                     size="small"
+                    variant="flat"
                   >
                     {{ rocketStore.selectedRocket.active ? 'Active' : 'Inactive' }}
                   </v-chip>
                 </div>
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-col>
-      </v-row>
-    </v-card>
-  </v-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </v-container>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -139,8 +137,96 @@ function formatCurrency(amount: number): string {
 </script>
 
 <style scoped>
-.rocket-detail-card {
-  overflow: hidden;
+.rocket-detail-page {
+  min-height: 100vh;
+  background: rgb(var(--v-theme-surface));
+}
+
+.back-button {
+  margin-bottom: 32px;
+  padding-left: 0 !important;
+  min-width: auto;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.back-button :deep(.v-btn__prepend) {
+  margin-inline-end: 8px;
+}
+
+.loading-container,
+.error-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.rocket-detail-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.detail-image {
+  position: sticky;
+  top: 24px;
+}
+
+.detail-info {
+  padding-top: 8px;
+}
+
+.detail-specs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(var(--v-border-opacity), var(--v-border-opacity));
+}
+
+.spec-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.spec-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(var(--v-theme-on-surface), 0.6);
+}
+
+.spec-value {
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: rgb(var(--v-theme-on-surface));
+}
+
+.line-height-relaxed {
+  line-height: 1.7;
+}
+
+@media (max-width: 960px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .detail-image {
+    position: static;
+  }
+
+  .detail-specs {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
 }
 </style>
 

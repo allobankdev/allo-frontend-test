@@ -1,14 +1,25 @@
 <template>
-  <v-container class="d-flex justify-center align-center" style="min-height: 400px">
+  <div class="loading-state">
     <v-progress-circular
       indeterminate
       color="primary"
-      size="64"
+      size="48"
+      width="3"
     />
-  </v-container>
+  </div>
 </template>
 
 <script lang="ts" setup>
 //
 </script>
+
+<style scoped>
+.loading-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  padding: 48px;
+}
+</style>
 

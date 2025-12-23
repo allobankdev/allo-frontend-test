@@ -1,69 +1,64 @@
 <template>
-  <v-container class="py-8">
-    <v-row>
-      <v-col cols="12">
-        <div class="d-flex justify-space-between align-center mb-4">
-          <h1 class="text-h4">Rocket List</h1>
+  <div class="rocket-list-page">
+    <v-container class="py-6">
+      <div class="page-header mb-8">
+        <div class="d-flex justify-space-between align-center flex-wrap gap-4">
+          <div>
+            <h1 class="text-h3 font-weight-light mb-2">Rockets</h1>
+            <p class="text-body-2 text-medium-emphasis">
+              Explore SpaceX rockets and add your own
+            </p>
+          </div>
           <v-btn
-            color="primary"
             prepend-icon="mdi-plus"
+            variant="outlined"
+            size="large"
+            class="add-rocket-btn"
             @click="showAddDialog = true"
           >
             Add Rocket
           </v-btn>
         </div>
-      </v-col>
-    </v-row>
+      </div>
 
-    <v-row>
-      <v-col cols="12" md="6" lg="4">
+      <div class="filter-section mb-6">
         <RocketFilter />
-      </v-col>
-    </v-row>
+      </div>
 
-    <v-row v-if="rocketStore.isLoading">
-      <v-col cols="12">
+      <div v-if="rocketStore.isLoading" class="loading-container">
         <LoadingState />
-      </v-col>
-    </v-row>
+      </div>
 
-    <v-row v-else-if="rocketStore.isError">
-      <v-col cols="12">
+      <div v-else-if="rocketStore.isError" class="error-container">
         <ErrorState
           :message="rocketStore.error || 'Failed to load rockets'"
           @retry="handleRetry"
         />
-      </v-col>
-    </v-row>
+      </div>
 
-    <v-row v-else-if="rocketStore.isSuccess">
-      <v-col
-        v-if="rocketStore.filteredRockets.length === 0"
-        cols="12"
-        class="text-center py-8"
-      >
-        <v-icon size="64" color="grey" class="mb-4">
-          mdi-rocket-launch
-        </v-icon>
-        <p class="text-h6 text-grey">No rockets found</p>
-      </v-col>
-      <v-col
-        v-for="rocket in rocketStore.filteredRockets"
-        :key="rocket.id"
-        cols="12"
-        sm="6"
-        md="4"
-        lg="3"
-      >
-        <RocketCard
-          :rocket="rocket"
-          @click="handleRocketClick(rocket.id)"
-        />
-      </v-col>
-    </v-row>
+      <div v-else-if="rocketStore.isSuccess">
+        <div
+          v-if="rocketStore.filteredRockets.length === 0"
+          class="empty-state text-center py-16"
+        >
+          <v-icon size="48" color="grey-lighten-1" class="mb-4">
+            mdi-rocket-launch
+          </v-icon>
+          <p class="text-body-1 text-medium-emphasis">No rockets found</p>
+        </div>
+        <div v-else class="rockets-grid">
+          <RocketCard
+            v-for="rocket in rocketStore.filteredRockets"
+            :key="rocket.id"
+            :rocket="rocket"
+            @click="handleRocketClick(rocket.id)"
+          />
+        </div>
+      </div>
 
-    <AddRocketDialog v-model="showAddDialog" />
-  </v-container>
+      <AddRocketDialog v-model="showAddDialog" />
+    </v-container>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -99,3 +94,53 @@ function handleRocketClick(id: string) {
   router.push(`/rockets/${id}`)
 }
 </script>
+
+<style scoped>
+.rocket-list-page {
+  min-height: 100vh;
+  background: rgb(var(--v-theme-surface));
+}
+
+.page-header {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.filter-section {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.rockets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.loading-container,
+.error-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.empty-state {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.add-rocket-btn {
+  border-width: 1.5px;
+  text-transform: none;
+  letter-spacing: normal;
+  border-radius: 8px;
+}
+
+@media (max-width: 600px) {
+  .rockets-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+</style>
