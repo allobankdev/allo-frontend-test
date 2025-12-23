@@ -81,6 +81,11 @@ const rocketStore = useRocketStore()
 const showAddDialog = ref(false)
 
 onMounted(async () => {
+  // Clear any previous error state when returning to list
+  if (rocketStore.isError) {
+    rocketStore.clearError()
+  }
+  
   if (rocketStore.rockets.length === 0) {
     await rocketStore.loadRockets()
   }

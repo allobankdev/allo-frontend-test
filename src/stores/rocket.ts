@@ -68,6 +68,19 @@ export const useRocketStore = defineStore('rocket', () => {
     error.value = null
     
     try {
+      // Check if it's a custom rocket (starts with "custom-")
+      if (id.startsWith('custom-')) {
+        const customRocket = rockets.value.find(r => r.id === id)
+        if (customRocket) {
+          selectedRocket.value = customRocket
+          loadingState.value = 'success'
+          return
+        } else {
+          throw new Error('Custom rocket not found')
+        }
+      }
+      
+      // For API rockets, fetch from API
       const data = await fetchRocketById(id)
       selectedRocket.value = data
       loadingState.value = 'success'
@@ -90,6 +103,11 @@ export const useRocketStore = defineStore('rocket', () => {
     selectedRocket.value = null
   }
 
+  function clearError() {
+    error.value = null
+    loadingState.value = 'idle'
+  }
+
   return {
     // State
     rockets,
@@ -108,6 +126,7 @@ export const useRocketStore = defineStore('rocket', () => {
     setFilterQuery,
     addRocket,
     clearSelectedRocket,
+    clearError,
   }
 })
 
