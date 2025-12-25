@@ -1,6 +1,6 @@
 <template>
   <div class="rocket-detail-page">
-    <v-container class="py-6">
+    <v-container class="py-4">
       <v-row class="mb-3">
         <v-col cols="12">
           <h1 class="text-h4 font-weight-bold">🚀 Rocket Detail</h1>
@@ -28,7 +28,7 @@
               :src="rocketImage"
               :alt="rocketStore.detailRocket?.name || ''"
               height="100%"
-              min-height="400"
+              min-height="300"
               cover
               class="rocket-card-image rounded-lg"
             />
@@ -47,13 +47,13 @@
                   <div class="d-block text-subtitle-2 text-medium-emphasis mb-1">
                     <v-icon
                       size="small"
-                      icon="mdi-domain"
+                      icon="mdi-earth"
                       class="mr-1"
                       /> 
-                    Company
+                    Location
                   </div>
                   <div class="font-weight-bold text-capitalize">
-                    {{ rocketStore.detailRocket?.company || '-' }}
+                    {{ rocketStore.detailRocket?.country || '-' }}
                   </div>
                 </v-col>
 
@@ -69,6 +69,20 @@
                     {{ rocketStore.detailRocket?.active ? 'Active' : 'Inactive' }}
                   </v-chip>
                 </v-col>
+
+                <v-col cols="6">
+                  <div class="d-block text-subtitle-2 text-medium-emphasis mb-1">
+                    <v-icon
+                      size="small"
+                      icon="mdi-domain"
+                      class="mr-1"
+                      /> 
+                    Company
+                  </div>
+                  <div class="font-weight-bold text-capitalize">
+                    {{ rocketStore.detailRocket?.company || '-' }}
+                  </div>
+                </v-col>
                 
                 <v-col cols="6">
                   <div class="d-block text-subtitle-2 text-medium-emphasis mb-1">
@@ -83,8 +97,35 @@
                     {{ rocketStore.detailRocket?.type || '-' }}
                   </div>
                 </v-col>
-              </v-row>
 
+                <v-col cols="6">
+                  <div class="d-block text-subtitle-2 text-medium-emphasis mb-1">
+                    <v-icon
+                      size="small"
+                      icon="mdi-rocket-launch"
+                      class="mr-1"
+                      />  
+                    First Flight
+                  </div>
+                  <div class="font-weight-bold text-capitalize">
+                    {{ rocketStore.detailRocket?.first_flight != '' ? formatDate(rocketStore.detailRocket?.first_flight ?? '') : '-' }}
+                  </div>
+                </v-col>
+
+                <v-col cols="6">
+                  <div class="d-block text-subtitle-2 text-medium-emphasis mb-1">
+                    <v-icon
+                      size="small"
+                      icon="mdi-rocket-launch"
+                      class="mr-1"
+                      />  
+                    Cost Per Launch
+                  </div>
+                  <div class="font-weight-bold text-capitalize">
+                    {{ formatCurrency(rocketStore.detailRocket?.cost_per_launch ?? 0) }}
+                  </div>
+                </v-col>
+              </v-row>
             </div>
           </v-col>
       </v-row>
@@ -97,9 +138,10 @@
 
 <script lang="ts" setup>
   import { computed, onMounted } from 'vue'
-  import { useRocketsStore } from '@/stores/RocketStore'
+  import { useRocketsStore } from '@/stores/rocket'
   import { useRouter, useRoute } from 'vue-router';
-  import LoadingState from '@/components/Loading.vue'
+  import LoadingState from '@/components/LoadingState.vue'
+  import { formatDate, formatCurrency } from '@/utils/formatter'
 
   const router = useRouter();
   const route = useRoute()

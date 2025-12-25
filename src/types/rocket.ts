@@ -1,12 +1,13 @@
 export interface Rocket {
-    id: string
-    name: string
+    id: string;
+    name: string;
     company?: string;
-    active?: boolean
-    type?: string
-    description: string
-    flickr_images: string[]
-    cost_per_launch: number
-    country: string
-    first_flight: string
+    active?: boolean;
+    type?: string;
+    description: string;
+    flickr_images: string[];
+    cost_per_launch: number;
+    country: string;
+    first_flight: string;
+    success_rate_pct?: number;
 }

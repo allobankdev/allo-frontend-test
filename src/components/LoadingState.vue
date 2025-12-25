@@ -10,12 +10,12 @@
 </template>
 
 <style scoped>
-.loading-state {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 400px;
-  padding: 48px;
-}
+  .loading-state {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    padding: 48px;
+  }
 </style>
   
