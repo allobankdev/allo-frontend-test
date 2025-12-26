@@ -27,6 +27,9 @@ export const useRocketStore = defineStore("rocket" ,{
       } finally {
         this.loading = false;
       }
+    },
+    addRocket(rocket: Rocket) {
+      this.rockets.unshift(rocket);
     }
   }
 })

@@ -24,7 +24,7 @@ const filteredRockets = computed(() => {
     <div>
       <div class="d-flex align-sm-center justify-space-between mb-8">
         <h1>Rocket List</h1>
-        <v-btn class="text-none"> Add Rocket </v-btn>
+        <DialogAddRocket />
       </div>
       <FilterSearch v-model="search" />
       <div v-if="store.loading">Loading...</div>
