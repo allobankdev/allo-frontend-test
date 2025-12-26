@@ -13,18 +13,18 @@ const shortDescription = computed(() => {
 </script>
 
 <template>
-  <v-card class="mx-auto">
-    <v-card-item>
-      <v-img 
-        cover
-        height="200" 
-        :src="rocket.flickr_images[0]"
-        class="mb-2"
-      />
-      <v-card-title>{{ rocket.name }}</v-card-title>
-    </v-card-item>
-    <v-card-text>
-      {{ shortDescription }}
-    </v-card-text>
-  </v-card>
+  <router-link
+    :to="{ name: 'rocket-detail', params: { id: rocket.id } }"
+    class="text-decoration-none"
+  >
+    <v-card class="mx-auto">
+      <v-card-item>
+        <v-img cover height="200" :src="rocket.flickr_images[0]" class="mb-2" />
+        <v-card-title>{{ rocket.name }}</v-card-title>
+      </v-card-item>
+      <v-card-text>
+        {{ shortDescription }}
+      </v-card-text>
+    </v-card>
+  </router-link>
 </template>

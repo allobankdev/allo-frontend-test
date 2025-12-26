@@ -27,7 +27,9 @@ const filteredRockets = computed(() => {
         <DialogAddRocket />
       </div>
       <FilterSearch v-model="search" />
-      <div v-if="store.loading">Loading...</div>
+      <div v-if="store.loading" class="d-flex justify-center align-center h-50">
+        <v-progress-circular indeterminate color="primary" size="64" />
+      </div>
       <div v-else-if="store.errorMsg">{{ store.errorMsg }}</div>
       <v-row>
         <v-col
