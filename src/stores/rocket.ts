@@ -28,5 +28,8 @@ export const useRocketStore = defineStore("rocket" ,{
         this.loading = false;
       }
     },
+    addRocket(rocket: Rocket) {
+      this.rockets.unshift(rocket);
+    },
   }
 });
