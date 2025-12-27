@@ -9,6 +9,11 @@ export const useRocketStore = defineStore("rocket" ,{
     loading: false,
     errorMsg: "",
   }),
+  getters: {
+    getRocketById: (state) => (id: string) => {
+      return state.rockets.find((rocket) => rocket.id === id);
+    },
+  },
   actions: {
     async fetchRockets() {
       this.loading = true;
