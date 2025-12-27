@@ -30,7 +30,10 @@ const filteredRockets = computed(() => {
       <div v-if="store.loading" class="d-flex justify-center align-center h-50">
         <v-progress-circular indeterminate color="primary" size="64" />
       </div>
-      <div v-else-if="store.errorMsg">{{ store.errorMsg }}</div>
+      <div v-else-if="store.errorMsg">
+        <ErrorBanner :errMsg="store.errorMsg" />
+      </div>
+      
       <v-row>
         <v-col
           v-for="rocket in filteredRockets"

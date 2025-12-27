@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     DialogAddRocket: typeof import('./src/components/DialogAddRocket.vue')['default']
+    ErrorBanner: typeof import('./src/components/ErrorBanner.vue')['default']
     FilterSearch: typeof import('./src/components/FilterSearch.vue')['default']
     RocketCard: typeof import('./src/components/RocketCard.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

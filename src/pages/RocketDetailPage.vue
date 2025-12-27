@@ -47,9 +47,8 @@ onMounted(() => {
       <v-progress-circular indeterminate color="primary" size="64" />
     </div>
 
-    <div v-else-if="error" class="text-center py-8">
-      <v-icon size="64" color="error" class="mb-4">mdi-alert-circle</v-icon>
-      <div class="text-h6 text-medium-emphasis">{{ error }}</div>
+    <div v-else-if="error">
+      <ErrorBanner :errMsg="error" />
     </div>
 
     <v-fade-transition v-else-if="rocket">
