@@ -18,7 +18,7 @@ const loadData = async () => {
 
   try {
     if (store.rockets.length === 0) {
-      await store.fetchRockets(); // Assuming you have this method
+      await store.fetchRockets();
     }
 
     if (!rocket.value) {

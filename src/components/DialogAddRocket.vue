@@ -68,6 +68,15 @@ const handleClose = () => {
   dialog.value = false;
   resetForm();
 };
+
+const handleCostInput = (event: Event) => {
+  const input = event.target as HTMLInputElement;
+  const value = input.value;
+  
+  // Remove leading zeros
+  const cleaned = value.replace(/^0+/, '') || '0';
+  rocket.cost_per_launch = parseInt(cleaned) || 0;
+};
 </script>
 
 <template>
@@ -103,6 +112,7 @@ const handleClose = () => {
                 required
                 :rules="[rules.number]"
                 clearable
+                @input="handleCostInput"
               />
               <v-text-field
                 v-model="rocket.flickr_images[0]"
