@@ -1,5 +1,3 @@
 <template>
-  <Home />
+  <Rockets />
 </template>
-
-<script lang="ts" setup></script>

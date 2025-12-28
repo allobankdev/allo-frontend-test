@@ -1,16 +1,4 @@
 <template>
-  <v-app-bar :elevation="2">
-    <v-container class="d-flex align-center">
-      <v-app-bar-title>Rocket Web Page</v-app-bar-title>
-
-      <v-spacer />
-
-      <v-chip size="small" variant="tonal">
-        {{ filteredRockets.length }}
-      </v-chip>
-    </v-container>
-  </v-app-bar>
-
   <v-container class="py-4">
     <div class="d-flex ga-2">
       <v-text-field
@@ -39,13 +27,6 @@
         lg="3"
       >
         <v-card class="ma-2" rounded="lg">
-          <!-- <v-carousel>
-            <v-carousel-item
-              v-for="(image, id) in item.flickr_images"
-              :src="image"
-              cover
-            ></v-carousel-item>
-          </v-carousel> -->
           <v-carousel
             height="220"
             hide-delimiter-background
@@ -105,17 +86,42 @@
       </v-col>
     </v-row>
   </v-container>
+
+  <v-dialog v-model="dialogDetail" max-width="480">
+    <v-card class="ma-2" rounded="lg">
+      <v-carousel hide-delimiter-background show-arrows="hover" cycle>
+        <template v-if="filteredRockets[0].flickr_images?.length">
+          <v-carousel-item
+            v-for="(image, idx) in filteredRockets[0].flickr_images"
+            :key="`${filteredRockets[0].id}-${idx}`"
+            :src="image"
+            cover
+          />
+        </template>
+
+        <v-carousel-item v-else :src="fallbackImage" cover />
+      </v-carousel>
+
+      <v-card-title class="text-subtitle-1 font-weight-bold">
+        {{ filteredRockets[0].name }}
+      </v-card-title>
+
+      <v-divider />
+      <v-card-text class="text-body-2">
+        {{ filteredRockets[0].description }}
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script lang="ts" setup>
-import { computed, reactive, ref } from "vue";
+import { computed, ref, shallowRef } from "vue";
 
 type Rocket = {
   id: string;
   name: string;
   description: string;
   flickr_images: string[];
-  // biar data nested lain (height, engines, dst) tetap aman tanpa ngetik semua:
   [key: string]: unknown;
 };
 
@@ -124,6 +130,8 @@ type RocketUI = Rocket & { show: boolean };
 const fallbackImage = "https://via.placeholder.com/1200x600?text=No+Image";
 
 const search = ref("");
+const dialogDetail = shallowRef(false);
+
 const initialList: Rocket[] = [
   {
     height: { meters: 22.25, feet: 73 },
@@ -419,13 +427,11 @@ function toggleDetails(id: string) {
 }
 
 function onExplore(id: string) {
-  // TODO: kalau pakai vue-router, bisa diarahkan ke halaman detail
-  // router.push({ name: 'rocket-detail', params: { id } })
   console.log("Explore:", id);
+  dialogDetail.value = true;
 }
 
 function onAdd() {
-  // TODO: buka dialog/form create rocket
   console.log("Add Data clicked");
 }
 </script>
