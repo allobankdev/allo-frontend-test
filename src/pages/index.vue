@@ -1,16 +1,36 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { useRocketStore } from '@/store/rocket'
 import RocketCard from "@/components/RocketCard.vue";
+
 const rocketStore = useRocketStore()
+const searchQuery = ref('')
 
 onMounted(() => {
   rocketStore.loadRockets()
+})
+
+const filteredRockets = computed(() => {
+  if (!searchQuery.value) {
+    return rocketStore.rockets
+  }
+
+  return rocketStore.rockets.filter((rocket) =>
+    rocket.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  )
 })
 </script>
 
 <template>
   <section>
+
+    <!-- Filter -->
+    <input
+      v-model="searchQuery"
+      type="text"
+      placeholder="Search rocket by name"
+    />
+
     <!-- Loading State -->
     <div v-if="rocketStore.isLoading">
       <p>Loading rockets...</p>
@@ -37,7 +57,7 @@ onMounted(() => {
 <!--        </li>-->
 <!--      </ul>-->
       <RocketCard
-        v-for="rocket in rocketStore.rockets"
+        v-for="rocket in filteredRockets"
         :key="rocket.id"
         :rocket="rocket"
       />
