@@ -1,19 +1,28 @@
-/**
- * plugins/vuetify.ts
- *
- * Framework documentation: https://vuetifyjs.com`
- */
+import "@mdi/font/css/materialdesignicons.css";
+import "vuetify/styles";
 
-// Styles
-import '@mdi/font/css/materialdesignicons.css'
-import 'vuetify/styles'
+import { createVuetify } from "vuetify";
 
-// Composables
-import { createVuetify } from 'vuetify'
+type ThemePreference = "light" | "dark" | "system";
 
-// https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
+const savedPreference =
+  (localStorage.getItem("vuetify-theme") as ThemePreference) ?? "system";
+
+const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+const resolvedTheme =
+  savedPreference === "system"
+    ? prefersDark
+      ? "dark"
+      : "light"
+    : savedPreference;
+
 export default createVuetify({
   theme: {
-    defaultTheme: 'dark',
+    defaultTheme: resolvedTheme,
+    themes: {
+      light: {},
+      dark: {},
+    },
   },
-})
+});
