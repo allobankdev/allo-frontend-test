@@ -1,7 +1,3 @@
 <template>
-  <HelloWorld />
+  <Rockets />
 </template>
-
-<script lang="ts" setup>
-  //
-</script>
