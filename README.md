@@ -34,3 +34,71 @@ You don’t need to worry about the detailed design, we’re not interested in y
 4.  Please complete the form to submit your technical test: [Click Here](https://forms.gle/nZKQ2EjTCPfAKHog7)
 
 Good luck with your assignment! Don't hesitate to contact us if you have any questions about the assignment process.
+
+---
+
+## Overview
+This Pull Request implements a simple frontend application to display SpaceX rockets data using Vue 3.
+The application consists of two main screens: Rocket List and Rocket Detail, following the requirements of the technical assignment.
+
+The focus of this implementation is on clean architecture, state management, clear UI states, and maintainable code structure, rather than complex UI design.
+
+### Features Implemented
+#### Rocket List Page
+
+- Display list of rockets with image, name, and description
+- Search/filter rockets by name
+- Add new rocket locally (client-side only)
+- UI states:
+  - Loading
+  - Error with retry action
+  - Success state
+
+#### Rocket Detail Page
+- Display rocket detail information:
+  - Image
+  - Name
+  - Description
+  - Country
+  - First flight
+  - Cost per launch
+- Accessed via dynamic route /rockets/:id
+- Handles loading and error states
+
+### Technical Implementation
+- Vue 3 + Vite
+- TypeScript
+- Pinia for state management
+- vue-router (file-based routing) for navigation
+- Axios for API communication
+- Native CSS for styling (no external UI library)
+
+Project structure is organized by responsibility:
+- ```api/``` → API layer
+- ```stores/``` → State management
+- ```pages/``` → Route-based views
+- ```components/``` → Reusable UI components
+- ```types/``` → Domain types
+
+### Architectural Decisions
+
+#### State Management
+Rocket list data is managed globally using Pinia as a single source of truth.
+UI-specific concerns such as filtering and form input are handled locally in the view.
+
+#### API Handling
+API logic is isolated in a dedicated service layer. Error handling and UI states are managed at the store or page level.
+
+#### Add Rocket Behavior
+Since SpaceX API is read-only, adding a new rocket is implemented as a local state update. Newly added rockets are immediately reflected in the list and can be accessed in the detail page.
+
+### How to Run the Project
+
+```ignorelang
+npm install
+npm run dev
+```
+Make sure to create a .env file based on .env.example:
+```
+VITE_SPACEX_API_BASE_URL=https://api.spacexdata.com/v4
+```
