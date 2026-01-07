@@ -2,6 +2,10 @@
   <HelloWorld />
 </template>
 
-<script lang="ts" setup>
-  //
+<script setup lang="ts">
+definePage({
+  meta: {
+    layout: "main",
+  },
+});
 </script>
