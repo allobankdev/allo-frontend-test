@@ -5,12 +5,31 @@
  */
 
 // Composables
-import { createRouter, createWebHistory } from 'vue-router/auto'
+import type { RouterScrollBehavior } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import { routes } from 'vue-router/auto-routes'
+
+const scrollBehavior: RouterScrollBehavior = (
+  to,
+  from,
+  savedPosition,
+) => {
+
+  if (savedPosition) {
+    return savedPosition
+  }
+
+  // default: scroll to top
+  return {
+    top: 0,
+    behavior: 'smooth',
+  }
+}
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
+  scrollBehavior,
 })
 
 // Workaround for https://github.com/vitejs/vite/issues/11804
