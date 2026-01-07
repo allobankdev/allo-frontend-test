@@ -7,7 +7,12 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    ErrorState: typeof import('./src/components/Common/ErrorState.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    LoadingSpinner: typeof import('./src/components/Common/LoadingSpinner.vue')['default']
+    RocketCard: typeof import('./src/components/Rocket/RocketCard.vue')['default']
+    RocketFilter: typeof import('./src/components/Rocket/RocketFilter.vue')['default']
+    RocketForm: typeof import('./src/components/Rocket/RocketForm.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

@@ -1,5 +1,3 @@
-// src/stores/rocketStore.ts
-
 import { defineStore } from "pinia";
 import { rocketService } from "@/services/rocketService";
 import type { Rocket, RocketState, FilterState } from "@/types/rocket";
@@ -82,7 +80,9 @@ export const useRocketStore = defineStore("rocket", {
           error instanceof Error ? error.message : "Failed to fetch rockets";
         console.error("Error in fetchRockets:", error);
       } finally {
-        this.loading = false;
+        setTimeout(() => {
+          this.loading = false;
+        }, 1000); // Simulate loading delay
       }
     },
 
@@ -95,6 +95,7 @@ export const useRocketStore = defineStore("rocket", {
 
       this.rockets.push(newRocket);
       this.saveLocalRockets();
+      this.fetchRockets();
     },
 
     setFilter(filters: Partial<FilterState>) {
