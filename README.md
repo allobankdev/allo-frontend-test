@@ -1,36 +1,105 @@
-# Allo Bank Frontend Technical Assignment
+# Allo Bank Frontend Technical Test
 
-In this assignment, you’re assigned to create a website that displays rockets. This website only has two screens: rocket list screen and rocket detail screen. Here are the requirements:
+A Vue 3 application that displays SpaceX rocket data with list and detail views, demonstrating modern frontend development practices.
 
-### Functional Requirements
-- As a user, I want to see a list of rockets in the rocket list screen (Show each rocket image, rocket name, and rocket description)
-- As a user, I want to be able to filter the rockets in the rocket list screen
-- As a user, I want to be able to add the new rocket in the rocket list screen
-- As a user, I want to be able to see the rocket detail by clicking a rocket in the rocket list screen (Show rocket image, rocket name, rocket description, cost per launch, country, first flight)
+## Tech Stack
 
-### Non-Functional Requirements
-- Use Space-X API (https://github.com/r-spacex/SpaceX-API) for getting the rocket data
-- Implement routers
-- Implement state management
-- Implement lifecycles
-- Create components based will be + points
-- UI states (Loading, Fail/Retry, and Success)
-- Show loading when waiting response from API
-- If an error occurred, user can retry by pressing retry button
-- Show result when get response from API
+- **Framework**: Vue 3 (Composition API)
+- **UI Library**: Vuetify 3
+- **State Management**: Pinia
+- **Routing**: Vue Router
+- **Build Tool**: Vite
+- **Type System**: TypeScript
+- **API**: SpaceX API (https://github.com/r-spacex/SpaceX-API)
 
-### Nice to have characteristics
-Responsive design
-You don’t need to worry about the detailed design, we’re not interested in your artistic prowess (for now), put your efforts on creating a readable/clean/maintainable source code.
+## Features
 
-### Submission
+### Core Functionality
+- Rocket list view with image, name, and description
+- Rocket detail view with comprehensive information (image, name, description, cost per launch, country, first flight)
+- Filtering capabilities for rocket list
+- Add new rocket functionality
+- Responsive design
 
-1.  **Fork** this repository.
+### Technical Implementation
+- Component-based architecture
+- State management with Pinia stores
+- Route management with Vue Router
+- TypeScript for type safety
+- UI state handling (Loading, Error/Retry, Success)
+- Error handling with retry mechanism
+- Loading states during API calls
 
-2.  Implement your solution on a dedicated feature branch (e.g., `feat/allo-spacex`).
+## Project Structure
 
-3.  When complete, submit your solution via a **Pull Request (PR)** back to the main repository.
-   
-4.  Please complete the form to submit your technical test: [Click Here](https://forms.gle/nZKQ2EjTCPfAKHog7)
+```
+src/
+├── assets/          # Static assets
+├── components/      # Reusable UI components
+├── pages/           # Page components
+├── plugins/         # Vue plugins
+├── router/          # Routing configuration
+├── stores/          # Pinia stores
+├── styles/          # Global styles
+├── types/           # TypeScript types
+└── App.vue          # Root component
+```
 
-Good luck with your assignment! Don't hesitate to contact us if you have any questions about the assignment process.
+## Setup Instructions
+
+### Prerequisites
+- Node.js v18+
+- pnpm (recommended) or npm/yarn
+
+### Installation
+```bash
+# Clone the repository
+git clone https://github.com/irfanfitriandi/allo-frontend-test.git
+
+# Install dependencies
+pnpm install
+
+# Run development server
+pnpm dev
+```
+
+### Available Scripts
+- `pnpm dev`: Start development server
+- `pnpm build`: Build for production
+- `pnpm preview`: Preview production build
+- `pnpm lint`: Run ESLint
+- `pnpm type-check`: Run TypeScript type checking
+
+## Development Notes
+
+### Key Implementation Decisions
+- **Component Organization**: Separated presentational and container components for better reusability
+- **State Management**: Used Pinia for centralized state with proper typing
+- **Error Handling**: Implemented comprehensive error states with retry functionality
+- **Type Safety**: Leveraged TypeScript throughout the application
+- **Routing**: Used file-based routing with unplugin-vue-router
+
+### Code Quality
+- ESLint configured for Vue 3 and TypeScript
+- TypeScript strict mode enabled
+- Consistent code formatting
+- Modular component structure
+
+## API Integration
+
+The application integrates with the SpaceX API:
+- Base URL: `https://api.spacexdata.com/v4/rockets`
+- Error handling for API failures
+- Loading states during data fetching
+- Data transformation for UI display
+
+## Evaluation Criteria
+
+This submission demonstrates:
+- Clean, maintainable code structure
+- Proper separation of concerns
+- Effective state management
+- Comprehensive error handling
+- Type safety throughout the application
+- Responsive UI implementation
+- Modern Vue 3 best practices
