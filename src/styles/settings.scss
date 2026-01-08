@@ -5,6 +5,165 @@
  */
 
 // https://vuetifyjs.com/features/sass-variables/`
-// @use 'vuetify/settings' with (
-//   $color-pack: false
-// );
+@use 'vuetify/settings' with (
+  $color-pack: false
+);
+
+// ===== COLOR SYSTEM =====
+// Secondary colors
+$primary-color: #1976d2; // Vuetify blue
+$primary-light: #42a5f5;
+$primary-dark: #1565c0;
+
+// Primary colors
+$secondary-color: #ffbc25; // Original allo yellow
+$secondary-light: #ffd54f;
+$secondary-dark: #ff9800;
+
+// Background colors
+$bg-dark: #121212;
+$bg-light: #f5f5f5;
+$bg-surface: #1e1e1e;
+$bg-surface-variant: #2d2d2d;
+
+// Text colors
+$text-primary: #ffffff;
+$text-secondary: #b0bec5;
+$text-disabled: #757575;
+$text-error: #ff5252;
+
+// Border and divider colors
+$border-color: rgba(255, 255, 255, 0.12);
+$divider-color: rgba(255, 255, 255, 0.12);
+
+// ===== SPACING SYSTEM =====
+$spacing-unit: 8px;
+$spacing-xs: $spacing-unit * 1;
+$spacing-sm: $spacing-unit * 2;
+$spacing-md: $spacing-unit * 3;
+$spacing-lg: $spacing-unit * 4;
+$spacing-xl: $spacing-unit * 6;
+$spacing-xxl: $spacing-unit * 8;
+
+// ===== TYPOGRAPHY =====
+$font-family-base: 'Roboto', sans-serif;
+$font-size-base: 16px;
+$line-height-base: 1.5;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 700;
+
+// ===== SHADOWS =====
+$shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.1);
+$shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+$shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+$shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.1);
+
+// ===== BORDER RADIUS =====
+$border-radius-xs: 4px;
+$border-radius-sm: 8px;
+$border-radius-md: 12px;
+$border-radius-lg: 16px;
+$border-radius-xl: 24px;
+
+// ===== TRANSITIONS =====
+$transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-normal: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-slow: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+// ===== Z-INDEX LAYERS =====
+$z-index-modal: 1000;
+$z-index-tooltip: 1100;
+$z-index-dialog: 1200;
+$z-index-snackbar: 1300;
+
+// ===== MIXINS =====
+@mixin hover-scale($scale: 1.02) {
+  transition: transform $transition-normal;
+  &:hover {
+    transform: scale($scale);
+  }
+}
+
+@mixin hover-lift($amount: -4px) {
+  transition: transform $transition-normal, box-shadow $transition-normal;
+  &:hover {
+    transform: translateY($amount);
+    box-shadow: $shadow-xl;
+  }
+}
+
+@mixin truncate-text($lines: 1) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin gradient-overlay($color: rgba(0, 0, 0, 0.3), $direction: to top) {
+  position: relative;
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient($direction, $color, transparent 60%);
+    pointer-events: none;
+  }
+}
+
+@mixin focus-style {
+  outline: 2px solid $primary-light;
+  outline-offset: 2px;
+}
+
+// ===== ACCESSIBILITY =====
+@mixin screen-reader-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@mixin high-contrast-focus {
+  &:focus-visible {
+    @include focus-style;
+  }
+}
+
+// ===== ANIMATIONS =====
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// ===== THEME OVERRIDES =====
+:root {
+  --v-theme-surface: #{$bg-surface};
+  --v-theme-on-surface: #{$text-primary};
+  --v-theme-primary: #{$primary-color};
+  --v-theme-secondary: #{$secondary-color};
+}
