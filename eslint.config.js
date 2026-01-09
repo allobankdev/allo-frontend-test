@@ -4,33 +4,43 @@
  * ESLint configuration file.
  */
 
-import pluginVue from 'eslint-plugin-vue'
-import vueTsEslintConfig from '@vue/eslint-config-typescript'
+import pluginVue from "eslint-plugin-vue";
+import vueTsEslintConfig from "@vue/eslint-config-typescript";
 
 export default [
   {
-    name: 'app/files-to-lint',
-    files: ['**/*.{ts,mts,tsx,vue}'],
+    name: "app/files-to-lint",
+    files: ["**/*.{ts,mts,tsx,vue}"],
   },
 
   {
-    name: 'app/files-to-ignore',
-    ignores: ['**/dist/**', '**/dist-ssr/**', '**/coverage/**'],
+    name: "app/files-to-ignore",
+    ignores: ["**/dist/**", "**/dist-ssr/**", "**/coverage/**"],
   },
 
-  ...pluginVue.configs['flat/recommended'],
+  ...pluginVue.configs["flat/recommended"],
   ...vueTsEslintConfig(),
 
   {
     rules: {
-      '@typescript-eslint/no-unused-expressions': [
-        'error',
+      "@typescript-eslint/no-unused-expressions": [
+        "error",
         {
           allowShortCircuit: true,
           allowTernary: true,
         },
       ],
-      'vue/multi-word-component-names': 'off',
-    }
-  }
-]
+      "vue/multi-word-component-names": "off",
+    },
+  },
+  {
+    name: "app/tsconfig",
+    files: ["**/*.{ts,mts,tsx,vue}"],
+    languageOptions: {
+      parserOptions: {
+        project: ["./tsconfig.app.json", "./tsconfig.node.json"],
+        extraFileExtensions: [".vue"],
+      },
+    },
+  },
+];
