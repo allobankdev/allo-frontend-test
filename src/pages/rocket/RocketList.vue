@@ -8,8 +8,94 @@
       <div class="text-orange text-h6 font-weight-bold">Rocket List</div>
 
       <div class="d-flex align-center gap-3">
-        <v-btn class="text-white bg-indigo" prepend-icon="mdi-plus"> Add Rocket </v-btn>
+        <v-btn
+          color="orange-darken-1"
+          prepend-icon="mdi-plus"
+          @click="dialogAdd = true"
+        >
+          Add Rocket
+        </v-btn>
 
+        <v-dialog v-model="dialogAdd" max-width="500px">
+          <v-card color="grey-darken-3" theme="dark" class="rounded-xl">
+            <v-card-title class="pa-6 text-h5 font-weight-bold text-orange">
+              Add New Rocket
+            </v-card-title>
+
+            <v-card-text class="pa-6 pt-0">
+              <v-form ref="formRef">
+                <v-text-field
+                  v-model="formData.name"
+                  label="Rocket Name"
+                  variant="outlined"
+                  color="orange"
+                  :rules="[rules.required, rules.min3]"
+                  class="mb-2"
+                />
+
+                <v-text-field
+                  v-model="formData.flickr_images"
+                  label="Image URL"
+                  variant="outlined"
+                  color="orange"
+                  :rules="[rules.url]"
+                  placeholder="https://example.com/rocket.jpg"
+                  class="mb-2"
+                />
+
+                <v-textarea
+                  v-model="formData.description"
+                  label="Description"
+                  variant="outlined"
+                  color="orange"
+                  :rules="[rules.required]"
+                  rows="3"
+                  class="mb-2"
+                />
+
+                <v-row>
+                  <v-col cols="6">
+                    <v-text-field
+                      v-model="formData.first_flight"
+                      label="Launch Date"
+                      type="date"
+                      :rules="[rules.required]"
+                      variant="outlined"
+                      color="orange"
+                    />
+                  </v-col>
+                  <v-col cols="6">
+                    <v-select
+                      v-model="formData.active"
+                      label="Status"
+                      :items="[
+                        { t: 'Active', v: true },
+                        { t: 'Inactive', v: false },
+                      ]"
+                      item-title="t"
+                      item-value="v"
+                      variant="outlined"
+                      color="orange"
+                    />
+                  </v-col>
+                </v-row>
+              </v-form>
+            </v-card-text>
+
+            <v-card-actions class="pa-6 pt-0">
+              <v-spacer />
+              <v-btn variant="text" @click="dialogAdd = false">Cancel</v-btn>
+              <v-btn
+                color="orange"
+                variant="elevated"
+                @click="saveRocket"
+                class="px-6 rounded-lg"
+              >
+                Save Rocket
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
         <v-menu :close-on-content-click="false" location="bottom end">
           <template v-slot:activator="{ props }">
             <v-btn variant="outlined" prepend-icon="mdi-filter" v-bind="props">
@@ -67,7 +153,7 @@
     <v-container>
       <v-row>
         <v-col
-          v-for="rocket in rocketStore.filteredList"
+          v-for="rocket in rocketStore.paginatedList"
           :key="rocket.id"
           cols="12"
           sm="6"
@@ -112,7 +198,10 @@
       type="warning"
       variant="tonal"
     >
-      No rocket data found. <u class="text-primary" @click="rocketStore.resetFilters()">Reset Filter</u>
+      No rocket data found.
+      <u class="text-primary" @click="rocketStore.resetFilters()"
+        >Reset Filter</u
+      >
     </v-alert>
 
     <CommonPagination
@@ -123,7 +212,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useRocketStore } from "@/utils/store/rocket.store";
 import CommonPagination from "@/components/Pagination.vue";
@@ -137,6 +226,48 @@ onMounted(() => {
 
 const goToDetail = (id: string) => {
   router.push(`/rockets/${id}`);
+};
+
+// create feature
+const dialogAdd = ref(false);
+const defaultForm = {
+  name: "",
+  description: "",
+  first_flight: new Date().toISOString().substr(0, 10),
+  active: true,
+  flickr_images: "",
+};
+
+const formData = ref({ ...defaultForm });
+const rules = {
+  required: (value: any) => !!value || "Required.",
+  min3: (value: any) => (value && value.length >= 3) || "Min 3 characters.",
+  url: (value: any) => {
+    if (!value) return true;
+    const pattern = /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp|svg))($|\?.*)/i;
+    return (
+      pattern.test(value) || "Invalid image URL (must be a valid image link)."
+    );
+  },
+};
+
+const formRef = ref<any>(null);
+
+const saveRocket = async () => {
+  // Validate form
+  const { valid } = await formRef.value.validate();
+
+  if (valid) {
+    rocketStore.addRocket({
+      ...formData.value,
+      flickr_images: formData.value.flickr_images
+        ? [formData.value.flickr_images]
+        : ["https://images.unsplash.com/photo-1517976487492-5750f3195933"], // fallback image
+    });
+
+    dialogAdd.value = false;
+    formData.value = { ...defaultForm };
+  }
 };
 </script>
 

@@ -33,7 +33,6 @@ export const useRocketStore = defineStore("rocket", {
       const start = (state.pagination.page - 1) * state.pagination.itemsPerPage;
       const end = start + state.pagination.itemsPerPage;
 
-      // Sekarang 'this.filteredList' bisa diakses dengan benar
       return this.filteredList.slice(start, end);
     },
     totalPages(state): number {
@@ -74,6 +73,20 @@ export const useRocketStore = defineStore("rocket", {
     resetFilters() {
       this.filters.search = "";
       this.filters.active = null;
+    },
+
+    addRocket(payload: any) {
+      const newRocket = {
+        ...payload,
+        id: crypto.randomUUID(),
+        // add default image if no image provided
+        flickr_images: payload.flickr_images || [
+          "https://images.unsplash.com/photo-1517976487492-5750f3195933",
+        ],
+      };
+
+      this.list.unshift(newRocket); 
+      this.pagination.page = 1; 
     },
 
     // Insert dummy ID
