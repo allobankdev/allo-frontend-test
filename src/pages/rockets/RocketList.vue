@@ -171,6 +171,9 @@
               <div class="text-caption mt-2">
                 First Flight: {{ rocket.first_flight }}
               </div>
+              <div class="text-caption mt-1">
+                Country: {{ rocket.country }}
+              </div> 
             </div>
 
             <div class="image-wrapper ml-md-6">
@@ -254,15 +257,18 @@ const rules = {
 const formRef = ref<any>(null);
 
 const saveRocket = async () => {
-  // Validate form
   const { valid } = await formRef.value.validate();
 
   if (valid) {
     rocketStore.addRocket({
       ...formData.value,
-      flickr_images: formData.value.flickr_images
-        ? [formData.value.flickr_images]
-        : ["https://images.unsplash.com/photo-1517976487492-5750f3195933"], // fallback image
+      country: 'United States', // Default 
+      success_rate_pct: 100,      // Default
+      height: { meters: 0 },      // Default
+      mass: { kg: 0 },            // Default
+      flickr_images: formData.value.flickr_images 
+        ? [formData.value.flickr_images] 
+        : ['https://images.unsplash.com/photo-1517976487492-5750f3195933']
     });
 
     dialogAdd.value = false;
