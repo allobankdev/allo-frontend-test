@@ -8,13 +8,50 @@
       <div class="text-h6 font-weight-bold">Rocket List</div>
 
       <div class="d-flex align-center gap-3">
-        <v-btn color="primary" prepend-icon="mdi-plus">
-          Add Rocket
-        </v-btn>
+        <v-btn color="primary" prepend-icon="mdi-plus"> Add Rocket </v-btn>
 
-        <v-btn variant="outlined" prepend-icon="mdi-filter">
-          Filter
-        </v-btn>
+        <v-menu :close-on-content-click="false" location="bottom end">
+          <template v-slot:activator="{ props }">
+            <v-btn variant="outlined" prepend-icon="mdi-filter" v-bind="props">
+              Filter
+            </v-btn>
+          </template>
+
+          <v-card min-width="300" class="pa-4 mt-2" rounded="lg">
+            <v-text-field
+              v-model="rocketStore.filters.search"
+              label="Search Rocket Name"
+              variant="outlined"
+              density="compact"
+              prepend-inner-icon="mdi-magnify"
+              hide-details
+              class="mb-4"
+            />
+
+            <v-select
+              v-model="rocketStore.filters.active"
+              :items="[
+                { title: 'All Status', value: null },
+                { title: 'Active', value: true },
+                { title: 'Inactive', value: false },
+              ]"
+              label="Status"
+              variant="outlined"
+              density="compact"
+              hide-details
+            />
+
+            <v-card-actions class="px-0 mt-2">
+              <v-spacer />
+              <v-btn
+                variant="text"
+                size="small"
+                @click="rocketStore.resetFilters()"
+                >Reset</v-btn
+              >
+            </v-card-actions>
+          </v-card>
+        </v-menu>
       </div>
     </v-sheet>
 
@@ -56,10 +93,7 @@
           class="rounded-lg"
         />
 
-        <div
-          class="image-overlay"
-          @click="goToDetail(rocket.id)"
-        >
+        <div class="image-overlay" @click="goToDetail(rocket.id)">
           View Detail {{ rocket.name }}
         </div>
       </div>
@@ -76,24 +110,22 @@
   </div>
 </template>
 
-
 <script lang="ts" setup>
-import { onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { useRocketStore } from '@/utils/store/rocket.store'
+import { onMounted } from "vue";
+import { useRouter } from "vue-router";
+import { useRocketStore } from "@/utils/store/rocket.store";
 
-const rocketStore = useRocketStore()
-const router = useRouter()
+const rocketStore = useRocketStore();
+const router = useRouter();
 
 onMounted(() => {
-  rocketStore.fetchList()
-})
+  rocketStore.fetchList();
+});
 
 const goToDetail = (id: string) => {
-  router.push(`/rockets/${id}`)
-}
+  router.push(`/rockets/${id}`);
+};
 </script>
-
 
 <style scoped>
 .fill-screen {

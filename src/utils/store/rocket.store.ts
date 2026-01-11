@@ -7,37 +7,66 @@ export const useRocketStore = defineStore('rocket', {
     list: [] as RocketListDTO[],
     selected: null as RocketListDTO | null,
     loading: false,
+    error: false, 
     filters: {
+      search: '', 
       active: null as boolean | null
     }
   }),
 
   getters: {
     filteredList(state) {
-      if (state.filters.active === null) return state.list
-      return state.list.filter(r => r.active === state.filters.active)
+      return state.list.filter(r => {
+        const matchSearch = r.name.toLowerCase().includes(state.filters.search.toLowerCase())
+        
+        const matchActive = state.filters.active === null || r.active === state.filters.active
+        
+        return matchSearch && matchActive
+      })
     }
   },
 
   actions: {
     async fetchList() {
       this.loading = true
-      this.list = await rocketService.list()
-      this.loading = false
+      this.error = false 
+      try {
+        this.list = await rocketService.list()
+      } catch (err) {
+        this.error = true 
+        // console.error('Fetch error:', err)
+      } finally {
+        this.loading = false
+      }
     },
 
     async fetchDetail(id: string) {
-      const cached = this.list.find(r => r.id === id)
-      this.selected = cached ?? await rocketService.detail(id)
+      this.loading = true
+      this.error = false
+      try {
+        const cached = this.list.find(r => r.id === id)
+        this.selected = cached ?? await rocketService.detail(id)
+      } catch (err) {
+        this.error = true
+      } finally {
+        this.loading = false
+      }
     },
 
-    setActiveFilter(value: boolean | null) {
-      this.filters.active = value
+    // Action Reset Filter
+    resetFilters() {
+      this.filters.search = ''
+      this.filters.active = null
     },
 
-    // MOCK ADD (client-side only)
-    addRocketMock(payload: RocketListDTO) {
-      this.list.unshift(payload)
+    // Insert dummy ID
+    addRocketMock(payload: Omit<RocketListDTO, 'id'>) {
+      const newRocket = {
+        ...payload,
+        id: crypto.randomUUID(), // Generate UUID 
+      } as RocketListDTO
+      
+      this.list.unshift(newRocket)
     }
   }
 })

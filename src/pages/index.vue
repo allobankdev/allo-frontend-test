@@ -23,5 +23,5 @@
 </template>
 
 <script setup>
-import RocketList from '@/components/RocketList.vue'
+import RocketList from './rocket/RocketList.vue'
 </script>
