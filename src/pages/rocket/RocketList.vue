@@ -1,14 +1,14 @@
 <template>
   <div class="pa-4 fill-screen">
     <v-sheet
-      class="pa-4 mb-6 d-flex align-center justify-space-between"
+      class="pa-4 mb-6 d-flex flex-wrap align-center justify-space-between gap-3"
       rounded="lg"
       elevation="1"
     >
-      <div class="text-h6 font-weight-bold">Rocket List</div>
+      <div class="text-orange text-h6 font-weight-bold">Rocket List</div>
 
       <div class="d-flex align-center gap-3">
-        <v-btn color="primary" prepend-icon="mdi-plus"> Add Rocket </v-btn>
+        <v-btn class="text-white bg-indigo" prepend-icon="mdi-plus"> Add Rocket </v-btn>
 
         <v-menu :close-on-content-click="false" location="bottom end">
           <template v-slot:activator="{ props }">
@@ -64,49 +64,61 @@
     />
 
     <!-- Rocket List -->
-    <v-card
-      v-for="rocket in rocketStore.filteredList"
-      :key="rocket.id"
-      class="pa-6 d-flex align-center mb-4"
-      rounded="xl"
-    >
-      <div class="ml-6 flex-grow-1 text-left">
-        <div class="text-h5 font-weight-bold">
-          {{ rocket.name }}
-        </div>
+    <v-container>
+      <v-row>
+        <v-col
+          v-for="rocket in rocketStore.filteredList"
+          :key="rocket.id"
+          cols="12"
+          sm="6"
+          md="12"
+        >
+          <v-card
+            class="pa-4 d-flex flex-column flex-md-row align-center mb-4"
+            rounded="xl"
+          >
+            <div class="flex-grow-1 text-center text-md-left mb-4 mb-md-0">
+              <div class="text-h5 font-weight-bold">{{ rocket.name }}</div>
+              <div class="text-body-2 mt-2 text-grey-lighten-1">
+                {{ rocket.description }}
+              </div>
+              <div class="text-caption mt-2">
+                First Flight: {{ rocket.first_flight }}
+              </div>
+            </div>
 
-        <div class="text-body-1 mt-2">
-          {{ rocket.description }}
-        </div>
-
-        <div class="text-caption mt-2">
-          First Flight: {{ rocket.first_flight }}
-        </div>
-      </div>
-
-      <div class="image-wrapper">
-        <v-img
-          :src="rocket.flickr_images?.[0]"
-          width="180"
-          height="120"
-          cover
-          class="rounded-lg"
-        />
-
-        <div class="image-overlay" @click="goToDetail(rocket.id)">
-          View Detail {{ rocket.name }}
-        </div>
-      </div>
-    </v-card>
+            <div class="image-wrapper ml-md-6">
+              <v-img
+                :src="rocket.flickr_images?.[0]"
+                width="100%"
+                min-width="180"
+                max-width="280"
+                height="160"
+                cover
+                class="rounded-lg"
+              />
+              <div class="image-overlay" @click="goToDetail(rocket.id)">
+                View Detail
+              </div>
+            </div>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
 
     <!-- Empty state -->
     <v-alert
       v-if="!rocketStore.loading && rocketStore.filteredList.length === 0"
-      type="info"
+      type="warning"
       variant="tonal"
     >
-      No rocket data found
+      No rocket data found. <u class="text-primary" @click="rocketStore.resetFilters()">Reset Filter</u>
     </v-alert>
+
+    <CommonPagination
+      v-model="rocketStore.pagination.page"
+      :length="rocketStore.totalPages"
+    />
   </div>
 </template>
 
@@ -114,6 +126,7 @@
 import { onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useRocketStore } from "@/utils/store/rocket.store";
+import CommonPagination from "@/components/Pagination.vue";
 
 const rocketStore = useRocketStore();
 const router = useRouter();
@@ -132,7 +145,6 @@ const goToDetail = (id: string) => {
   min-height: 100vh;
 }
 
-/* spacing gap helper */
 .gap-3 {
   gap: 12px;
 }
@@ -145,6 +157,7 @@ const goToDetail = (id: string) => {
 }
 
 .image-overlay {
+  cursor: pointer;
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.55);
@@ -163,5 +176,20 @@ const goToDetail = (id: string) => {
 .image-wrapper:hover .image-overlay {
   opacity: 1;
   cursor: pointer;
+}
+
+.image-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+@media (min-width: 960px) {
+  .image-wrapper {
+    width: 280px;
+  }
+}
+
+.text-md-left {
+  padding-right: 16px;
 }
 </style>

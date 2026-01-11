@@ -9,3 +9,6 @@ linux_setup:
 		node -v; \
 		npm install -g yarn \
 	'
+
+run_local:
+	npm run dev

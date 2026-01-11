@@ -2,17 +2,10 @@
   <v-app>
     <v-layout class="h-screen">
       <v-app-bar
-        color="surface-variant"
-        title="Space X Rocket List"
+        class="bg-indigo"
+        title="Rocket Punch Allo SpaceX"
         elevation="1"
       />
-
-      <v-navigation-drawer permanent>
-      </v-navigation-drawer>
-
-      <v-navigation-drawer location="right" permanent>
-      </v-navigation-drawer>
-
       <v-main class="overflow-y-auto">
         <v-container fluid class="pt-6">
           <RocketList />
