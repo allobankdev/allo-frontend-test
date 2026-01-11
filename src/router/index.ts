@@ -13,8 +13,10 @@ const router = createRouter({
   routes,
 })
 
-// Workaround for https://github.com/vitejs/vite/issues/11804
-router.onError((err, to) => {
+// Workaround for https://github.com/vitejs/vuetify/issues/11804
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+router.onError((err: any, to: any) => {
   if (err?.message?.includes?.('Failed to fetch dynamically imported module')) {
     if (!localStorage.getItem('vuetify:dynamic-reload')) {
       console.log('Reloading page to fix dynamic import error')
