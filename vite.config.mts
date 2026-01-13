@@ -4,6 +4,8 @@ import Vue from '@vitejs/plugin-vue'
 import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 import ViteFonts from 'unplugin-fonts/vite'
 import VueRouter from 'unplugin-vue-router/vite'
+import tailwindcss from '@tailwindcss/vite';
+
 
 // Utilities
 import { defineConfig } from 'vite'
@@ -13,6 +15,7 @@ import { fileURLToPath, URL } from 'node:url'
 export default defineConfig({
   plugins: [
     VueRouter(),
+    tailwindcss(),
     Vue({
       template: { transformAssetUrls },
     }),
@@ -24,14 +27,14 @@ export default defineConfig({
       },
     }),
     Components(),
-    ViteFonts({
-      google: {
-        families: [ {
-          name: 'Roboto',
-          styles: 'wght@100;300;400;500;700;900',
-        }],
-      },
-    }),
+    // ViteFonts({
+    //   google: {
+    //     families: [ {
+    //       name: 'Roboto',
+    //       styles: 'wght@100;300;400;500;700;900',
+    //     }],
+    //   },
+    // }),
   ],
   define: { 'process.env': {} },
   resolve: {
@@ -51,11 +54,11 @@ export default defineConfig({
   server: {
     port: 3000,
   },
-  css: {
-    preprocessorOptions: {
-      sass: {
-        api: 'modern-compiler',
-      },
-    },
-  },
+  // css: {
+  //   preprocessorOptions: {
+  //     sass: {
+  //       api: 'modern-compiler',
+  //     },
+  //   },
+  // },
 })
