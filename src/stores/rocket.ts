@@ -9,11 +9,21 @@ export const useRocketStore = defineStore(
     const rockets = ref<Rocket[]>([]);
     const isLoading = ref(false);
     const error = ref<string | null>(null);
-    const filterActive = ref<boolean | null>(null);
+    const active = ref<boolean | null>(null);
+    const search = ref('');
 
     const filteredRockets = computed(() => {
-      if (filterActive.value === null) return rockets.value;
-      return rockets.value.filter(r => r.active === filterActive.value);
+      let result = rockets.value;
+
+      if (active.value !== null) {
+        result = result.filter(r => r.active === active.value);
+      }
+
+      if (search.value) {
+        result = result.filter(r => r.name.toLowerCase().includes(search.value.toLowerCase()));
+      }
+
+      return result;
     });
 
     async function fetchRockets(force?: boolean) {
@@ -35,15 +45,16 @@ export const useRocketStore = defineStore(
       rockets.value.push(rocket);
     }
 
-    function setFilter(active: boolean | null) {
-      filterActive.value = active;
+    function setFilter(value: boolean | null) {
+      active.value = value;
     }
 
     return {
       rockets,
       isLoading,
       error,
-      filterActive,
+      active,
+      search,
       filteredRockets,
       fetchRockets,
       addRocket,
@@ -52,7 +63,7 @@ export const useRocketStore = defineStore(
   },
   {
     persist: {
-      pick: ['rockets', 'filterActive'],
+      pick: ['rockets', 'active', 'search'],
     },
   },
 );

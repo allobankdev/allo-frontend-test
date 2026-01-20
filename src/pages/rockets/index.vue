@@ -31,7 +31,7 @@
         <v-icon size="64" color="grey" class="mb-4"> mdi-rocket-outline </v-icon>
         <h3 class="text-h5 mb-2">No rockets found</h3>
         <p class="text-body-1 text-grey">
-          {{ filterActive === null ? 'Try adding a new rocket' : 'Try changing the filter' }}
+          {{ active === null ? 'Try adding a new rocket' : 'Try changing the filter' }}
         </p>
       </v-card>
     </v-col>
@@ -63,7 +63,7 @@ import LoadingSpinner from '@/components/LoadingSpinner.vue';
 import ErrorState from '@/components/ErrorState.vue';
 
 const store = useRocketStore();
-const { rockets, filteredRockets, isLoading, error, filterActive } = storeToRefs(store);
+const { rockets, filteredRockets, isLoading, error, active } = storeToRefs(store);
 
 // Fetch rockets on mount
 onMounted(() => {
