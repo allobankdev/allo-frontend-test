@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, toRaw } from "vue";
+import { ref, reactive, toRaw, computed } from "vue";
 import { useRocketStore } from "@/stores/rocket.store";
 import type { Rocket } from "@/types/rocket";
 
@@ -23,6 +23,11 @@ const form = reactive<Rocket>({
 
 const isSubmitting = ref(false);
 const success = ref(false);
+
+const formatDisplayDate = computed(() => {
+  if (!form.first_flight) return "";
+  return new Date(form.first_flight).toISOString().slice(0, 10);
+});
 
 const close = () => {
   isOpenModal.value = false;
@@ -160,7 +165,7 @@ const handleSubmit = () => {
           <v-menu v-model="dateMenu" :close-on-content-click="false">
             <template #activator="{ props }">
               <v-text-field
-                v-model="form.first_flight"
+                v-model="formatDisplayDate"
                 label="First Flight"
                 readonly
                 v-bind="props"
