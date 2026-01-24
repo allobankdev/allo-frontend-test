@@ -3,14 +3,7 @@ import { ref, reactive, toRaw, computed } from "vue";
 import { useRocketStore } from "@/stores/rocket.store";
 import type { Rocket } from "@/types/rocket";
 
-const isOpenModal = defineModel<boolean>({ required: true });
-
-const fileInput = ref<HTMLInputElement | null>(null);
-const dateMenu = ref(false);
-
-const store = useRocketStore();
-
-const form = reactive<Rocket>({
+const createDefaultForm = (): Rocket => ({
   id: crypto.randomUUID(),
   name: "",
   description: "",
@@ -20,6 +13,15 @@ const form = reactive<Rocket>({
   flickr_images: [],
   company: "",
 });
+
+const isOpenModal = defineModel<boolean>({ required: true });
+
+const fileInput = ref<HTMLInputElement | null>(null);
+const dateMenu = ref(false);
+
+const store = useRocketStore();
+
+const form = reactive<Rocket>(createDefaultForm());
 
 const isSubmitting = ref(false);
 const success = ref(false);
@@ -32,6 +34,7 @@ const formatDisplayDate = computed(() => {
 const close = () => {
   isOpenModal.value = false;
   success.value = false;
+  Object.assign(form, createDefaultForm());
 };
 
 const openFile = () => {
@@ -55,17 +58,17 @@ const handleImageChange = (e: Event) => {
 };
 
 const handleSubmit = () => {
-  const payload: Rocket = { ...form };
+  const payload: Rocket = {
+    ...form,
+    first_flight: new Date(form.first_flight).toISOString().slice(0, 10),
+  };
 
   isSubmitting.value = true;
   store.addRocket(payload);
-
-  setTimeout(() => {
-    isSubmitting.value = false;
-    success.value = true;
-    console.log(toRaw(store.createdRockets));
-    setTimeout(close, 1500);
-  }, 1000);
+  isSubmitting.value = false;
+  success.value = true;
+  Object.assign(form, createDefaultForm());
+  close();
 };
 </script>
 
@@ -90,16 +93,8 @@ const handleSubmit = () => {
 
       <!-- Body -->
       <v-card-text class="dialog-body">
-        <!-- SUCCESS -->
-        <div v-if="success" class="success-wrap">
-          <div class="success-icon">
-            <v-icon icon="mdi-check" size="32" />
-          </div>
-          <p>Rocket Registered Successfully!</p>
-        </div>
-
         <!-- FORM -->
-        <v-form v-else @submit.prevent="handleSubmit">
+        <v-form @submit.prevent="handleSubmit">
           <!-- Image upload -->
           <div class="field">
             <label class="label">Rocket Visual</label>
@@ -145,7 +140,12 @@ const handleSubmit = () => {
           </div>
 
           <!-- Name -->
-          <v-text-field v-model="form.name" label="Rocket Name" required />
+          <v-text-field
+            v-model="form.name"
+            label="Rocket Name"
+            required
+            class="mt-5"
+          />
 
           <!-- Company -->
           <v-text-field v-model="form.company" label="Company" required />

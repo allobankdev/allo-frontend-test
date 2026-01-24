@@ -2,6 +2,9 @@ import { defineStore } from "pinia";
 import { getRockets, getRocketById } from "@/api/spacex";
 import type { Rocket } from "@/types/rocket";
 import { toRaw } from "vue";
+import { useNotificationStore } from "./notification.store";
+
+const notification = useNotificationStore();
 
 export const useRocketStore = defineStore("rocket", {
   state: () => ({
@@ -21,6 +24,7 @@ export const useRocketStore = defineStore("rocket", {
         this.rockets = res.data;
       } catch {
         this.error = true;
+        notification.notify("Something went wrong", "error");
       } finally {
         this.loading = false;
       }
@@ -38,6 +42,8 @@ export const useRocketStore = defineStore("rocket", {
           this.selectedRocket = res.data;
         } catch {
           this.error = true;
+
+          notification.notify("Something went wrong", "error");
         } finally {
           this.loading = false;
         }
@@ -50,6 +56,7 @@ export const useRocketStore = defineStore("rocket", {
     addRocket(data: Rocket) {
       this.rockets.push(toRaw(data));
       this.createdRockets.push(data);
+      notification.notify("Success Add Rocket", "success");
     },
   },
 });

@@ -6,6 +6,7 @@ import RocketCard from "@/modules/Rocket/RocketCard.vue";
 import RocketFilter from "@/modules/Rocket/RocketFilter.vue";
 import Header from "@/components/Header.vue";
 import ModalCreateRocket from "@/modules/Rocket/ModalCreateRocket.vue";
+import SkeletonLoading from "@/modules/Rocket/SkeletonLoading.vue";
 
 const store = useRocketStore();
 const router = useRouter();
@@ -42,9 +43,9 @@ const openCreateModal = () => {
     <RocketFilter v-model="filter" @openCreateModal="openCreateModal" />
     <ModalCreateRocket v-model="isOpenModal" />
 
-    <v-row v-if="store.loading">
+    <v-row v-if="true">
       <v-col cols="12" md="4" v-for="n in 6" :key="n">
-        <v-skeleton-loader type="image, article" height="260" />
+        <skeleton-loading />
       </v-col>
     </v-row>
 
