@@ -1,22 +1,28 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+</script>
 
 <template>
   <v-app-bar density="compact" class="sticky-header py-2">
     <v-container>
       <v-row align="center" justify="space-between" class="flex-wrap">
         <v-col cols="12" md="auto">
-          <div class="d-flex align-center ga-3 group">
-            <v-avatar size="40" class="logo-avatar">
-              <v-icon
-                icon="mdi-rocket-launch"
-                size="24"
-                class="logo-icon text-white"
-              />
-            </v-avatar>
-            <h1 class="logo-text">
-              Space<span class="text-blue">X</span> Explorer
-            </h1>
-          </div>
+          <button @click="router.push('/')">
+            <div class="d-flex align-center ga-3 group">
+              <v-avatar size="40" class="logo-avatar">
+                <v-icon
+                  icon="mdi-rocket-launch"
+                  size="24"
+                  class="logo-icon text-white"
+                />
+              </v-avatar>
+              <h1 class="logo-text">
+                Space<span class="text-blue">X</span> Explorer
+              </h1>
+            </div>
+          </button>
         </v-col>
       </v-row>
     </v-container>

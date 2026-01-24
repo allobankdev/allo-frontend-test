@@ -43,7 +43,7 @@ const openCreateModal = () => {
     <RocketFilter v-model="filter" @openCreateModal="openCreateModal" />
     <ModalCreateRocket v-model="isOpenModal" />
 
-    <v-row v-if="true">
+    <v-row v-if="store.loading">
       <v-col cols="12" md="4" v-for="n in 6" :key="n">
         <skeleton-loading />
       </v-col>
