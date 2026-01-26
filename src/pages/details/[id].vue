@@ -1,9 +1,9 @@
 <template>
-  <List />
+  <Detail />
 </template>
 
 <script lang="ts" setup>
-import List from '@/components/List.vue';
+import Detail from '@/components/Detail.vue';
 
   //
 </script>
