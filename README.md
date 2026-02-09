@@ -1,36 +1,77 @@
-# Allo Bank Frontend Technical Assignment
+# SpaceX Rockets Application
 
-In this assignment, you’re assigned to create a website that displays rockets. This website only has two screens: rocket list screen and rocket detail screen. Here are the requirements:
+Aplikasi web untuk melihat informasi roket-roket SpaceX.
 
-### Functional Requirements
-- As a user, I want to see a list of rockets in the rocket list screen (Show each rocket image, rocket name, and rocket description)
-- As a user, I want to be able to filter the rockets in the rocket list screen
-- As a user, I want to be able to add the new rocket in the rocket list screen
-- As a user, I want to be able to see the rocket detail by clicking a rocket in the rocket list screen (Show rocket image, rocket name, rocket description, cost per launch, country, first flight)
+**Dibuat oleh:** Raymond Tjahyadi
 
-### Non-Functional Requirements
-- Use Space-X API (https://github.com/r-spacex/SpaceX-API) for getting the rocket data
-- Implement routers
-- Implement state management
-- Implement lifecycles
-- Create components based will be + points
-- UI states (Loading, Fail/Retry, and Success)
-- Show loading when waiting response from API
-- If an error occurred, user can retry by pressing retry button
-- Show result when get response from API
+---
 
-### Nice to have characteristics
-Responsive design
-You don’t need to worry about the detailed design, we’re not interested in your artistic prowess (for now), put your efforts on creating a readable/clean/maintainable source code.
+## Deskripsi Project
 
-### Submission
+Aplikasi ini dibuat menggunakan Vue 3 dengan TypeScript dan Vuetify sebagai UI framework. Aplikasi mengambil data dari SpaceX API dan menampilkannya dalam bentuk list dan detail.
 
-1.  **Fork** this repository.
+### Teknologi yang Digunakan:
+- Vue 3 (Composition API)
+- TypeScript
+- Vuetify 3
+- Pinia (State Management)
+- Vue Router
+- Axios
+- Vite
 
-2.  Implement your solution on a dedicated feature branch (e.g., `feat/allo-spacex`).
+---
 
-3.  When complete, submit your solution via a **Pull Request (PR)** back to the main repository.
-   
-4.  Please complete the form to submit your technical test: [Click Here](https://forms.gle/nZKQ2EjTCPfAKHog7)
+## Cara Menjalankan
 
-Good luck with your assignment! Don't hesitate to contact us if you have any questions about the assignment process.
+### Install Dependencies
+```bash
+npm install
+```
+
+### Jalankan Development Server
+```bash
+npm run dev
+```
+
+Buka browser dan akses: `http://localhost:3000`
+
+### Build untuk Production
+```bash
+npm run build
+```
+
+---
+
+## Fitur
+
+### Halaman List
+- Menampilkan semua roket dari SpaceX API
+- Filter berdasarkan status (Active/Inactive)
+- Pencarian roket
+- Tambah roket baru (simulasi)
+
+### Halaman Detail
+- Informasi lengkap roket
+- Gambar roket
+- Spesifikasi (cost per launch, country, first flight, dll)
+
+---
+
+## Struktur Folder
+
+```
+src/
+├── components/      # Komponen reusable
+├── pages/          # Halaman aplikasi
+├── stores/         # Pinia store
+├── services/       # API service
+├── types/          # TypeScript types
+└── main.ts         # Entry point
+```
+
+---
+
+## Catatan
+
+- Fitur "Add Rocket" adalah simulasi karena SpaceX API tidak support POST
+- Data yang ditambahkan hanya tersimpan di browser memory
