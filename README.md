@@ -1,36 +1,67 @@
-# Allo Bank Frontend Technical Assignment
+# SpaceX Rockets
 
-In this assignment, you’re assigned to create a website that displays rockets. This website only has two screens: rocket list screen and rocket detail screen. Here are the requirements:
+A Vue 3 web application that displays SpaceX rocket data using the [SpaceX API](https://github.com/r-spacex/SpaceX-API).
 
-### Functional Requirements
-- As a user, I want to see a list of rockets in the rocket list screen (Show each rocket image, rocket name, and rocket description)
-- As a user, I want to be able to filter the rockets in the rocket list screen
-- As a user, I want to be able to add the new rocket in the rocket list screen
-- As a user, I want to be able to see the rocket detail by clicking a rocket in the rocket list screen (Show rocket image, rocket name, rocket description, cost per launch, country, first flight)
+## Tech Stack
 
-### Non-Functional Requirements
-- Use Space-X API (https://github.com/r-spacex/SpaceX-API) for getting the rocket data
-- Implement routers
-- Implement state management
-- Implement lifecycles
-- Create components based will be + points
-- UI states (Loading, Fail/Retry, and Success)
-- Show loading when waiting response from API
-- If an error occurred, user can retry by pressing retry button
-- Show result when get response from API
+- **Vue 3** — Composition API with `<script setup>`
+- **TypeScript** — Type-safe development
+- **Vuetify 3** — Material Design component library (dark theme)
+- **Pinia** — State management
+- **Axios** — HTTP client for API calls
+- **Vite** — Fast build tooling
+- **Vue Router** — File-based routing via `unplugin-vue-router`
 
-### Nice to have characteristics
-Responsive design
-You don’t need to worry about the detailed design, we’re not interested in your artistic prowess (for now), put your efforts on creating a readable/clean/maintainable source code.
+## Setup & Run
 
-### Submission
+```bash
+# Install dependencies
+npm install
 
-1.  **Fork** this repository.
+# Start development server (http://localhost:3000)
+npm run dev
 
-2.  Implement your solution on a dedicated feature branch (e.g., `feat/allo-spacex`).
+# Build for production
+npm run build
 
-3.  When complete, submit your solution via a **Pull Request (PR)** back to the main repository.
-   
-4.  Please complete the form to submit your technical test: [Click Here](https://forms.gle/nZKQ2EjTCPfAKHog7)
+# Type check
+npm run type-check
+```
 
-Good luck with your assignment! Don't hesitate to contact us if you have any questions about the assignment process.
+## Features
+
+- **Rocket List** — Browse all SpaceX rockets with images, names, and descriptions
+- **Search/Filter** — Filter rockets by name or description in real-time
+- **Add Rocket** — Add custom rockets locally via a form dialog
+- **Rocket Detail** — View full rocket details including cost, country, first flight, dimensions, and more
+- **UI States** — Loading spinners, error messages with retry buttons, and empty states
+- **Responsive Design** — Adapts from mobile (1 column) to desktop (4 columns) using Vuetify grid breakpoints
+
+## Project Structure
+
+```
+src/
+├── components/       # Reusable Vue components (auto-imported)
+│   ├── RocketCard.vue
+│   └── AddRocketDialog.vue
+├── pages/            # File-based routing
+│   ├── index.vue     # Redirects to /rockets
+│   └── rockets/
+│       ├── index.vue # Rocket list page
+│       └── [id].vue  # Rocket detail page
+├── stores/           # Pinia state management
+│   └── rocket.ts
+├── services/         # API layer
+│   └── api.ts
+├── types/            # TypeScript interfaces
+│   └── rocket.ts
+└── plugins/          # Vue plugin registration
+    ├── index.ts
+    └── vuetify.ts
+```
+
+## API
+
+Uses the SpaceX v4 API:
+- `GET /rockets` — List all rockets
+- `GET /rockets/:id` — Get rocket by ID
