@@ -1,36 +1,39 @@
-# Allo Bank Frontend Technical Assignment
-
-In this assignment, you’re assigned to create a website that displays rockets. This website only has two screens: rocket list screen and rocket detail screen. Here are the requirements:
-
-### Functional Requirements
-- As a user, I want to see a list of rockets in the rocket list screen (Show each rocket image, rocket name, and rocket description)
-- As a user, I want to be able to filter the rockets in the rocket list screen
-- As a user, I want to be able to add the new rocket in the rocket list screen
-- As a user, I want to be able to see the rocket detail by clicking a rocket in the rocket list screen (Show rocket image, rocket name, rocket description, cost per launch, country, first flight)
-
-### Non-Functional Requirements
-- Use Space-X API (https://github.com/r-spacex/SpaceX-API) for getting the rocket data
-- Implement routers
-- Implement state management
-- Implement lifecycles
-- Create components based will be + points
-- UI states (Loading, Fail/Retry, and Success)
-- Show loading when waiting response from API
-- If an error occurred, user can retry by pressing retry button
-- Show result when get response from API
-
-### Nice to have characteristics
-Responsive design
-You don’t need to worry about the detailed design, we’re not interested in your artistic prowess (for now), put your efforts on creating a readable/clean/maintainable source code.
-
-### Submission
-
-1.  **Fork** this repository.
-
-2.  Implement your solution on a dedicated feature branch (e.g., `feat/allo-spacex`).
-
-3.  When complete, submit your solution via a **Pull Request (PR)** back to the main repository.
-   
-4.  Please complete the form to submit your technical test: [Click Here](https://forms.gle/nZKQ2EjTCPfAKHog7)
-
-Good luck with your assignment! Don't hesitate to contact us if you have any questions about the assignment process.
+## Features
+### Rocket List
+- Display rockets with image, name, and description
+- Search and filter rockets by name
+- Add new rockets locally based on provided rocket options
+- Handles UI states: loading, error (with retry), and success
+### Rocket Detail
+- Display detailed rocket information: Image, Name, Description, Country, Status, Type, and Company
+- Accessible via dynamic route: /rockets/:id
+- Handles loading and error states
+### Tech Stack
+- **Framework**: Vue 3 + Vite
+- **Language**: TypeScript
+- **State Management**: Pinia
+- **HTTP Requests**: Axios
+### Project Structure
+```bash
+src/
+├─ components/    # Reusable UI components
+├─ pages/         # Route-based views
+├─ service/       # API service layer
+├─ stores/        # Pinia state management
+├─ types/         # TypeScript domain types
+└─ main.ts        # Entry point
+```
+### Getting Started
+1. Install dependencies:
+```bash
+npm install
+```
+2. Start the development server:
+```bash
+npm run dev
+```
+### Environment Variables
+Create a `.env` file in the root (or copy `.env.example`) and configure:
+```bash
+VITE_APP_API_URL=https://api.spacexdata.com/v4
+```
