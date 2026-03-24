@@ -3,7 +3,8 @@ import { getRockets } from '@/services/rocketService'
 import type { Rocket, UiStatus } from '@/types/rocket'
 
 interface RocketStoreState {
-  rockets: Rocket[]
+  remoteRockets: Rocket[]
+  localRockets: Rocket[]
   filterKeyword: string
   selectedRocketId: string | null
   status: UiStatus
@@ -19,19 +20,30 @@ export interface CreateRocketPayload {
   firstFlight?: string
 }
 
+export interface UpdateRocketPayload extends CreateRocketPayload {
+  id: string
+}
+
 const state = reactive<RocketStoreState>({
-  rockets: [],
+  remoteRockets: [],
+  localRockets: [],
   filterKeyword: '',
   selectedRocketId: null,
   status: 'idle',
   error: null,
 })
 
+const rockets = computed(() => {
+  return [...state.localRockets, ...state.remoteRockets]
+})
+
+const isLoading = computed(() => state.status === 'loading')
+
 const filteredRockets = computed(() => {
   const keyword = state.filterKeyword.trim().toLowerCase()
-  if (!keyword) return state.rockets
+  if (!keyword) return rockets.value
 
-  return state.rockets.filter((rocket) => {
+  return rockets.value.filter((rocket) => {
     return (
       rocket.name.toLowerCase().includes(keyword) ||
       rocket.description.toLowerCase().includes(keyword)
@@ -41,7 +53,7 @@ const filteredRockets = computed(() => {
 
 const selectedRocket = computed(() => {
   if (!state.selectedRocketId) return null
-  return state.rockets.find((rocket) => rocket.id === state.selectedRocketId) ?? null
+  return rockets.value.find((rocket) => rocket.id === state.selectedRocketId) ?? null
 })
 
 async function fetchRockets() {
@@ -49,13 +61,11 @@ async function fetchRockets() {
   state.error = null
 
   try {
-    state.rockets = await getRockets()
+    state.remoteRockets = await getRockets()
     state.status = 'success'
   } catch (error) {
     state.status = 'error'
-    state.error = error instanceof Error
-      ? error.message
-      : 'Failed to load rockets. Please try again.'
+    state.error = toFriendlyErrorMessage(error)
   }
 }
 
@@ -80,7 +90,37 @@ function addRocket(payload: CreateRocketPayload) {
     firstFlight: payload.firstFlight?.trim() || now.toISOString().split('T')[0],
   }
 
-  state.rockets = [localRocket, ...state.rockets]
+  state.localRockets = [localRocket, ...state.localRockets]
+}
+
+function updateRocket(payload: UpdateRocketPayload) {
+  const normalize = (rocket: Rocket): Rocket => {
+    return {
+      ...rocket,
+      name: payload.name.trim(),
+      description: payload.description.trim(),
+      image: payload.image?.trim() || null,
+      images: payload.image?.trim() ? [payload.image.trim()] : rocket.images,
+      costPerLaunch: payload.costPerLaunch ?? 0,
+      country: payload.country?.trim() || 'Unknown',
+      firstFlight: payload.firstFlight?.trim() || rocket.firstFlight,
+    }
+  }
+
+  const localIndex = state.localRockets.findIndex((rocket) => rocket.id === payload.id)
+  if (localIndex >= 0) {
+    const nextLocalRockets = [...state.localRockets]
+    nextLocalRockets[localIndex] = normalize(nextLocalRockets[localIndex])
+    state.localRockets = nextLocalRockets
+    return
+  }
+
+  const remoteIndex = state.remoteRockets.findIndex((rocket) => rocket.id === payload.id)
+  if (remoteIndex >= 0) {
+    const nextRemoteRockets = [...state.remoteRockets]
+    nextRemoteRockets[remoteIndex] = normalize(nextRemoteRockets[remoteIndex])
+    state.remoteRockets = nextRemoteRockets
+  }
 }
 
 function setSelectedRocketById(id: string | null) {
@@ -90,13 +130,26 @@ function setSelectedRocketById(id: string | null) {
 export function useRocketStore() {
   return {
     state: readonly(state),
+    rockets,
     filteredRockets,
     selectedRocket,
+    isLoading,
     fetchRockets,
     retryFetchRockets,
     setFilter,
     addRocket,
+    updateRocket,
     setSelectedRocketById,
   }
 }
 
+function toFriendlyErrorMessage(error: unknown): string {
+  if (!(error instanceof Error)) return 'Gagal memuat data rocket. Silakan coba lagi.'
+
+  const message = error.message.toLowerCase()
+  if (message.includes('failed to fetch')) {
+    return 'Gagal memuat data rocket. Periksa koneksi internet lalu coba lagi.'
+  }
+
+  return error.message
+}

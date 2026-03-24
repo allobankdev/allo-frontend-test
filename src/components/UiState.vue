@@ -20,11 +20,16 @@
     class="my-4"
   >
     <div class="d-flex flex-column ga-3">
-      <div>{{ error || 'Terjadi kesalahan.' }}</div>
+      <div>{{ friendlyError }}</div>
+      <div class="text-caption text-medium-emphasis">
+        Coba tekan Retry setelah memastikan koneksi internet stabil.
+      </div>
       <div>
         <v-btn
           color="error"
           variant="flat"
+          :loading="retrying"
+          :disabled="retrying"
           @click="$emit('retry')"
         >
           Retry
@@ -37,13 +42,23 @@
 </template>
 
 <script setup lang="ts">
+  import { computed } from 'vue'
   import type { UiStatus } from '@/types/rocket'
 
   interface Props {
     status: UiStatus
     error?: string | null
+    retrying?: boolean
   }
 
-  defineProps<Props>()
+  const props = withDefaults(defineProps<Props>(), {
+    error: null,
+    retrying: false,
+  })
+
+  const friendlyError = computed(() => {
+    return props.error || 'Terjadi kesalahan saat mengambil data rocket.'
+  })
+
   defineEmits<{ (event: 'retry'): void }>()
 </script>

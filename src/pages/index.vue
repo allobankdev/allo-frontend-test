@@ -15,12 +15,16 @@
         @update:model-value="store.setFilter"
       />
 
-      <AddRocketForm @submit="store.addRocket" />
+      <AddRocketForm
+        :disabled="store.isLoading.value"
+        @submit="store.addRocket"
+      />
 
       <UiState
         :status="store.state.status"
         :error="store.state.error"
-        @retry="store.retryFetchRockets"
+        :retrying="isRetrying"
+        @retry="onRetry"
       >
         <v-alert
           v-if="filteredRockets.length === 0"
@@ -47,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, onMounted } from 'vue'
+  import { computed, onMounted, ref } from 'vue'
   import AddRocketForm from '@/components/AddRocketForm.vue'
   import RocketCard from '@/components/RocketCard.vue'
   import RocketFilter from '@/components/RocketFilter.vue'
@@ -56,10 +60,19 @@
 
   const store = useRocketStore()
   const filteredRockets = computed(() => store.filteredRockets.value)
+  const isRetrying = ref(false)
 
   onMounted(async () => {
     if (store.state.status !== 'idle') return
     await store.fetchRockets()
   })
-</script>
 
+  async function onRetry() {
+    isRetrying.value = true
+    try {
+      await store.retryFetchRockets()
+    } finally {
+      isRetrying.value = false
+    }
+  }
+</script>

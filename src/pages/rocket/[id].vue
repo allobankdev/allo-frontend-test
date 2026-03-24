@@ -17,7 +17,8 @@
       <UiState
         :status="store.state.status"
         :error="store.state.error"
-        @retry="prepare"
+        :retrying="isRetrying"
+        @retry="onRetry"
       >
         <v-alert
           v-if="isNotFound"
@@ -42,6 +43,16 @@
               {{ rocket.name }}
             </v-card-title>
             <v-card-subtitle>{{ rocket.country }}</v-card-subtitle>
+            <template #append>
+              <v-btn
+                color="primary"
+                variant="tonal"
+                prepend-icon="mdi-pencil"
+                @click="openEditDialog"
+              >
+                Edit
+              </v-btn>
+            </template>
           </v-card-item>
 
           <v-card-text>
@@ -91,10 +102,108 @@
       </UiState>
     </div>
   </v-container>
+
+  <v-dialog
+    v-model="isEditOpen"
+    max-width="720"
+  >
+    <v-card>
+      <v-card-title class="text-h6">
+        Edit Rocket
+      </v-card-title>
+      <v-card-text>
+        <v-form @submit.prevent="saveEdit">
+          <v-row>
+            <v-col
+              cols="12"
+              md="6"
+            >
+              <v-text-field
+                v-model="editForm.name"
+                label="Nama Rocket"
+                :error-messages="editErrors.name"
+              />
+            </v-col>
+
+            <v-col
+              cols="12"
+              md="6"
+            >
+              <v-text-field
+                v-model="editForm.image"
+                label="URL Gambar"
+                placeholder="https://..."
+                :error-messages="editErrors.image"
+              />
+            </v-col>
+
+            <v-col cols="12">
+              <v-textarea
+                v-model="editForm.description"
+                label="Deskripsi"
+                rows="3"
+                :error-messages="editErrors.description"
+              />
+            </v-col>
+
+            <v-col
+              cols="12"
+              md="4"
+            >
+              <v-text-field
+                v-model.number="editForm.costPerLaunch"
+                label="Cost Per Launch"
+                type="number"
+                min="0"
+                :error-messages="editErrors.costPerLaunch"
+              />
+            </v-col>
+
+            <v-col
+              cols="12"
+              md="4"
+            >
+              <v-text-field
+                v-model="editForm.country"
+                label="Country"
+              />
+            </v-col>
+
+            <v-col
+              cols="12"
+              md="4"
+            >
+              <v-text-field
+                v-model="editForm.firstFlight"
+                label="First Flight"
+                placeholder="YYYY-MM-DD"
+                :error-messages="editErrors.firstFlight"
+              />
+            </v-col>
+          </v-row>
+
+          <div class="d-flex ga-2 justify-end mt-2">
+            <v-btn
+              variant="text"
+              @click="closeEditDialog"
+            >
+              Batal
+            </v-btn>
+            <v-btn
+              color="primary"
+              type="submit"
+            >
+              Simpan
+            </v-btn>
+          </div>
+        </v-form>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup lang="ts">
-  import { computed, onMounted, watch } from 'vue'
+  import { computed, onMounted, reactive, ref, watch } from 'vue'
   import { useRoute } from 'vue-router'
   import UiState from '@/components/UiState.vue'
   import { useRocketStore } from '@/store/rocketStore'
@@ -111,6 +220,25 @@
   })
 
   const rocket = computed(() => store.selectedRocket.value)
+  const isRetrying = ref(false)
+  const isEditOpen = ref(false)
+
+  const editForm = reactive({
+    name: '',
+    description: '',
+    image: '',
+    costPerLaunch: 0,
+    country: '',
+    firstFlight: '',
+  })
+
+  const editErrors = reactive<Record<string, string[]>>({
+    name: [],
+    description: [],
+    image: [],
+    costPerLaunch: [],
+    firstFlight: [],
+  })
 
   const isNotFound = computed(() => {
     return store.state.status === 'success' && !rocket.value
@@ -122,6 +250,109 @@
     }
 
     store.setSelectedRocketById(rocketId.value ?? null)
+  }
+
+  async function onRetry() {
+    isRetrying.value = true
+    try {
+      await prepare()
+    } finally {
+      isRetrying.value = false
+    }
+  }
+
+  function openEditDialog() {
+    if (!rocket.value) return
+
+    clearEditErrors()
+    editForm.name = rocket.value.name
+    editForm.description = rocket.value.description
+    editForm.image = rocket.value.image ?? ''
+    editForm.costPerLaunch = rocket.value.costPerLaunch
+    editForm.country = rocket.value.country
+    editForm.firstFlight = rocket.value.firstFlight
+    isEditOpen.value = true
+  }
+
+  function closeEditDialog() {
+    isEditOpen.value = false
+  }
+
+  function saveEdit() {
+    if (!rocket.value) return
+    if (!validateEditForm()) return
+
+    store.updateRocket({
+      id: rocket.value.id,
+      name: editForm.name,
+      description: editForm.description,
+      image: editForm.image,
+      costPerLaunch: Number(editForm.costPerLaunch) || 0,
+      country: editForm.country,
+      firstFlight: editForm.firstFlight,
+    })
+
+    isEditOpen.value = false
+  }
+
+  function clearEditErrors() {
+    editErrors.name = []
+    editErrors.description = []
+    editErrors.image = []
+    editErrors.costPerLaunch = []
+    editErrors.firstFlight = []
+  }
+
+  function validateEditForm() {
+    clearEditErrors()
+    let valid = true
+
+    if (!editForm.name.trim()) {
+      editErrors.name = ['Nama rocket wajib diisi.']
+      valid = false
+    }
+
+    if (!editForm.description.trim()) {
+      editErrors.description = ['Deskripsi rocket wajib diisi.']
+      valid = false
+    }
+
+    if (editForm.image.trim() && !isValidUrl(editForm.image.trim())) {
+      editErrors.image = ['URL gambar tidak valid. Gunakan format http:// atau https://']
+      valid = false
+    }
+
+    const cost = Number(editForm.costPerLaunch)
+    if (!Number.isFinite(cost) || cost < 0) {
+      editErrors.costPerLaunch = ['Cost Per Launch harus angka nol atau lebih besar.']
+      valid = false
+    }
+
+    if (editForm.firstFlight.trim() && !isValidDateFormat(editForm.firstFlight.trim())) {
+      editErrors.firstFlight = ['Format tanggal harus YYYY-MM-DD dan tanggal valid.']
+      valid = false
+    }
+
+    return valid
+  }
+
+  function isValidUrl(value: string) {
+    try {
+      const url = new URL(value)
+      return url.protocol === 'http:' || url.protocol === 'https:'
+    } catch {
+      return false
+    }
+  }
+
+  function isValidDateFormat(value: string) {
+    const datePattern = /^\d{4}-\d{2}-\d{2}$/
+    if (!datePattern.test(value)) return false
+
+    const parsed = new Date(`${value}T00:00:00Z`)
+    if (Number.isNaN(parsed.getTime())) return false
+
+    return parsed.toISOString().startsWith(value)
   }
 
   function formatCurrency(amount: number) {
