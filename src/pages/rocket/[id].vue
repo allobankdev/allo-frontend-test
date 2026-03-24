@@ -44,14 +44,24 @@
             </v-card-title>
             <v-card-subtitle>{{ rocket.country }}</v-card-subtitle>
             <template #append>
-              <v-btn
-                color="primary"
-                variant="tonal"
-                prepend-icon="mdi-pencil"
-                @click="openEditDialog"
-              >
-                Edit
-              </v-btn>
+              <div class="d-flex ga-2">
+                <v-btn
+                  color="primary"
+                  variant="tonal"
+                  prepend-icon="mdi-pencil"
+                  @click="openEditDialog"
+                >
+                  Edit
+                </v-btn>
+                <v-btn
+                  color="error"
+                  variant="tonal"
+                  prepend-icon="mdi-delete"
+                  @click="openDeleteDialog"
+                >
+                  Hapus
+                </v-btn>
+              </div>
             </template>
           </v-card-item>
 
@@ -200,17 +210,49 @@
       </v-card-text>
     </v-card>
   </v-dialog>
+
+  <v-dialog
+    v-model="isDeleteOpen"
+    max-width="480"
+  >
+    <v-card>
+      <v-card-title class="text-h6">
+        Hapus Rocket?
+      </v-card-title>
+      <v-card-text>
+        Data rocket yang dihapus tidak bisa dikembalikan.
+      </v-card-text>
+      <v-card-actions class="justify-end">
+        <v-btn
+          variant="text"
+          :disabled="isDeleting"
+          @click="isDeleteOpen = false"
+        >
+          Batal
+        </v-btn>
+        <v-btn
+          color="error"
+          :loading="isDeleting"
+          :disabled="isDeleting"
+          @click="confirmDelete"
+        >
+          Ya, Hapus
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup lang="ts">
   import { computed, onMounted, reactive, ref, watch } from 'vue'
-  import { useRoute } from 'vue-router'
+  import { useRoute, useRouter } from 'vue-router'
   import UiState from '@/components/UiState.vue'
   import { useRocketStore } from '@/store/rocketStore'
 
   const fallbackImage = 'https://images2.imgbox.com/9a/96/nLppz9HW_o.png'
   const store = useRocketStore()
   const route = useRoute()
+  const router = useRouter()
 
   const rocketId = computed(() => {
     const params = route.params as Record<string, string | string[] | undefined>
@@ -222,6 +264,8 @@
   const rocket = computed(() => store.selectedRocket.value)
   const isRetrying = ref(false)
   const isEditOpen = ref(false)
+  const isDeleteOpen = ref(false)
+  const isDeleting = ref(false)
 
   const editForm = reactive({
     name: '',
@@ -293,6 +337,24 @@
     })
 
     isEditOpen.value = false
+  }
+
+  function openDeleteDialog() {
+    if (!rocket.value) return
+    isDeleteOpen.value = true
+  }
+
+  async function confirmDelete() {
+    if (!rocket.value) return
+
+    isDeleting.value = true
+    try {
+      store.deleteRocket(rocket.value.id)
+      isDeleteOpen.value = false
+      await router.push('/')
+    } finally {
+      isDeleting.value = false
+    }
   }
 
   function clearEditErrors() {

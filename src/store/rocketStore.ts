@@ -123,6 +123,17 @@ function updateRocket(payload: UpdateRocketPayload) {
   }
 }
 
+function deleteRocket(id: string) {
+  const previousLength = state.localRockets.length + state.remoteRockets.length
+  state.localRockets = state.localRockets.filter((rocket) => rocket.id !== id)
+  state.remoteRockets = state.remoteRockets.filter((rocket) => rocket.id !== id)
+
+  const currentLength = state.localRockets.length + state.remoteRockets.length
+  if (currentLength < previousLength && state.selectedRocketId === id) {
+    state.selectedRocketId = null
+  }
+}
+
 function setSelectedRocketById(id: string | null) {
   state.selectedRocketId = id
 }
@@ -139,6 +150,7 @@ export function useRocketStore() {
     setFilter,
     addRocket,
     updateRocket,
+    deleteRocket,
     setSelectedRocketById,
   }
 }
