@@ -2,13 +2,23 @@
   <v-container class="py-8">
     <div class="d-flex flex-column ga-6">
       <div class="d-flex align-center ga-3">
-        <v-btn variant="text" prepend-icon="mdi-arrow-left" to="/">
+        <v-btn
+          variant="text"
+          prepend-icon="mdi-arrow-left"
+          to="/"
+        >
           Kembali
         </v-btn>
-        <h1 class="text-h5 font-weight-bold">Detail Rocket</h1>
+        <h1 class="text-h5 font-weight-bold">
+          Detail Rocket
+        </h1>
       </div>
 
-      <UiState :status="store.state.status" :error="store.state.error" @retry="prepare">
+      <UiState
+        :status="store.state.status"
+        :error="store.state.error"
+        @retry="prepare"
+      >
         <v-alert
           v-if="isNotFound"
           type="warning"
@@ -17,7 +27,10 @@
           Rocket dengan id tersebut tidak ditemukan.
         </v-alert>
 
-        <v-card v-else-if="rocket" variant="outlined">
+        <v-card
+          v-else-if="rocket"
+          variant="outlined"
+        >
           <v-img
             :src="rocket.image || fallbackImage"
             height="340"
@@ -25,27 +38,52 @@
           />
 
           <v-card-item>
-            <v-card-title class="text-h5">{{ rocket.name }}</v-card-title>
+            <v-card-title class="text-h5">
+              {{ rocket.name }}
+            </v-card-title>
             <v-card-subtitle>{{ rocket.country }}</v-card-subtitle>
           </v-card-item>
 
           <v-card-text>
-            <p class="text-body-1 mb-6">{{ rocket.description }}</p>
+            <p class="text-body-1 mb-6">
+              {{ rocket.description }}
+            </p>
 
             <v-row>
-              <v-col cols="12" md="4">
-                <div class="text-caption text-medium-emphasis">Cost Per Launch</div>
-                <div class="text-body-1 font-weight-bold">{{ formatCurrency(rocket.costPerLaunch) }}</div>
+              <v-col
+                cols="12"
+                md="4"
+              >
+                <div class="text-caption text-medium-emphasis">
+                  Cost Per Launch
+                </div>
+                <div class="text-body-1 font-weight-bold">
+                  {{ formatCurrency(rocket.costPerLaunch) }}
+                </div>
               </v-col>
 
-              <v-col cols="12" md="4">
-                <div class="text-caption text-medium-emphasis">Country</div>
-                <div class="text-body-1 font-weight-bold">{{ rocket.country }}</div>
+              <v-col
+                cols="12"
+                md="4"
+              >
+                <div class="text-caption text-medium-emphasis">
+                  Country
+                </div>
+                <div class="text-body-1 font-weight-bold">
+                  {{ rocket.country }}
+                </div>
               </v-col>
 
-              <v-col cols="12" md="4">
-                <div class="text-caption text-medium-emphasis">First Flight</div>
-                <div class="text-body-1 font-weight-bold">{{ formatDate(rocket.firstFlight) }}</div>
+              <v-col
+                cols="12"
+                md="4"
+              >
+                <div class="text-caption text-medium-emphasis">
+                  First Flight
+                </div>
+                <div class="text-body-1 font-weight-bold">
+                  {{ formatDate(rocket.firstFlight) }}
+                </div>
               </v-col>
             </v-row>
           </v-card-text>
@@ -66,9 +104,10 @@
   const route = useRoute()
 
   const rocketId = computed(() => {
-    const raw = route.params.id
+    const params = route.params as Record<string, string | string[] | undefined>
+    const raw = params.id
     if (Array.isArray(raw)) return raw[0]
-    return raw as string | undefined
+    return raw
   })
 
   const rocket = computed(() => store.selectedRocket.value)
@@ -105,10 +144,9 @@
   onMounted(prepare)
 
   watch(
-    () => route.params.id,
+    () => route.fullPath,
     () => {
       void prepare()
     },
   )
 </script>
-

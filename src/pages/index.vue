@@ -2,7 +2,9 @@
   <v-container class="py-8">
     <div class="d-flex flex-column ga-6">
       <div>
-        <h1 class="text-h4 font-weight-bold">SpaceX Rockets</h1>
+        <h1 class="text-h4 font-weight-bold">
+          SpaceX Rockets
+        </h1>
         <p class="text-body-1 text-medium-emphasis mt-1">
           Daftar rocket dari SpaceX API.
         </p>

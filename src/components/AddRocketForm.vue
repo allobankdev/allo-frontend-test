@@ -1,10 +1,15 @@
 <template>
   <v-card variant="tonal">
-    <v-card-title class="text-h6">Tambah Rocket</v-card-title>
+    <v-card-title class="text-h6">
+      Tambah Rocket
+    </v-card-title>
     <v-card-text>
       <v-form @submit.prevent="onSubmit">
         <v-row>
-          <v-col cols="12" md="6">
+          <v-col
+            cols="12"
+            md="6"
+          >
             <v-text-field
               v-model="form.name"
               label="Nama Rocket"
@@ -12,7 +17,10 @@
             />
           </v-col>
 
-          <v-col cols="12" md="6">
+          <v-col
+            cols="12"
+            md="6"
+          >
             <v-text-field
               v-model="form.image"
               label="URL Gambar"
@@ -29,7 +37,10 @@
             />
           </v-col>
 
-          <v-col cols="12" md="4">
+          <v-col
+            cols="12"
+            md="4"
+          >
             <v-text-field
               v-model.number="form.costPerLaunch"
               label="Cost Per Launch"
@@ -38,14 +49,20 @@
             />
           </v-col>
 
-          <v-col cols="12" md="4">
+          <v-col
+            cols="12"
+            md="4"
+          >
             <v-text-field
               v-model="form.country"
               label="Country"
             />
           </v-col>
 
-          <v-col cols="12" md="4">
+          <v-col
+            cols="12"
+            md="4"
+          >
             <v-text-field
               v-model="form.firstFlight"
               label="First Flight"
