@@ -1,8 +1,8 @@
 {
-  "name": "allo-frontend-test",
+  "name": "spacex-rockets",
   "private": true,
   "type": "module",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "@mdi/font": "7.4.47",
-    "core-js": "^3.37.1",
-    "roboto-fontface": "*",
+    "axios": "^1.13.6",
+    "pinia": "^3.0.4",
     "vue": "^3.4.31",
     "vuetify": "^3.6.14"
   },
@@ -28,8 +28,7 @@
     "eslint": "^9.14.0",
     "eslint-plugin-vue": "^9.30.0",
     "npm-run-all2": "^7.0.1",
-    "sass": "1.77.8",
-    "sass-embedded": "^1.77.8",
+    "sass": "^1.77.8",
     "typescript": "~5.6.3",
     "unplugin-fonts": "^1.1.1",
     "unplugin-vue-components": "^0.27.2",

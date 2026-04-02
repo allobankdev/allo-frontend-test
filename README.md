@@ -1,36 +1,73 @@
-# Allo Bank Frontend Technical Assignment
+# SpaceX Rockets
 
-In this assignment, you’re assigned to create a website that displays rockets. This website only has two screens: rocket list screen and rocket detail screen. Here are the requirements:
+Vue 3 application for the Allo Bank frontend assignment. The app shows a list of SpaceX rockets, supports filtering, allows adding a new rocket locally, and provides a dedicated detail screen for each rocket.
 
-### Functional Requirements
-- As a user, I want to see a list of rockets in the rocket list screen (Show each rocket image, rocket name, and rocket description)
-- As a user, I want to be able to filter the rockets in the rocket list screen
-- As a user, I want to be able to add the new rocket in the rocket list screen
-- As a user, I want to be able to see the rocket detail by clicking a rocket in the rocket list screen (Show rocket image, rocket name, rocket description, cost per launch, country, first flight)
+## Features
 
-### Non-Functional Requirements
-- Use Space-X API (https://github.com/r-spacex/SpaceX-API) for getting the rocket data
-- Implement routers
-- Implement state management
-- Implement lifecycles
-- Create components based will be + points
-- UI states (Loading, Fail/Retry, and Success)
-- Show loading when waiting response from API
-- If an error occurred, user can retry by pressing retry button
-- Show result when get response from API
+- Rocket list screen with image, name, and description
+- Rocket detail screen with image, name, description, cost per launch, country, and first flight
+- Client-side filtering by name, description, or country
+- Add rocket dialog with form validation
+- Loading, error, retry, success, and empty states
+- Responsive layout built with Vuetify
+- State management with Pinia
+- File-based routing with Vue Router
 
-### Nice to have characteristics
-Responsive design
-You don’t need to worry about the detailed design, we’re not interested in your artistic prowess (for now), put your efforts on creating a readable/clean/maintainable source code.
+## Tech Stack
 
-### Submission
+- Vue 3
+- TypeScript
+- Vite
+- Vuetify 3
+- Pinia
+- Axios
+- SpaceX API v4
 
-1.  **Fork** this repository.
+## Project Structure
 
-2.  Implement your solution on a dedicated feature branch (e.g., `feat/allo-spacex`).
+```text
+src/
+  components/
+    AddRocketDialog.vue
+    RocketCard.vue
+  pages/
+    index.vue
+    rockets/[id].vue
+  plugins/
+    index.ts
+    vuetify.ts
+  router/
+    index.ts
+  services/
+    api.ts
+  stores/
+    rocketStore.ts
+```
 
-3.  When complete, submit your solution via a **Pull Request (PR)** back to the main repository.
-   
-4.  Please complete the form to submit your technical test: [Click Here](https://forms.gle/nZKQ2EjTCPfAKHog7)
+## Getting Started
 
-Good luck with your assignment! Don't hesitate to contact us if you have any questions about the assignment process.
+### Install dependencies
+
+```bash
+npm install
+```
+
+### Run development server
+
+```bash
+npm run dev
+```
+
+### Run checks
+
+```bash
+npm run type-check
+npm run lint
+npm run build
+```
+
+## Notes
+
+- Rocket data is fetched from the SpaceX API.
+- Newly added rockets are stored locally in Pinia and remain fully navigable to the detail page.
+- The app uses file-based routes, so `src/pages/index.vue` maps to `/` and `src/pages/rockets/[id].vue` maps to `/rockets/:id`.
