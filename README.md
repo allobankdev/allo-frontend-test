@@ -1,36 +1,34 @@
-# Allo Bank Frontend Technical Assignment
+# SpaceX Rockets
 
-In this assignment, you’re assigned to create a website that displays rockets. This website only has two screens: rocket list screen and rocket detail screen. Here are the requirements:
+## Tech Stack
 
-### Functional Requirements
-- As a user, I want to see a list of rockets in the rocket list screen (Show each rocket image, rocket name, and rocket description)
-- As a user, I want to be able to filter the rockets in the rocket list screen
-- As a user, I want to be able to add the new rocket in the rocket list screen
-- As a user, I want to be able to see the rocket detail by clicking a rocket in the rocket list screen (Show rocket image, rocket name, rocket description, cost per launch, country, first flight)
+- **Vue 3** — Composition API
+- **TypeScript** — strict typing
+- **Vuetify 3** — UI component framework
+- **Pinia** — state management
 
-### Non-Functional Requirements
-- Use Space-X API (https://github.com/r-spacex/SpaceX-API) for getting the rocket data
-- Implement routers
-- Implement state management
-- Implement lifecycles
-- Create components based will be + points
-- UI states (Loading, Fail/Retry, and Success)
-- Show loading when waiting response from API
-- If an error occurred, user can retry by pressing retry button
-- Show result when get response from API
+## Features
 
-### Nice to have characteristics
-Responsive design
-You don’t need to worry about the detailed design, we’re not interested in your artistic prowess (for now), put your efforts on creating a readable/clean/maintainable source code.
+- Rocket list with image, name, and description
+- Search/filter rockets by name, description, or country
+- Add new rockets with multiple image upload (stored in localStorage)
+- Rocket detail page with image, cost per launch, country, and first flight
+- Client-side pagination (4 rockets per page)
+- UI states: skeleton loading, error with retry, and success
 
-### Submission
+## API
 
-1.  **Fork** this repository.
+Uses the [SpaceX API v4](https://api.spacexdata.com/v4)
 
-2.  Implement your solution on a dedicated feature branch (e.g., `feat/allo-spacex`).
+## Setup
 
-3.  When complete, submit your solution via a **Pull Request (PR)** back to the main repository.
-   
-4.  Please complete the form to submit your technical test: [Click Here](https://forms.gle/nZKQ2EjTCPfAKHog7)
+```bash
+# Install dependencies
+yarn install
 
-Good luck with your assignment! Don't hesitate to contact us if you have any questions about the assignment process.
+# Start development server
+yarn run dev
+
+
+## Created By
+Akbar Rahmana - 2026
