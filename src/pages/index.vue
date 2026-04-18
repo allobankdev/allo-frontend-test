@@ -1,6 +1,6 @@
 <template>
   <v-container class="py-8">
-    <!-- 🔥 Header -->
+    <!-- Header -->
     <div class="header">
       <div>
         <h1 class="text-h4 font-weight-bold">🚀 Space Rockets</h1>
@@ -26,7 +26,7 @@
     <!-- Error -->
     <div v-else-if="store.error" class="state">
       <p class="mb-4">{{ store.error }}</p>
-      <v-btn color="primary" @click="store.retry()">Retry</v-btn>
+      <v-btn color="primary" @click="store.getRockets()">Retry</v-btn>
     </div>
 
     <!-- Empty -->

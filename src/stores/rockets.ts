@@ -8,6 +8,7 @@ export const useRocketStore = defineStore("rockets", {
     loading: false,
     error: null as string | null,
     search: "",
+    rocketDetail: null as Rocket | null,
   }),
 
   getters: {
@@ -18,11 +19,6 @@ export const useRocketStore = defineStore("rockets", {
         rocket.name.toLowerCase().includes(state.search.toLowerCase()),
       );
     },
-
-    getRocketById: (state) => {
-      return (id: string): Rocket | undefined =>
-        state.rockets.find((rocket) => rocket.id === id);
-    },
   },
 
   actions: {
@@ -32,12 +28,22 @@ export const useRocketStore = defineStore("rockets", {
 
       try {
         const res = await api.get<Rocket[]>("/rockets");
-
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-
         this.rockets = res.data;
       } catch (err: any) {
         this.error = err?.message || "Failed to fetch rockets";
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async getRocketById(id: string) {
+      this.loading = true;
+      this.error = null;
+      try {
+        const res = await api.get<Rocket>(`/rockets/${id}`);
+        this.rocketDetail = res.data;
+      } catch (err: any) {
+        this.error = err?.message || "Failed to fetch rocket detail";
       } finally {
         this.loading = false;
       }
@@ -49,10 +55,6 @@ export const useRocketStore = defineStore("rockets", {
 
     addRocket(newRocket: Rocket) {
       this.rockets.unshift(newRocket);
-    },
-
-    retry() {
-      this.getRockets();
     },
   },
 });
