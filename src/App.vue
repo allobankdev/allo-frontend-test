@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app theme="light">
     <v-main>
       <router-view />
     </v-main>
@@ -7,5 +7,5 @@
 </template>
 
 <script lang="ts" setup>
-  //
+//
 </script>
