@@ -13,8 +13,12 @@ import App from './App.vue'
 // Composables
 import { createApp } from 'vue'
 
+//pinia
+import { createPinia } from 'pinia'
+
 const app = createApp(App)
 
 registerPlugins(app)
-
+const pinia = createPinia()
+app.use(pinia)
 app.mount('#app')
