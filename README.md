@@ -1,36 +1,82 @@
-# Allo Bank Frontend Technical Assignment
+# Allo SpaceX — Frontend Test
 
-In this assignment, you’re assigned to create a website that displays rockets. This website only has two screens: rocket list screen and rocket detail screen. Here are the requirements:
+A small Vue 3 application that lists SpaceX rockets, lets the user filter and add new entries, and shows a detail page for each rocket.
 
-### Functional Requirements
-- As a user, I want to see a list of rockets in the rocket list screen (Show each rocket image, rocket name, and rocket description)
-- As a user, I want to be able to filter the rockets in the rocket list screen
-- As a user, I want to be able to add the new rocket in the rocket list screen
-- As a user, I want to be able to see the rocket detail by clicking a rocket in the rocket list screen (Show rocket image, rocket name, rocket description, cost per launch, country, first flight)
+## Tech Stack
 
-### Non-Functional Requirements
-- Use Space-X API (https://github.com/r-spacex/SpaceX-API) for getting the rocket data
-- Implement routers
-- Implement state management
-- Implement lifecycles
-- Create components based will be + points
-- UI states (Loading, Fail/Retry, and Success)
-- Show loading when waiting response from API
-- If an error occurred, user can retry by pressing retry button
-- Show result when get response from API
+| Layer | Choice | Reason |
+| --- | --- | --- |
+| Framework | **Vue 3 (Composition API)** | Reactive primitives, `<script setup>` keeps components terse |
+| Language | **TypeScript** | Type safety on the `Rocket` model and store contracts |
+| Build tool | **Vite** | Fast HMR, native ESM |
+| UI library | **Vuetify 3** | Production-ready Material components, responsive grid out of the box |
+| Routing | **Vue Router + `unplugin-vue-router`** | File-based routes from `src/pages/*` keep wiring zero-config |
+| State | **Pinia** | Official Vue store; less boilerplate than Vuex |
 
-### Nice to have characteristics
-Responsive design
-You don’t need to worry about the detailed design, we’re not interested in your artistic prowess (for now), put your efforts on creating a readable/clean/maintainable source code.
+## Features
 
-### Submission
+- ✅ Rocket list with image, name, description
+- ✅ Search filter (by name or description)
+- ✅ Add new rocket via dialog form (kept client-side; SpaceX API is read-only)
+- ✅ Rocket detail page (image, name, description, cost per launch, country, first flight, status)
+- ✅ UI states: Loading, Error+Retry, Success — separate for list and detail
+- ✅ Responsive grid (1 / 2 / 3 / 4 columns at xs / sm / md / lg)
+- ✅ List cache: navigating Detail → Back doesn't re-fetch
 
-1.  **Fork** this repository.
+## Project Structure
 
-2.  Implement your solution on a dedicated feature branch (e.g., `feat/allo-spacex`).
+```
+src/
+├── components/
+│   ├── AddRocketDialog.vue  # Modal form to add a rocket (client-side)
+│   ├── ErrorState.vue       # Reusable error block with retry emit
+│   ├── LoadingState.vue     # Reusable centered spinner
+│   └── RocketCard.vue       # List item card
+├── pages/
+│   ├── index.vue            # Rocket list page (route: /)
+│   └── rockets/[id].vue     # Rocket detail page (route: /rockets/:id)
+├── stores/
+│   └── rocket.ts            # Pinia store: fetch, filter, add, detail
+├── plugins/                 # Vuetify, Pinia, Router registration
+├── router/                  # Vue Router setup with auto-routes
+└── styles/                  # Vuetify SCSS settings
+```
 
-3.  When complete, submit your solution via a **Pull Request (PR)** back to the main repository.
-   
-4.  Please complete the form to submit your technical test: [Click Here](https://forms.gle/nZKQ2EjTCPfAKHog7)
+## How to Run
 
-Good luck with your assignment! Don't hesitate to contact us if you have any questions about the assignment process.
+Requirements: Node.js 22+, npm.
+
+```bash
+# Install dependencies
+npm install
+
+# Start dev server (http://localhost:3000)
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+## Design Notes
+
+**Separation of list state and detail state.** The store keeps `loading/error` for the list separate from `detailLoading/detailError` for the detail page. Sharing them caused stale data flashes and conflicting spinners when navigating between pages.
+
+**Locally-added rockets resolve without an API call.** The detail page first checks the in-memory list before hitting the SpaceX API. Without this, a rocket added through the dialog (which has a client-generated UUID, not a real SpaceX ID) would always 404 on detail.
+
+**Filter re-applied after add.** The original `addRocket` pushed to both `rockets` and `filteredRockets` unconditionally, so a new rocket would show up even if it didn't match the current search query. The fix re-runs the filter after every mutation.
+
+**Error logging.** `catch (err)` actually logs `err` to the console — the user message stays friendly, but the dev console keeps the real diagnostic.
+
+**No external image guard.** Both list cards and the detail image fall back to a placeholder if `flickr_images` is empty (common for user-added rockets that skip the image URL).
+
+## API
+
+[SpaceX REST API v4](https://github.com/r-spacex/SpaceX-API):
+
+- `GET /v4/rockets` — list of rockets
+- `GET /v4/rockets/:id` — single rocket
+
+No auth required. Read-only — the "Add Rocket" feature is client-side only.
