@@ -32,6 +32,7 @@
       :is-loading="isLoading" 
       :is-error="isError" 
       :is-success="isSuccess"
+      :has-data="allRockets.length > 0"
       :error-message="error?.message"
       @retry="refetch"
     >

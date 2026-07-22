@@ -11,7 +11,7 @@
   </div>
   
   <div
-    v-else-if="isError"
+    v-if="isError"
     class="d-flex flex-column align-center justify-center py-12"
   >
     <v-icon
@@ -36,7 +36,7 @@
     </v-btn>
   </div>
   
-  <template v-else-if="isSuccess">
+  <template v-if="isSuccess || hasData">
     <slot />
   </template>
 </template>
@@ -46,6 +46,7 @@ defineProps<{
   isLoading: boolean;
   isError: boolean;
   isSuccess: boolean;
+  hasData?: boolean;
   errorMessage?: string;
 }>();
 

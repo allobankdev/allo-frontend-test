@@ -64,10 +64,11 @@
                 />
               </v-col>
               <v-col cols="12">
-                <v-text-field
-                  v-model="rocket.first_flight"
-                  label="First Flight (YYYY-MM-DD)*"
-                  type="date"
+                <v-date-input
+                  v-model="firstFlightDate"
+                  label="First Flight*"
+                  prepend-icon=""
+                  prepend-inner-icon="mdi-calendar"
                   :rules="[v => !!v || 'First Flight is required']"
                   required
                 />
@@ -128,12 +129,14 @@ const initialRocketState = (): Partial<Rocket> => ({
 })
 
 const rocket = reactive<Partial<Rocket>>(initialRocketState())
+const firstFlightDate = ref<Date | null>(null)
 
 const submit = () => {
   if (!isValid.value) return
 
   const newRocket: Rocket = {
     ...rocket,
+    first_flight: firstFlightDate.value ? firstFlightDate.value.toISOString().split('T')[0] : '',
     id: `local-${Date.now()}`
   } as Rocket
 
@@ -141,6 +144,7 @@ const submit = () => {
 
   // Reset form and close
   Object.assign(rocket, initialRocketState())
+  firstFlightDate.value = null
   if (form.value) form.value.resetValidation()
   dialog.value = false
 }
