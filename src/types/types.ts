@@ -1,0 +1,4 @@
+export interface RocketData {
+    rocket: string
+    // ????????
+}
