@@ -1,14 +1,20 @@
 <template>
     <v-container class="fill-height">
         <v-responsive class="align-centerfill-height mx-auto" max-width="900">
-            <div v-if="loading">Loading...</div>
+            <input v-model="query" type="text" placeholder="Search..." />
 
-            <div v-if="exception">{{ exception }}</div>
+            <div class="content-center" v-if="loading">Loading...</div>
 
-            <ul v-if="data.length">
-                <li v-for="d in data" :key="d.rocket">
-                    {{ d.rocket }}
+            <div class="content-center" v-if="exception">
+                <p>{{ exception }}</p>
+                <button @click="getData">Reload</button>
+            </div>
+
+            <ul class="content-center" v-if="data.length">
+                <li v-for="d in data" :key="d.name">
+                    {{ d.name }}
                 </li>
+                <!-- <router-link :to></router-link> -->
             </ul>
         </v-responsive>
     </v-container>
@@ -17,11 +23,12 @@
 <script setup lang="ts">
 import type { RocketData } from '@/types/types';
 import axios from 'axios';
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 
 const data = ref<RocketData[]>([])
 const loading = ref(false)
 const exception = ref('')
+const query = ref('')
 
 async function getData() {
     loading.value = true
@@ -36,7 +43,15 @@ async function getData() {
         } else {
             exception.value = 'Unknown error: ' + error
         }
+
+        data.value = [
+            { name: 'A' },
+            { name: 'B' },
+            { name: 'C' }
+        ]
+        exception.value = ''
     } finally {
+        data.value = data.value.filter(d => d.name.toLowerCase().includes(query.value.toLowerCase()))
         loading.value = false
     }
 }

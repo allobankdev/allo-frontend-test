@@ -13,6 +13,7 @@ import App from './App.vue'
 // Composables
 import { createApp } from 'vue'
 import router from './router/index.js'
+import './assets/styles/general.css'
 
 const app = createApp(App)
 
