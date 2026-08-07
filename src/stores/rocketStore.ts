@@ -73,9 +73,15 @@ export const useRocketStore = defineStore('rocket', () => {
     }
   }
 
+  // Prevent UI flashing on next visit
+  const clearSelectedRocket = () => {
+    selectedRocket.value = null
+    detailError.value = null
+  }
+
   return { 
     rockets, isLoading, isError, fetchRockets,
     searchQuery, statusFilter, filteredRockets,
-    selectedRocket, isDetailLoading, detailError, fetchRocketById 
+    selectedRocket, isDetailLoading, detailError, fetchRocketById, clearSelectedRocket 
   }
 })
