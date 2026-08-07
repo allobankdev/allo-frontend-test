@@ -4,3 +4,39 @@
     align-items: center;
     height: 100vh;
 }
+
+.image-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.image-table th,
+.image-table td {
+    padding: 12px;
+    border: 1px solid;
+    text-align: left;
+}
+
+.cell-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.table-container {
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: auto;
+    border: 1px solid;
+}
+
+.table-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+}
+
+.table-text {
+    font-size: 0.85rem;
+}

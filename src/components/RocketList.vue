@@ -11,9 +11,31 @@
             </div>
 
             <ul class="content-center" v-if="filterResults.length">
-                <li v-for="result in filterResults" :key="result.id">
-                    {{ result.full_name }}
-                </li>
+                <div class="table-container">
+                    <table class="image-table">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Rocket</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(result, index) in filterResults" :key="result.id">
+                                <td>{{ index + 1 }}</td>
+                                <td>
+                                    <div class="cell-content">
+                                        <img :src="result.image_url" @error="handleImageError" :alt="result.full_name" class="table-img" />
+                                        <span class="table-text">
+                                            {{ result.full_name }}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>{{ result.description }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <!-- <router-link :to></router-link> -->
             </ul>
         </v-responsive>
@@ -22,12 +44,17 @@
 
 <script setup lang="ts">
 import type { RocketData, Result } from '@/types/types';
-import axios from 'axios';
 import { ref, onMounted, computed } from 'vue'
 import { useRocketStore } from '@/stores/rocketStore';
+import fallback from '@/assets/logo.png';
 
 const rocketStore = useRocketStore()
 const query = ref('')
+
+function handleImageError(event: Event) {
+    const target = event.target as HTMLInputElement
+    target.src = fallback
+}
 
 const filterResults = computed<Result[]>(() => {
     if (query.value) {
@@ -37,6 +64,8 @@ const filterResults = computed<Result[]>(() => {
 })
 
 onMounted(() => {
+    console.log("rocketlist mounted");
+    
     rocketStore.getData()
 })
 </script>
