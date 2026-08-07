@@ -1,5 +1,5 @@
 <template>
-    <b-button class="btn btn-primary" @click="modal = !modal">Toggle modal</b-button>
+    <b-button class="btn btn-primary" @click="modal = !modal">Add Rocket</b-button>
 
     <b-modal v-model="modal" title="Add New Rocket" ok-title="Save" @show="resetForm" @hidden="resetForm" @ok="handleSubmit">
         <div class="modal-dialog">
