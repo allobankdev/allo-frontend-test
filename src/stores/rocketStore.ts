@@ -10,21 +10,32 @@ export const useRocketStore = defineStore('rocketStore', {
     }),
     actions: {
         async getData() {
-            this.loading = true
-            this.exception = ''
+            if (!this.data) {
+                console.log("get data");
 
-            try {
-                const res = await axios.get('https://lldev.thespacedevs.com/2.2.0/config/launcher/?manufacturer__name=SpaceX&mode=detailed')
-                this.data = res.data
-            } catch (error) {
-                if (error instanceof Error) {
-                    this.exception = 'Get data failed: ' + error.message
-                } else {
-                    this.exception = 'Unknown error: ' + error
+                this.loading = true
+                this.exception = ''
+    
+                try {
+                    const res = await axios.get('https://lldev.thespacedevs.com/2.2.0/config/launcher/?manufacturer__name=SpaceX&mode=detailed')
+                    this.data = res.data
+                } catch (error) {
+                    if (error instanceof Error) {
+                        this.exception = 'Get data failed: ' + error.message
+                    } else {
+                        this.exception = 'Unknown error: ' + error
+                    }
+                } finally {
+                    this.loading = false
                 }
-            } finally {
-                this.loading = false
             }
+            console.log("not get data");
+        },
+        addRocket(imageUrl: string, fullName: string, description: string, launchCost: string, country: string, maidenFlight: string) {
+
+        },
+        getResultById(id: number) {
+            return this.data?.results?.find(result => result.id === id)
         }
     }
 })
