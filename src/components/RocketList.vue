@@ -1,7 +1,11 @@
 <template>
     <v-container class="fill-height">
         <v-responsive class="align-centerfill-height mx-auto" max-width="900">
-            <input v-model="query" type="text" placeholder="Search..." />
+            <div class="grid-row">
+                <input v-model="query" type="text" placeholder="Search..." />
+                <input-rocket-modal :is-open="showModal" @close="showModal = false" />
+            </div>
+
 
             <div class="content-center" v-if="rocketStore.loading">Loading...</div>
 
@@ -48,9 +52,11 @@ import type { Result } from '@/types/types';
 import { ref, onMounted, computed } from 'vue'
 import { useRocketStore } from '@/stores/rocketStore';
 import FallbackImage from './FallbackImage.vue';
+import InputRocketModal from './InputRocketModal.vue';
 
 const rocketStore = useRocketStore()
 const query = ref('')
+const showModal = ref(false);
 
 const filterResults = computed<Result[]>(() => {
     if (query.value) {

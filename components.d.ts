@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     FallbackImage: typeof import('./src/components/FallbackImage.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    InputRocketModal: typeof import('./src/components/InputRocketModal.vue')['default']
     RocketDetail: typeof import('./src/components/RocketDetail.vue')['default']
     RocketList: typeof import('./src/components/RocketList.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
