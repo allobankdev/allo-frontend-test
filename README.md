@@ -1,70 +1,40 @@
-# Allo Bank Frontend Technical Assignment
+# Allo SpaceX Frontend
 
-In this assignment, you’re assigned to create a website that displays rockets. This website only has two screens: rocket list screen and rocket detail screen. Here are the requirements:
+Vue 3 application listing SpaceX launcher configurations from Launch Library 2.
 
-### Functional Requirements
-- As a user, I want to see a list of rockets in the rocket list screen (Show each rocket image, rocket name, and rocket description)
-- As a user, I want to be able to filter the rockets in the rocket list screen
-- As a user, I want to be able to add the new rocket in the rocket list screen (the API is read-only, so the new rocket only needs to appear in the running app)
-- As a user, I want to be able to see the rocket detail by clicking a rocket in the rocket list screen (Show rocket image, rocket name, rocket description, cost per launch, country, first flight)
-- As a user, I want both screens to still display correctly when some rocket data is missing
+## Features
 
-### API
+- Rocket list with client-side name/description filter
+- Runtime rocket creation
+- Detail view backed by Pinia state (no single-rocket API request)
+- Missing image, name, description, cost, country, and flight-date fallbacks
+- Loading, error/retry, empty, and success states
+- Vue 3, TypeScript, Vite, Vue Router, Pinia, Vuetify, native `fetch`
 
-Use the Launch Library 2 API by The Space Devs for rocket data.
-Docs: https://thespacedevs.com/llapi
+Runtime additions live only in memory and reset after page reload. Opening a local rocket detail URL after reload shows the not-found state.
 
-Rocket list (returns 13 SpaceX rockets in a single request):
+## API
 
-    GET https://lldev.thespacedevs.com/2.2.0/config/launcher/?manufacturer__name=SpaceX&mode=detailed
+`GET https://lldev.thespacedevs.com/2.2.0/config/launcher/?manufacturer__name=SpaceX&mode=detailed`
 
-Single rocket:
+The list and detail views share Pinia state. A detail view does not make a separate single-rocket request.
 
-    GET https://lldev.thespacedevs.com/2.2.0/config/launcher/:id/
+## Routes
 
-`mode=detailed` is required — without it the response omits `description`
-and the other detail fields.
+- `/` — rocket list
+- `/rockets/:id` — rocket detail
 
-| Requirement      | Field                              |
-| ---------------- | ---------------------------------- |
-| rocket image     | `image_url`                        |
-| rocket name      | `full_name`                        |
-| description      | `description`                      |
-| cost per launch  | `launch_cost`                      |
-| country          | `manufacturer.country_code`        |
-| first flight     | `maiden_flight`                    |
+## Setup
 
-**Rate limit:** the API allows 15 requests/hour for anonymous users. Use the
-`lldev.thespacedevs.com` host shown above during development — it serves the
-same data with a far more generous limit. The production host,
-`ll.thespacedevs.com`, will throttle you quickly.
+```sh
+npm install
+npm run dev
+```
 
-Note that some rockets have missing values for `launch_cost`, `maiden_flight`,
-and `image_url`.
+## Quality checks
 
-### Non-Functional Requirements
-- Use the Launch Library 2 API (see the API section above) for getting the rocket data
-- Implement routers
-- Implement state management
-- Implement lifecycles
-- Create components based will be + points
-- UI states (Loading, Fail/Retry, and Success)
-- Show loading when waiting response from API
-- If an error occurred, user can retry by pressing retry button
-- Show result when get response from API
-
-### Nice to have characteristics
-Responsive design
-You don’t need to worry about the detailed design, we’re not interested in your artistic prowess (for now), put your efforts on creating a readable/clean/maintainable source code.
-
-### Submission
-
-1.  **Fork** this repository.
-
-2.  Implement your solution on a dedicated feature branch (e.g., `feat/allo-spacex`).
-
-3.  When complete, submit your solution via a **Pull Request (PR)** back to the main repository.
-   
-4.  Please complete the form to submit your technical test: [Click Here](https://forms.gle/nZKQ2EjTCPfAKHog7)
-
-Good luck with your assignment! Don't hesitate to contact us if you have any questions about the assignment process.
+```sh
+npm run lint
+npm run type-check
+npm run build
+```
