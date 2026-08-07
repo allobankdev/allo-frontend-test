@@ -7,43 +7,8 @@
         <p class="text-body-1 text-grey-darken-1">Explore our orbital launch vehicles.</p>
       </div>
       
-      <!-- Filter Controls connected to Pinia Store -->
-      <div class="d-flex flex-column flex-sm-row gap-4 align-sm-center" style="width: 100%; max-width: 700px;">
-        <v-text-field
-          v-model="store.searchQuery"
-          prepend-inner-icon="mdi-magnify"
-          label="Search rockets..."
-          variant="outlined"
-          density="comfortable"
-          hide-details
-          class="flex-grow-1"
-        ></v-text-field>
-        
-        <v-select
-          v-model="store.statusFilter"
-          :items="[
-            { title: 'All Status', value: 'all' },
-            { title: 'Active Only', value: 'active' },
-            { title: 'Inactive Only', value: 'inactive' }
-          ]"
-          item-title="title"
-          item-value="value"
-          variant="outlined"
-          density="comfortable"
-          hide-details
-          style="min-width: 150px; max-width: 180px;"
-        ></v-select>
-
-        <v-btn
-          color="blue-darken-3"
-          prepend-icon="mdi-plus"
-          height="48"
-          class="text-none font-weight-bold rounded-lg px-6"
-          @click="isModalOpen = true"
-        >
-          Add Rocket
-        </v-btn>
-      </div>
+      <!-- Component Extracted: RocketFilterBar -->
+      <RocketFilterBar @open-modal="isModalOpen = true" />
     </div>
 
     <!-- UI State: Loading -->
@@ -79,24 +44,46 @@
     <!-- Modal Form for Adding Rocket -->
     <AddRocketModal 
       v-model="isModalOpen" 
-      @submit="store.addSimulatedRocket" 
+      @submit="handleRocketAdded" 
     />
+
+    <!-- Global Optimistic UI Success Notification -->
+    <v-snackbar
+      v-model="showSnackbar"
+      color="success"
+      location="bottom right"
+      :timeout="3000"
+    >
+      <div class="d-flex align-center">
+        <v-icon icon="mdi-check-circle" class="mr-2"></v-icon>
+        <strong>Success!</strong>&nbsp;Rocket successfully deployed to fleet.
+      </div>
+    </v-snackbar>
   </v-container>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 import { useRocketStore } from '@/stores/rocketStore'
+import type { RocketDTO } from '@/types/rocket'
 import RocketCard from '@/components/RocketCard.vue'
 import LoadingSkeleton from '@/components/common/LoadingSkeleton.vue'
 import ErrorState from '@/components/common/ErrorState.vue'
 import AddRocketModal from '@/components/AddRocketModal.vue'
+import RocketFilterBar from '@/components/RocketFilterBar.vue'
 
 // Initialize state manager
 const store = useRocketStore()
 
-// State for Modal
+// State for Modal and Notification
 const isModalOpen = ref(false)
+const showSnackbar = ref(false)
+
+// Handle Optimistic UI submission
+const handleRocketAdded = (rocketData: Partial<RocketDTO>) => {
+  store.addSimulatedRocket(rocketData)
+  showSnackbar.value = true // Show success feedback!
+}
 
 // Lifecycle Hook
 onMounted(() => {

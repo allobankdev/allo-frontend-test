@@ -1,7 +1,13 @@
 <template>
-  <v-dialog v-model="isOpen" max-width="600px" persistent @after-leave="resetForm">
+  <v-dialog 
+    v-model="isOpen" 
+    max-width="600px" 
+    persistent 
+    :fullscreen="$vuetify.display.smAndDown"
+    @after-leave="resetForm"
+  >
     <!-- Explicitly set color to white to prevent dark-mode bleeding on inputs -->
-    <v-card class="rounded-xl text-black" color="white">
+    <v-card class="rounded-xl text-black h-100" color="white">
       <v-card-title class="d-flex justify-space-between align-center pa-4 bg-grey-lighten-4">
         <span class="text-h6 font-weight-bold">Add New Rocket</span>
         <v-btn icon="mdi-close" variant="text" size="small" @click="closeModal" color="black"></v-btn>
@@ -63,8 +69,15 @@
       
       <v-card-actions class="pa-4 bg-grey-lighten-5">
         <v-spacer></v-spacer>
-        <v-btn text="Cancel" variant="text" @click="closeModal" class="text-none"></v-btn>
-        <v-btn color="blue-darken-3" variant="flat" text="Save Rocket" @click="submitForm" class="text-none px-6 rounded-lg"></v-btn>
+        <v-btn text="Cancel" variant="text" @click="closeModal" class="text-none" :disabled="isSubmitting"></v-btn>
+        <v-btn 
+          color="blue-darken-3" 
+          variant="flat" 
+          text="Save Rocket" 
+          @click="submitForm" 
+          class="text-none px-6 rounded-lg"
+          :loading="isSubmitting"
+        ></v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -86,6 +99,7 @@ const emit = defineEmits<{
 // 2. Strong typing for Vuetify Form ref instead of <any>
 const form = ref<InstanceType<typeof VForm> | null>(null)
 const isValid = ref(false)
+const isSubmitting = ref(false)
 
 // Default clean state
 const getInitialState = () => ({
@@ -115,15 +129,22 @@ const resetForm = () => {
   form.value?.resetValidation()
 }
 
-// Validate and bubble up
+// Validate and bubble up with Optimistic Loading Illusion
 const submitForm = async () => {
   const result = await form.value?.validate()
   if (result?.valid) {
-    emit('submit', { 
-      ...formData.value,
-      cost_per_launch: formData.value.cost_per_launch ?? 0
-    })
-    closeModal()
+    // 1. Simulate network request latency (800ms)
+    isSubmitting.value = true
+    
+    setTimeout(() => {
+      // 2. Execute Optimistic UI Update
+      emit('submit', { 
+        ...formData.value,
+        cost_per_launch: formData.value.cost_per_launch ?? 0
+      })
+      isSubmitting.value = false
+      closeModal()
+    }, 800)
   }
 }
 </script>
