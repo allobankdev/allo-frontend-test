@@ -56,7 +56,11 @@ defineProps<{ rocket: RocketDTO }>()
 
 // Utility to format large numbers to readable currency
 const formatCurrency = (value: number) => {
-  return (value / 1000000).toFixed(1) + 'M'
+  if (value >= 1000000) {
+    return (value / 1000000).toFixed(1) + 'M'
+  }
+  // If the value is small (e.g. 1000 from our simulated input), just show it normally
+  return new Intl.NumberFormat('en-US').format(value)
 }
 </script>
 

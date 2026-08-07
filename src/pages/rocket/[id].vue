@@ -104,7 +104,7 @@
             <h3 class="text-h6 font-weight-bold mb-4">Financials</h3>
             <div class="mb-4">
               <div class="text-caption text-white-lighten-3 text-uppercase">Cost per Launch</div>
-              <div class="text-h4 font-weight-bold">${{ formatCost(rocket.cost_per_launch) }}M</div>
+              <div class="text-h4 font-weight-bold">${{ formatCost(rocket.cost_per_launch) }}</div>
             </div>
             <div>
               <div class="text-caption text-white-lighten-3 text-uppercase">Success Rate</div>
@@ -148,8 +148,12 @@ const formatNumber = (num?: number | null) => {
 
 // 2. Extracted Math Logic: Format cost calculation
 const formatCost = (val?: number | null) => {
-  if (val == null) return '0.0'
-  return (val / 1000000).toFixed(1)
+  if (val == null) return '0'
+  if (val >= 1000000) {
+    return (val / 1000000).toFixed(1) + 'M'
+  }
+  // For small simulated rockets
+  return new Intl.NumberFormat('en-US').format(val)
 }
 
 // Fetch data on arrival

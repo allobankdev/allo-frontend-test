@@ -1,7 +1,13 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import axios from 'axios'
 import { RocketService } from '@/api/rocketService'
 import type { RocketDTO } from '@/types/rocket'
+// We use Partial<RocketDTO> as the input parameter for simulated creation
+// No need to import non-existent types
+
+// Best practice: Explicitly define the status filter type
+export type RocketStatusFilter = 'all' | 'active' | 'inactive'
 
 export const useRocketStore = defineStore('rocket', () => {
   // --- LIST STATE ---
@@ -11,15 +17,15 @@ export const useRocketStore = defineStore('rocket', () => {
 
   // --- FILTER STATE ---
   const searchQuery = ref('')
-  const statusFilter = ref<'all' | 'active' | 'inactive'>('all')
+  const statusFilter = ref<RocketStatusFilter>('all')
 
-  // Computed state for UI projection
+  // --- COMPUTED: UI Projection ---
   const filteredRockets = computed(() => {
+    const query = searchQuery.value.toLowerCase().trim()
+    
     return rockets.value.filter(rocket => {
-      // 1. Check text match (case-insensitive)
-      const matchesSearch = rocket.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+      const matchesSearch = query === '' || rocket.name.toLowerCase().includes(query)
       
-      // 2. Check strict active status
       const matchesStatus = statusFilter.value === 'all' 
         || (statusFilter.value === 'active' && rocket.active)
         || (statusFilter.value === 'inactive' && !rocket.active)
@@ -33,32 +39,43 @@ export const useRocketStore = defineStore('rocket', () => {
   const isDetailLoading = ref(false)
   const detailError = ref<string | null>(null)
 
-  // Fetch all rockets
-  const fetchRockets = async () => {
-    // Avoid refetching if already loaded
-    if (rockets.value.length > 0) return
+  // --- ACTIONS ---
+
+  const fetchRockets = async (options = { forceRefresh: false }) => {
+    // Avoid refetching if already loaded, unless forced
+    if (!options.forceRefresh && rockets.value.length > 0) return
 
     isLoading.value = true
     isError.value = null
+    
     try {
       const response = await RocketService.getAllRockets()
       rockets.value = response.data
     } catch (error: unknown) {
-      isError.value = error instanceof Error ? error.message : 'Unknown error occurred'
+      // Type-safe error handling without 'any'
+      if (axios.isAxiosError(error)) {
+        isError.value = error.response?.data?.message ?? error.message
+      } else if (error instanceof Error) {
+        isError.value = error.message
+      } else {
+        isError.value = 'Failed to load rocket fleet.'
+      }
     } finally {
       isLoading.value = false
     }
   }
 
   // Fetch single rocket with smart caching
-  const fetchRocketById = async (id: string) => {
+  const fetchRocketById = async (id: string, options = { forceRefresh: false }) => {
     detailError.value = null
     
-    // Check memory cache first
-    const cached = rockets.value.find(r => r.id === id)
-    if (cached) {
-      selectedRocket.value = cached
-      return
+    // Check memory cache first, unless forced to bypass
+    if (!options.forceRefresh) {
+      const cached = rockets.value.find(r => r.id === id)
+      if (cached) {
+        selectedRocket.value = cached
+        return
+      }
     }
 
     // Fallback to API
@@ -67,7 +84,13 @@ export const useRocketStore = defineStore('rocket', () => {
       const response = await RocketService.getRocketById(id)
       selectedRocket.value = response.data
     } catch (error: unknown) {
-      detailError.value = error instanceof Error ? error.message : 'Unknown error occurred'
+      if (axios.isAxiosError(error)) {
+        detailError.value = error.response?.data?.message ?? error.message
+      } else if (error instanceof Error) {
+        detailError.value = error.message
+      } else {
+        detailError.value = 'Failed to load rocket details.'
+      }
     } finally {
       isDetailLoading.value = false
     }
@@ -79,9 +102,51 @@ export const useRocketStore = defineStore('rocket', () => {
     detailError.value = null
   }
 
+  // Simulate adding a new rocket using strict form payload
+  const addSimulatedRocket = (rocketData: Partial<RocketDTO>) => {
+    const newRocket: RocketDTO = {
+      // Map mapped form inputs
+      name: rocketData.name ?? 'Unknown Rocket',
+      country: rocketData.country ?? 'Unknown',
+      cost_per_launch: rocketData.cost_per_launch ?? 0,
+      active: rocketData.active ?? true,
+      description: rocketData.description ?? '',
+      
+      // Auto-generate the rest with dummy data to satisfy TS
+      id: `sim-${Date.now()}`, 
+      type: 'simulated_rocket',
+      company: 'SpaceX', // REQUIRED by RocketDTO
+      flickr_images: ['https://via.placeholder.com/400x300?text=New+Rocket'],
+      height: { meters: 0, feet: 0 },
+      diameter: { meters: 0, feet: 0 },
+      mass: { kg: 0, lb: 0 },
+      engines: { 
+        type: 'unknown', 
+        version: '', 
+        layout: '', 
+        propellant_1: 'unknown', 
+        propellant_2: 'unknown', 
+        thrust_to_weight: 0 
+      },
+      first_flight: new Date().toISOString().split('T')[0],
+      success_rate_pct: 0
+    }
+
+    // Prepend to array so it appears first in the list
+    rockets.value = [newRocket, ...rockets.value]
+    
+    // Clear the global error state so the UI switches back to the Grid view
+    isError.value = null
+  }
+
   return { 
-    rockets, isLoading, isError, fetchRockets,
-    searchQuery, statusFilter, filteredRockets,
-    selectedRocket, isDetailLoading, detailError, fetchRocketById, clearSelectedRocket 
+    // State
+    rockets, isLoading, isError, 
+    searchQuery, statusFilter, 
+    selectedRocket, isDetailLoading, detailError,
+    // Getters
+    filteredRockets,
+    // Actions
+    fetchRockets, fetchRocketById, clearSelectedRocket, addSimulatedRocket
   }
 })

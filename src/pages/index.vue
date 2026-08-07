@@ -1,6 +1,6 @@
 <template>
   <v-container class="py-8">
-    <!-- Header and search section (Removed v-row/v-col to fix padding alignment) -->
+    <!-- Header and search section -->
     <div class="d-flex flex-column flex-md-row justify-space-between align-md-end mb-6">
       <div class="mb-4 mb-md-0">
         <h1 class="text-h4 font-weight-bold text-grey-darken-4">SpaceX Fleet</h1>
@@ -8,7 +8,7 @@
       </div>
       
       <!-- Filter Controls connected to Pinia Store -->
-      <div class="d-flex flex-column flex-sm-row gap-4 align-sm-center" style="width: 100%; max-width: 600px;">
+      <div class="d-flex flex-column flex-sm-row gap-4 align-sm-center" style="width: 100%; max-width: 700px;">
         <v-text-field
           v-model="store.searchQuery"
           prepend-inner-icon="mdi-magnify"
@@ -19,7 +19,6 @@
           class="flex-grow-1"
         ></v-text-field>
         
-        <!-- Replaced btn-toggle with Dropdown (v-select) per user request -->
         <v-select
           v-model="store.statusFilter"
           :items="[
@@ -32,8 +31,18 @@
           variant="outlined"
           density="comfortable"
           hide-details
-          style="min-width: 150px; max-width: 200px;"
+          style="min-width: 150px; max-width: 180px;"
         ></v-select>
+
+        <v-btn
+          color="blue-darken-3"
+          prepend-icon="mdi-plus"
+          height="48"
+          class="text-none font-weight-bold rounded-lg px-6"
+          @click="isModalOpen = true"
+        >
+          Add Rocket
+        </v-btn>
       </div>
     </div>
 
@@ -67,20 +76,29 @@
         </v-col>
       </v-row>
     </template>
+    <!-- Modal Form for Adding Rocket -->
+    <AddRocketModal 
+      v-model="isModalOpen" 
+      @submit="store.addSimulatedRocket" 
+    />
   </v-container>
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRocketStore } from '@/stores/rocketStore'
+import RocketCard from '@/components/RocketCard.vue'
 import LoadingSkeleton from '@/components/common/LoadingSkeleton.vue'
 import ErrorState from '@/components/common/ErrorState.vue'
-import RocketCard from '@/components/RocketCard.vue'
+import AddRocketModal from '@/components/AddRocketModal.vue'
 
-// Inject global state manager
+// Initialize state manager
 const store = useRocketStore()
 
-// Trigger data fetch unconditionally (Cache handles optimization)
+// State for Modal
+const isModalOpen = ref(false)
+
+// Lifecycle Hook
 onMounted(() => {
   store.fetchRockets()
 })
