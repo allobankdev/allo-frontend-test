@@ -58,7 +58,7 @@ function handleImageError(event: Event) {
 
 const filterResults = computed<Result[]>(() => {
     if (query.value) {
-        return rocketStore.data?.results?.filter(result => result.full_name.toLowerCase().includes(query.value.toLowerCase())) || []
+        return rocketStore.data?.results?.filter(result => result.full_name.toLowerCase().includes(query.value.trim().toLowerCase())) || []
     }
     return rocketStore.data?.results || []
 })
