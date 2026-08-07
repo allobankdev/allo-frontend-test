@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { RocketService } from '@/api/rocketService'
-import type { Rocket } from '@/types/rocket'
+import type { RocketDTO } from '@/types/rocket'
 
 export const useRocketStore = defineStore('rocket', () => {
   // Server state storage
-  const rockets = ref<Rocket[]>([])
+  const rockets = ref<RocketDTO[]>([])
   
   // UI interaction states
   const isLoading = ref(false)
