@@ -2,13 +2,13 @@
   <v-app>
     <!-- Persistent top navigation bar -->
     <v-app-bar color="grey-darken-4" elevation="2">
-      <v-app-bar-title>
-        <!-- Clean text link without button backgrounds -->
+      <v-container class="d-flex align-center py-0 h-100">
+        <!-- Clean text link perfectly aligned with main container -->
         <router-link to="/" class="text-decoration-none text-white d-flex align-center" style="cursor: pointer;">
           <v-icon color="blue-lighten-2" class="mr-2">mdi-rocket-launch</v-icon>
           <span class="font-weight-bold text-h6">Allo SpaceX</span>
         </router-link>
-      </v-app-bar-title>
+      </v-container>
     </v-app-bar>
 
     <!-- Main dynamic content area -->

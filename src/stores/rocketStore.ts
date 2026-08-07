@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { RocketService } from '@/api/rocketService'
 import type { RocketDTO } from '@/types/rocket'
 
@@ -8,6 +8,25 @@ export const useRocketStore = defineStore('rocket', () => {
   const rockets = ref<RocketDTO[]>([])
   const isLoading = ref(false)
   const isError = ref<string | null>(null)
+
+  // --- FILTER STATE ---
+  const searchQuery = ref('')
+  const statusFilter = ref<'all' | 'active' | 'inactive'>('all')
+
+  // Computed state for UI projection
+  const filteredRockets = computed(() => {
+    return rockets.value.filter(rocket => {
+      // 1. Check text match (case-insensitive)
+      const matchesSearch = rocket.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+      
+      // 2. Check strict active status
+      const matchesStatus = statusFilter.value === 'all' 
+        || (statusFilter.value === 'active' && rocket.active)
+        || (statusFilter.value === 'inactive' && !rocket.active)
+      
+      return matchesSearch && matchesStatus
+    })
+  })
 
   // --- DETAIL STATE ---
   const selectedRocket = ref<RocketDTO | null>(null)
@@ -56,6 +75,7 @@ export const useRocketStore = defineStore('rocket', () => {
 
   return { 
     rockets, isLoading, isError, fetchRockets,
+    searchQuery, statusFilter, filteredRockets,
     selectedRocket, isDetailLoading, detailError, fetchRocketById 
   }
 })
