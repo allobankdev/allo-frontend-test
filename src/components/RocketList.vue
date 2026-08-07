@@ -26,7 +26,6 @@
                                 <td>
                                     <router-link :to="{ name: '/detail/', query: { id: result.id } }">
                                         <div class="cell-content">
-                                            <!-- <img :src="result.image_url" @error="handleImageError" :alt="result.full_name" class="table-img" /> -->
                                             <fallback-image :src="result.image_url" :alt="result.full_name" />
                                             <span class="table-text">
                                                 {{ result.full_name }}
