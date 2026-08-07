@@ -44,19 +44,13 @@
 </template>
 
 <script setup lang="ts">
-import type { RocketData, Result } from '@/types/types';
+import type { Result } from '@/types/types';
 import { ref, onMounted, computed } from 'vue'
 import { useRocketStore } from '@/stores/rocketStore';
-// import fallback from '@/assets/logo.png';
 import FallbackImage from './FallbackImage.vue';
 
 const rocketStore = useRocketStore()
 const query = ref('')
-
-// function handleImageError(event: Event) {
-//     const target = event.target as HTMLInputElement
-//     target.src = fallback
-// }
 
 const filterResults = computed<Result[]>(() => {
     if (query.value) {

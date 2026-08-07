@@ -40,3 +40,29 @@
 .table-text {
     font-size: 0.85rem;
 }
+
+.grid-main {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
+
+.grid-row {
+    border: 1px solid;
+    display: flex;
+    gap: 8px;
+    width: 100%;
+}
+
+.grid-cell-left {
+    flex: 30%;
+    font-weight: bold;
+    padding: 10px;
+    border-right: 1px solid;
+}
+
+.grid-cell-right {
+    flex: 70%;
+    padding: 10px;
+}
