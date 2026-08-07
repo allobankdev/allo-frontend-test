@@ -2,7 +2,7 @@ import axios from 'axios'
 
 // Centralized API client instance
 const apiClient = axios.create({
-  baseURL: 'https://api.spacexdata.com/v4/',
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json'
@@ -16,11 +16,13 @@ apiClient.interceptors.request.use((config) => {
   return Promise.reject(error)
 })
 
-// Response interceptor placeholder
+// Normalize API errors globally
 apiClient.interceptors.response.use((response) => {
   return response
 }, (error) => {
-  return Promise.reject(error)
+  // Extract readable error message
+  const message = error.response?.data?.message || error.message || 'An unexpected error occurred'
+  return Promise.reject(new Error(message))
 })
 
 export default apiClient
