@@ -24,14 +24,6 @@
                         <b-form-group label="First Flight" label-for="first-flight">
                             <b-form-input type="text" v-model="form.maidenFlight" id="first-flight" placeholder="First Flight" required ></b-form-input>
                         </b-form-group>
-                        <!-- <input v-model="form.name" id="rocket-name" class="form-control" placeholder="Rocket Name" required />
-                        <input v-model="form.imageUrl" class="form-control" placeholder="Image Url" required /> -->
-                        <!-- <input v-model="form.description" class="form-control" placeholder="Description" required /> -->
-                        <!-- <input v-model="form.launchCost" class="form-control" placeholder="Launch Cost" required /> -->
-                        <!-- <input v-model="form.country" class="form-control" placeholder="Country" required /> -->
-                        <!-- <input v-model="form.maidenFlight" class="form-control" placeholder="First Flight" required /> -->
-                        <!-- <button type="submit" class="btn-primary">Save</button>
-                        <button type="button" class="btn-close" @click="emit('close')">Cancel</button> -->
                     </b-form>
                 </div>
             </div>
