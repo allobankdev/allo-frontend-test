@@ -38,25 +38,25 @@
         md="5"
       >
         <v-img
-          :src="rocket.image_url ?? undefined"
+          v-if="rocket.image_url && !imageFailed"
+          :src="rocket.image_url"
           height="360"
           rounded="0"
           style="border: 1px solid var(--color-rule);"
           cover
+          @error="imageFailed = true"
+        />
+        <div
+          v-else
+          class="d-flex align-center justify-center"
+          style="height: 360px; border: 1px solid var(--color-rule); background: #EFECE4;"
         >
-          <template #placeholder>
-            <div
-              class="d-flex align-center justify-center fill-height"
-              style="background: #EFECE4;"
-            >
-              <v-icon
-                icon="mdi-rocket-launch-outline"
-                size="56"
-                style="color: var(--color-ink-soft);"
-              />
-            </div>
-          </template>
-        </v-img>
+          <v-icon
+            icon="mdi-rocket-launch-outline"
+            size="56"
+            style="color: var(--color-ink-soft);"
+          />
+        </div>
       </v-col>
 
       <v-col
@@ -94,15 +94,16 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, onMounted } from 'vue'
+  import { computed, onMounted, ref, watch } from 'vue'
   import { useRoute } from 'vue-router/auto'
   import { useRocketsStore } from '@/stores/rockets'
 
   const route = useRoute('/rockets/[id]')
   const store = useRocketsStore()
 
-  const rocketId = Number(route.params.id)
-  const rocket = computed(() => store.getById(rocketId))
+  const rocketId = computed(() => Number(route.params.id))
+  const rocket = computed(() => store.getById(rocketId.value))
+  const imageFailed = ref(false)
 
   const formattedCost = computed(() => {
     const cost = rocket.value?.launch_cost
@@ -110,7 +111,12 @@
     return `$${Number(cost).toLocaleString('en-US')}`
   })
 
+  watch(rocketId, id => {
+    imageFailed.value = false
+    store.fetchRocketDetail(id)
+  })
+
   onMounted(() => {
-    store.fetchRocketDetail(rocketId)
+    store.fetchRocketDetail(rocketId.value)
   })
 </script>

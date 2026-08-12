@@ -7,24 +7,24 @@
     rounded="0"
   >
     <v-img
-      :src="rocket.image_url ?? undefined"
+      v-if="rocket.image_url && !imageFailed"
+      :src="rocket.image_url"
       height="200"
       class="rocket-card__image"
       cover
+      @error="imageFailed = true"
+    />
+    <div
+      v-else
+      class="d-flex align-center justify-center rocket-card__image"
+      style="height: 200px; background: #EFECE4;"
     >
-      <template #placeholder>
-        <div
-          class="d-flex align-center justify-center fill-height"
-          style="background: #EFECE4;"
-        >
-          <v-icon
-            icon="mdi-rocket-launch-outline"
-            size="40"
-            style="color: var(--color-ink-soft);"
-          />
-        </div>
-      </template>
-    </v-img>
+      <v-icon
+        icon="mdi-rocket-launch-outline"
+        size="40"
+        style="color: var(--color-ink-soft);"
+      />
+    </div>
 
     <v-card-text class="pa-4">
       <h2 class="display-heading text-subtitle-1 font-weight-medium mb-2">
@@ -41,9 +41,12 @@
 </template>
 
 <script lang="ts" setup>
+  import { ref } from 'vue'
   import type { Rocket } from '@/types/rocket'
 
   defineProps<{ rocket: Rocket }>()
+
+  const imageFailed = ref(false)
 </script>
 
 <style scoped>
