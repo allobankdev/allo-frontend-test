@@ -5,6 +5,7 @@
   >
     <template #activator="{ props: activatorProps }">
       <v-btn
+        class="add-rocket-btn"
         color="primary"
         prepend-icon="mdi-plus"
         rounded="0"
@@ -129,3 +130,15 @@
     open.value = false
   }
 </script>
+
+<style scoped>
+.add-rocket-btn {
+  width: 100%;
+}
+
+@media (min-width: 600px) {
+  .add-rocket-btn {
+    width: auto;
+  }
+}
+</style>

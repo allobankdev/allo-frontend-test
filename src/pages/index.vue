@@ -1,11 +1,11 @@
 <template>
   <v-container
-    class="py-8 py-md-12"
+    class="py-6 py-md-12"
     max-width="1200"
   >
-    <div class="d-flex flex-wrap align-end justify-space-between mb-8 ga-4">
-      <h1 class="display-heading text-h3 font-weight-medium">
-        Rocket Fleet
+    <div class="page-header mb-6 mb-md-8">
+      <h1 class="display-heading text-h4 text-md-h3 font-weight-medium">
+        SpaceX
       </h1>
       <AddRocketDialog />
     </div>
@@ -21,8 +21,7 @@
     <template v-else>
       <RocketFilter
         v-model="search"
-        class="mb-8"
-        style="max-width: 360px;"
+        class="mb-6 mb-md-8 filter-field"
       />
 
       <p
@@ -68,3 +67,28 @@
     }
   })
 </script>
+
+<style scoped>
+.page-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.filter-field {
+  max-width: 100%;
+}
+
+@media (min-width: 600px) {
+  .page-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .filter-field {
+    max-width: 360px;
+  }
+}
+</style>
