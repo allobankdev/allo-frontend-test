@@ -1,8 +1,11 @@
 <template>
   <v-container class="py-8 py-md-12" max-width="1200">
-    <h1 class="display-heading text-h3 font-weight-medium mb-8">
-      Rocket Fleet
-    </h1>
+    <div class="d-flex flex-wrap align-end justify-space-between mb-8 ga-4">
+      <h1 class="display-heading text-h3 font-weight-medium">
+        Rocket Fleet
+      </h1>
+      <AddRocketDialog />
+    </div>
 
     <LoadingState v-if="store.status === 'loading'" />
 

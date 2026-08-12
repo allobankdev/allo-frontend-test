@@ -10,12 +10,12 @@
       Back to fleet
     </v-btn>
 
-    <LoadingState v-if="store.status === 'loading'" />
+    <LoadingState v-if="store.detailStatus === 'loading'" message="Loading rocket..." />
 
     <ErrorState
-      v-else-if="store.status === 'error'"
-      :message="store.errorMessage"
-      @retry="store.fetchRockets"
+      v-else-if="store.detailStatus === 'error'"
+      :message="store.detailErrorMessage"
+      @retry="store.fetchRocketDetail(rocketId)"
     />
 
     <v-alert v-else-if="!rocket" type="warning" variant="tonal">
@@ -75,7 +75,8 @@
   const route = useRoute('/rockets/[id]')
   const store = useRocketsStore()
 
-  const rocket = computed(() => store.getById(Number(route.params.id)))
+  const rocketId = Number(route.params.id)
+  const rocket = computed(() => store.getById(rocketId))
 
   const formattedCost = computed(() => {
     const cost = rocket.value?.launch_cost
@@ -84,8 +85,6 @@
   })
 
   onMounted(() => {
-    if (store.status === 'idle') {
-      store.fetchRockets()
-    }
+    store.fetchRocketDetail(rocketId)
   })
 </script>

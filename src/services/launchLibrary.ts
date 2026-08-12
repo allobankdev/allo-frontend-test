@@ -13,3 +13,14 @@ export async function fetchSpaceXRockets (): Promise<Rocket[]> {
   const data: LauncherListResponse = await response.json()
   return data.results
 }
+
+export async function fetchRocketById (id: number): Promise<Rocket> {
+  const url = `${BASE_URL}/config/launcher/${id}/`
+  const response = await fetch(url)
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch rocket ${id} (status ${response.status})`)
+  }
+
+  return response.json()
+}
