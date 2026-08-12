@@ -1,6 +1,11 @@
 <template>
   <div class="d-flex flex-column align-center justify-center py-16">
-    <v-progress-circular color="primary" indeterminate size="40" width="2" />
+    <v-progress-circular
+      color="primary"
+      indeterminate
+      size="40"
+      width="2"
+    />
     <p class="eyebrow mt-4">
       {{ message }}
     </p>

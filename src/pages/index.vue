@@ -1,5 +1,8 @@
 <template>
-  <v-container class="py-8 py-md-12" max-width="1200">
+  <v-container
+    class="py-8 py-md-12"
+    max-width="1200"
+  >
     <div class="d-flex flex-wrap align-end justify-space-between mb-8 ga-4">
       <h1 class="display-heading text-h3 font-weight-medium">
         Rocket Fleet
@@ -16,9 +19,17 @@
     />
 
     <template v-else>
-      <RocketFilter v-model="search" class="mb-8" style="max-width: 360px;" />
+      <RocketFilter
+        v-model="search"
+        class="mb-8"
+        style="max-width: 360px;"
+      />
 
-      <p v-if="filteredRockets.length === 0" class="text-body-2" style="color: var(--color-ink-soft);">
+      <p
+        v-if="filteredRockets.length === 0"
+        class="text-body-2"
+        style="color: var(--color-ink-soft);"
+      >
         No rockets match "{{ search }}".
       </p>
 

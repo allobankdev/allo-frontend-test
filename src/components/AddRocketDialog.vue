@@ -1,7 +1,16 @@
 <template>
-  <v-dialog v-model="open" max-width="520">
+  <v-dialog
+    v-model="open"
+    max-width="520"
+  >
     <template #activator="{ props: activatorProps }">
-      <v-btn color="primary" prepend-icon="mdi-plus" rounded="0" variant="flat" v-bind="activatorProps">
+      <v-btn
+        color="primary"
+        prepend-icon="mdi-plus"
+        rounded="0"
+        variant="flat"
+        v-bind="activatorProps"
+      >
         Add rocket
       </v-btn>
     </template>
@@ -11,7 +20,10 @@
         Add a rocket
       </v-card-title>
 
-      <v-form ref="formRef" @submit.prevent="submit">
+      <v-form
+        ref="formRef"
+        @submit.prevent="submit"
+      >
         <v-card-text class="px-6">
           <v-text-field
             v-model="form.full_name"
@@ -55,10 +67,18 @@
 
         <v-card-actions class="px-6 pb-6">
           <v-spacer />
-          <v-btn variant="text" @click="open = false">
+          <v-btn
+            variant="text"
+            @click="open = false"
+          >
             Cancel
           </v-btn>
-          <v-btn color="primary" rounded="0" type="submit" variant="flat">
+          <v-btn
+            color="primary"
+            rounded="0"
+            type="submit"
+            variant="flat"
+          >
             Add rocket
           </v-btn>
         </v-card-actions>

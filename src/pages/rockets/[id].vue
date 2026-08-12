@@ -1,5 +1,8 @@
 <template>
-  <v-container class="py-8 py-md-12" max-width="1200">
+  <v-container
+    class="py-8 py-md-12"
+    max-width="1200"
+  >
     <v-btn
       class="mb-6 pl-0"
       prepend-icon="mdi-arrow-left"
@@ -10,7 +13,10 @@
       Back to fleet
     </v-btn>
 
-    <LoadingState v-if="store.detailStatus === 'loading'" message="Loading rocket..." />
+    <LoadingState
+      v-if="store.detailStatus === 'loading'"
+      message="Loading rocket..."
+    />
 
     <ErrorState
       v-else-if="store.detailStatus === 'error'"
@@ -18,12 +24,19 @@
       @retry="store.fetchRocketDetail(rocketId)"
     />
 
-    <v-alert v-else-if="!rocket" type="warning" variant="tonal">
+    <v-alert
+      v-else-if="!rocket"
+      type="warning"
+      variant="tonal"
+    >
       Rocket not found.
     </v-alert>
 
     <v-row v-else>
-      <v-col cols="12" md="5">
+      <v-col
+        cols="12"
+        md="5"
+      >
         <v-img
           :src="rocket.image_url ?? undefined"
           height="360"
@@ -32,19 +45,32 @@
           cover
         >
           <template #placeholder>
-            <div class="d-flex align-center justify-center fill-height" style="background: #EFECE4;">
-              <v-icon icon="mdi-rocket-launch-outline" size="56" style="color: var(--color-ink-soft);" />
+            <div
+              class="d-flex align-center justify-center fill-height"
+              style="background: #EFECE4;"
+            >
+              <v-icon
+                icon="mdi-rocket-launch-outline"
+                size="56"
+                style="color: var(--color-ink-soft);"
+              />
             </div>
           </template>
         </v-img>
       </v-col>
 
-      <v-col cols="12" md="7">
+      <v-col
+        cols="12"
+        md="7"
+      >
         <h1 class="display-heading text-h4 font-weight-medium mb-4">
           {{ rocket.full_name }}
         </h1>
 
-        <p class="text-body-1 mb-8" style="color: var(--color-ink-soft);">
+        <p
+          class="text-body-1 mb-8"
+          style="color: var(--color-ink-soft);"
+        >
           {{ rocket.description ?? 'No description available.' }}
         </p>
 
