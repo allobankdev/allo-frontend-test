@@ -11,9 +11,24 @@ import 'vuetify/styles'
 // Composables
 import { createVuetify } from 'vuetify'
 
-// https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
   theme: {
     defaultTheme: 'dark',
+    themes: {
+      dark: {
+        dark: true,
+        colors: {
+          primary: '#FF6B35',
+          secondary: '#FFB800',
+          accent: '#FFB800',
+          surface: '#1E1E28',
+          background: '#0A0A0F',
+          error: '#FF5252',
+          info: '#2196F3',
+          success: '#4CAF50',
+          warning: '#FFB800',
+        },
+      },
+    },
   },
 })
