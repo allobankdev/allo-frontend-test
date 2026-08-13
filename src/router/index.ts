@@ -1,12 +1,27 @@
 /**
  * router/index.ts
  *
- * Automatic routes for `./src/pages/*.vue`
+ * Simple, explicit routes (2 screens):
+ * - /rockets
+ * - /rockets/:id
  */
 
-// Composables
-import { createRouter, createWebHistory } from 'vue-router/auto'
-import { routes } from 'vue-router/auto-routes'
+import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
+
+const routes: RouteRecordRaw[] = [
+  { path: '/', redirect: '/rockets' },
+  {
+    path: '/rockets',
+    name: 'rocket-list',
+    component: () => import('@/pages/rockets/index.vue'),
+  },
+  {
+    path: '/rockets/:id',
+    name: 'rocket-detail',
+    component: () => import('@/pages/rockets/[id].vue'),
+    props: true,
+  },
+]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,7 +29,7 @@ const router = createRouter({
 })
 
 // Workaround for https://github.com/vitejs/vite/issues/11804
-router.onError((err, to) => {
+router.onError((err: any, to: any) => {
   if (err?.message?.includes?.('Failed to fetch dynamically imported module')) {
     if (!localStorage.getItem('vuetify:dynamic-reload')) {
       console.log('Reloading page to fix dynamic import error')
