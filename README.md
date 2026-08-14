@@ -3,6 +3,7 @@
 In this assignment, you’re assigned to create a website that displays rockets. This website only has two screens: rocket list screen and rocket detail screen. Here are the requirements:
 
 ### Functional Requirements
+
 - As a user, I want to see a list of rockets in the rocket list screen (Show each rocket image, rocket name, and rocket description)
 - As a user, I want to be able to filter the rockets in the rocket list screen
 - As a user, I want to be able to add the new rocket in the rocket list screen (the API is read-only, so the new rocket only needs to appear in the running app)
@@ -63,6 +64,7 @@ and `image_url`.
 - Show result when get response from API
 
 ### Nice to have characteristics
+
 Responsive design
 You don’t need to worry about the detailed design, we’re not interested in your artistic prowess (for now), put your efforts on creating a readable/clean/maintainable source code.
 
@@ -73,7 +75,7 @@ You don’t need to worry about the detailed design, we’re not interested in y
 2.  Implement your solution on a dedicated feature branch (e.g., `feat/allo-spacex`).
 
 3.  When complete, submit your solution via a **Pull Request (PR)** back to the main repository.
-   
+
 4.  Please complete the form to submit your technical test: [Click Here](https://forms.gle/nZKQ2EjTCPfAKHog7)
 
 Good luck with your assignment! Don't hesitate to contact us if you have any questions about the assignment process.
