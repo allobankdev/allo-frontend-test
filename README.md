@@ -77,3 +77,10 @@ You don’t need to worry about the detailed design, we’re not interested in y
 4.  Please complete the form to submit your technical test: [Click Here](https://forms.gle/nZKQ2EjTCPfAKHog7)
 
 Good luck with your assignment! Don't hesitate to contact us if you have any questions about the assignment process.
+
+
+<!-- How to setup to local  -->
+
+copy ENV example to be .env 
+isi VITE_DEV_PUBLIC_API_URL dengan base  <link dev> dan  VITE_PROD_PUBLIC_API_URL=  <link prod>
+VITE_LEVEL= "dev" || "prod"
