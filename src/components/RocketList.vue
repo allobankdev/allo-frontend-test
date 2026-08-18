@@ -1,10 +1,12 @@
 <template>
     <v-container class="fill-height">
         <v-responsive class="align-centerfill-height mx-auto" max-width="900">
-            <div class="search-bar">
-                <input :disabled="rocketStore.loading" v-model="query" type="text" placeholder="Search..." />
+            <div class="container margin-general">
+                <div class="input-group">
+                    <input class="form-control" :disabled="rocketStore.loading" v-model="query" type="text" placeholder="Search..." />
+                </div>
             </div>
-            <div>
+            <div class="container margin-general">
                 <input-rocket-modal :is-loading="rocketStore.loading" @close="showModal = false" />
             </div>
 
@@ -17,7 +19,7 @@
 
             <div v-if="filterResults.length">
                 <div class="content-center" v-if="filterResults.length">
-                    <div class="container rounded-start cards-overflow">
+                    <div class="container rounded-start cards-overflow margin-general">
                         <div class="vstack gap-3">
                             <card v-for="(result, index) in filterResults" :key="result.id" :id="result.id" :image-url="result.image_url" :title="result.full_name" :description="result.description" />
                         </div>

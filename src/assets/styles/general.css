@@ -19,14 +19,17 @@
 }
 
 .cards-overflow {
-    margin-left: 2%;
-    margin-right: 2%;
-    margin-top: 6%;
-    margin-bottom: 6%;
     max-height: 500px;
     overflow-y: auto;
     overflow-x: auto;
     border: 1px solid;
+}
+
+.margin-general {
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-top: 1%;
+    margin-bottom: 1%;
 }
 
 .grid-main {
