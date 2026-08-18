@@ -1,11 +1,12 @@
 <template>
     <v-container class="fill-height">
         <v-responsive class="align-centerfill-height mx-auto" max-width="900">
-            <div class="grid-row">
-                <input v-model="query" type="text" placeholder="Search..." />
-                <input-rocket-modal :is-open="showModal" @close="showModal = false" />
+            <div class="search-bar">
+                <input :disabled="rocketStore.loading" v-model="query" type="text" placeholder="Search..." />
             </div>
-
+            <div>
+                <input-rocket-modal :is-loading="rocketStore.loading" @close="showModal = false" />
+            </div>
 
             <div class="content-center" v-if="rocketStore.loading">Loading...</div>
 
@@ -14,33 +15,13 @@
                 <button @click="rocketStore.getData">Reload</button>
             </div>
 
-            <div class="content-center" v-if="filterResults.length">
-                <div class="table-container">
-                    <table class="image-table">
-                        <thead>
-                            <tr>
-                                <th>No.</th>
-                                <th>Rocket</th>
-                                <th>Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(result, index) in filterResults" :key="result.id">
-                                <td>{{ index + 1 }}</td>
-                                <td>
-                                    <router-link :to="{ name: '/detail/', query: { id: result.id } }">
-                                        <div class="cell-content">
-                                            <fallback-image :src="result.image_url" :alt="result.full_name" />
-                                            <span class="table-text">
-                                                {{ result.full_name }}
-                                            </span>
-                                        </div>
-                                    </router-link>
-                                </td>
-                                <td>{{ result.description }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <div v-if="filterResults.length">
+                <div class="content-center" v-if="filterResults.length">
+                    <div class="container rounded-start cards-overflow">
+                        <div class="vstack gap-3">
+                            <card v-for="(result, index) in filterResults" :key="result.id" :id="result.id" :image-url="result.image_url" :title="result.full_name" :description="result.description" />
+                        </div>
+                    </div>
                 </div>
             </div>
         </v-responsive>
@@ -51,8 +32,8 @@
 import type { Result } from '@/types/types';
 import { ref, onMounted, computed } from 'vue'
 import { useRocketStore } from '@/stores/rocketStore';
-import FallbackImage from './FallbackImage.vue';
 import InputRocketModal from './InputRocketModal.vue';
+import Card from './Card.vue';
 
 const rocketStore = useRocketStore()
 const query = ref('')

@@ -1,6 +1,6 @@
 <template>
     <v-container class="fill-height">
-        <v-responsive class="align-centerfill-height mx-auto" max-width="900">
+        <v-responsive class="align-centerfill-height mx-auto flex-start" max-width="900">
             <div class="grid-main" v-if="rocketDetail">
                 <div class="grid-row">
                     <div class="grid-cell-left">

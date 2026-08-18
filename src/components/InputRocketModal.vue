@@ -1,5 +1,5 @@
 <template>
-    <b-button class="btn btn-primary" @click="modal = true">Add Rocket</b-button>
+    <b-button :disabled="isLoading" class="btn btn-primary" @click="modal = true">Add Rocket</b-button>
 
     <b-modal v-model="modal" title="Add New Rocket" ok-title="Save" @show="resetForm" @hidden="resetForm"
         @ok="handleSubmit">
@@ -46,6 +46,10 @@ import { computed, reactive, ref } from 'vue';
 import { useRocketStore } from '@/stores/rocketStore';
 import { BButton, BForm, BFormGroup, BModal, BFormInput, BvTriggerableEvent } from 'bootstrap-vue-next';
 
+defineProps<{
+    isLoading: boolean
+}>()
+
 const modal = ref(false)
 
 const nameState = ref<boolean | null>(null)
@@ -55,7 +59,6 @@ const costState = ref<boolean | null>(null)
 const countryState = ref<boolean | null>(null)
 const dateState = ref<boolean | null>(null)
 
-defineProps<{ isOpen: boolean }>()
 const emit = defineEmits(['close'])
 
 const rocketStore = useRocketStore()

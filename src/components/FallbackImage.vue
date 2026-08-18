@@ -1,5 +1,5 @@
 <template>
-    <img :src="src" @error="handleImageError" :alt="alt" class="table-img" />
+    <img :src="src" @error="handleImageError" :alt="alt" class="img-fluid rounded-start" />
 </template>
 
 <script setup lang="ts">
