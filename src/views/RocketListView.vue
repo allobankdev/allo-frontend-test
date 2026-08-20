@@ -44,7 +44,7 @@
       <EmptyState
         v-else-if="searchQuery"
         title="No rockets match your search"
-        :message="`No results for &quot;${searchQuery}&quot;. Try a different term.`"
+:message="`No results for “${searchQuery}”. Try a different term.`"
       />
 
       <EmptyState
