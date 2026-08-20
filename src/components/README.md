@@ -1,12 +1,8 @@
 # Components
 
-Vue template files in this folder are automatically imported.
+All components in this directory are imported explicitly in each SFC that uses them.
 
-## 🚀 Usage
-
-Importing is handled by [unplugin-vue-components](https://github.com/unplugin/unplugin-vue-components). This plugin automatically imports `.vue` files created in the `src/components` directory, and registers them as global components. This means that you can use any component in your application without having to manually import it.
-
-The following example assumes a component located at `src/components/MyComponent.vue`:
+## Usage
 
 ```vue
 <template>
@@ -16,20 +12,19 @@ The following example assumes a component located at `src/components/MyComponent
 </template>
 
 <script lang="ts" setup>
-  //
+import MyComponent from '@/components/MyComponent.vue'
 </script>
 ```
 
-When your template is rendered, the component's import will automatically be inlined, which renders to this:
+## Components
 
-```vue
-<template>
-  <div>
-    <MyComponent />
-  </div>
-</template>
-
-<script lang="ts" setup>
-  import MyComponent from '@/components/MyComponent.vue'
-</script>
-```
+| File                  | Description                                           |
+| --------------------- | ----------------------------------------------------- |
+| `AppHeader.vue`       | Sticky site header with navigation                    |
+| `BaseButton.vue`      | Reusable button with `primary` and `ghost` variants   |
+| `EmptyState.vue`      | No-results / no-data state with optional slot         |
+| `ErrorState.vue`      | Error message with a Retry button                     |
+| `LoadingSkeleton.vue` | Pulsing card skeleton grid                            |
+| `RocketCard.vue`      | Clickable rocket card (renders as `RouterLink`)       |
+| `RocketFilter.vue`    | Search input — emits query string, makes no API calls |
+| `RocketFormModal.vue` | Accessible modal for adding a locally-stored rocket   |
