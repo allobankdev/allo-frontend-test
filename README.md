@@ -1,79 +1,133 @@
-# Allo Bank Frontend Technical Assignment
+# Rocket Atlas
 
-In this assignment, you’re assigned to create a website that displays rockets. This website only has two screens: rocket list screen and rocket detail screen. Here are the requirements:
+Rocket Atlas is a responsive Vue application for browsing SpaceX launcher
+configurations from the Launch Library 2 API. It contains the two screens
+requested by the assignment: a filterable rocket catalog and a rocket detail
+screen. Rockets added through the UI are kept in application state for the
+current browser session because the provided API is read-only.
 
-### Functional Requirements
-- As a user, I want to see a list of rockets in the rocket list screen (Show each rocket image, rocket name, and rocket description)
-- As a user, I want to be able to filter the rockets in the rocket list screen
-- As a user, I want to be able to add the new rocket in the rocket list screen (the API is read-only, so the new rocket only needs to appear in the running app)
-- As a user, I want to be able to see the rocket detail by clicking a rocket in the rocket list screen (Show rocket image, rocket name, rocket description, cost per launch, country, first flight)
-- As a user, I want both screens to still display correctly when some rocket data is missing
+## Feature Coverage
 
-### API
+| Requirement | Implementation |
+| --- | --- |
+| Rocket list | Image, full name, description, country, and first flight |
+| Filtering | Text search plus Falcon, Starship, and Other family filters |
+| Add rocket | Validated dialog; the new rocket is inserted into Pinia state |
+| Rocket detail | Image, name, description, launch cost, country, and first flight |
+| Missing data | Stable text and image fallbacks on both screens |
+| Router | File-based routes for `/` and `/rockets/:id` |
+| State management | Pinia store for catalog, local entries, detail cache, and UI states |
+| Lifecycles | Fetch on mount/route change and abort requests on unmount |
+| UI states | Loading skeletons, error with Retry, success, and empty filter result |
+| Responsive design | Three/two/one-column catalog and a one-column mobile detail view |
 
-Use the Launch Library 2 API by The Space Devs for rocket data.
-Docs: https://thespacedevs.com/llapi
+## Tech Stack
 
-Rocket list (returns all 13 SpaceX rockets in a single request):
+- Vue 3 with the Composition API and TypeScript
+- Vuetify 3
+- Pinia
+- Vue Router with `unplugin-vue-router`
+- Vite
+- Vitest
 
-    GET https://lldev.thespacedevs.com/2.2.0/config/launcher/?manufacturer__name=SpaceX&mode=detailed&limit=20
+## Getting Started
 
-Single rocket:
+### Prerequisites
 
-    GET https://lldev.thespacedevs.com/2.2.0/config/launcher/:id/
+- Node.js `20.19+` or `22.12+`
+- npm
 
-`mode=detailed` is required — without it the response omits `description`
-and the other detail fields. `limit=20` is required too — the default page size
-is 10, so without it you get 10 rockets and a `next` page instead of all 13.
+### Install and run
 
-**API version:** use `2.2.0` as shown above. The docs site now showcases
-`2.3.0`, but `2.2.0` is still live with no announced end-of-life, and the field
-names in the table below are the `2.2.0` ones. Don't migrate: `2.3.0` renames
-the endpoint to `/2.3.0/launcher_configurations/` and moves several of these
-fields (`image_url` becomes `image.image_url`, `manufacturer.country_code`
-becomes a `manufacturer.country` array). Both versions return the same 13
-rockets.
+```bash
+npm ci
+npm run dev
+```
 
-| Requirement      | Field                              |
-| ---------------- | ---------------------------------- |
-| rocket image     | `image_url`                        |
-| rocket name      | `full_name`                        |
-| description      | `description`                      |
-| cost per launch  | `launch_cost`                      |
-| country          | `manufacturer.country_code`        |
-| first flight     | `maiden_flight`                    |
+Open `http://localhost:3000`.
 
-**Rate limit:** the API allows 15 requests/hour for anonymous users. Use the
-`lldev.thespacedevs.com` host shown above during development — it serves the
-same data with a far more generous limit. The production host,
-`ll.thespacedevs.com`, will throttle you quickly.
+### Production build
 
-Note that some rockets have missing values for `launch_cost`, `maiden_flight`,
-and `image_url`.
+```bash
+npm run build
+npm run preview
+```
 
-### Non-Functional Requirements
-- Use the Launch Library 2 API (see the API section above) for getting the rocket data
-- Implement routers
-- Implement state management
-- Implement lifecycles
-- Create components based will be + points
-- UI states (Loading, Fail/Retry, and Success)
-- Show loading when waiting response from API
-- If an error occurred, user can retry by pressing retry button
-- Show result when get response from API
+### Quality checks
 
-### Nice to have characteristics
-Responsive design
-You don’t need to worry about the detailed design, we’re not interested in your artistic prowess (for now), put your efforts on creating a readable/clean/maintainable source code.
+```bash
+npm run lint
+npm run type-check
+npm test
+```
 
-### Submission
+## API
 
-1.  **Fork** this repository.
+The application uses the development host requested by the assignment to
+avoid the low anonymous rate limit on the production host.
 
-2.  Implement your solution on a dedicated feature branch (e.g., `feat/allo-spacex`).
+Catalog request:
 
-3.  When complete, submit your solution via a **Pull Request (PR)** back to the main repository.
-   
-4.  Please complete the form to submit your technical test: [Click Here](https://forms.gle/nZKQ2EjTCPfAKHog7)
+```text
+GET https://lldev.thespacedevs.com/2.2.0/config/launcher/?manufacturer__name=SpaceX&mode=detailed&limit=20
+```
 
-Good luck with your assignment! Don't hesitate to contact us if you have any questions about the assignment process.
+Detail request:
+
+```text
+GET https://lldev.thespacedevs.com/2.2.0/config/launcher/:id/
+```
+
+The API version, `mode=detailed`, and `limit=20` are intentionally kept as
+specified. API access is isolated in `src/services/rocketApi.ts`.
+
+## Project Structure
+
+```text
+src/
+|-- components/       Reusable header, cards, images, dialogs, and UI states
+|-- composables/       Screen lifecycle and request cancellation
+|-- pages/             Catalog and detail route components
+|-- plugins/           Pinia, router, and Vuetify registration
+|-- services/          Launch Library 2 HTTP client
+|-- stores/            Pinia catalog and detail state
+|-- styles/            Global responsive styles
+|-- types/             API and form contracts
+`-- utils/             Filtering, formatting, and fallback helpers
+```
+
+## State and Data Flow
+
+The list and detail screens do not call `fetch` directly. Pages trigger their
+composables, composables own the request lifecycle, and the Pinia store owns
+data plus `idle`, `loading`, `success`, and `error` states. The store caches
+successful remote details by ID and keeps locally added rockets separate from
+the API results so a refresh request cannot overwrite them.
+
+Each composable uses an `AbortController` to cancel work when its route is
+left. Failed requests preserve a clear error state and can be repeated with
+the Retry action. Local rocket IDs use a `local-` prefix, allowing the same
+detail route to render them without calling the read-only API.
+
+## Testing
+
+The Vitest suite covers:
+
+- text and family filtering
+- formatting and missing-value fallbacks
+- browser network error messaging
+- list loading success
+- failure followed by a successful retry
+- local rocket insertion and detail access
+- remote detail fetching through the single-rocket service
+
+Run the suite with `npm test`.
+
+## Design Decisions
+
+Local entries intentionally live only in Pinia instead of local storage. This
+matches the assignment's running-app requirement and avoids inventing a
+persistence contract that the API cannot support. Remote detail data is fetched
+from the dedicated endpoint even though the detailed list has overlapping
+fields; the extra request demonstrates the required detail lifecycle and keeps
+that screen independent of list navigation.
