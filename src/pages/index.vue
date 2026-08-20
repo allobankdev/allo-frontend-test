@@ -1,7 +1,7 @@
-<template>
-  <HelloWorld />
-</template>
-
-<script lang="ts" setup>
-  //
+<script setup lang="ts">
+import RocketView from '@/views/RocketView.vue'
 </script>
+
+<template>
+  <RocketView />
+</template>
