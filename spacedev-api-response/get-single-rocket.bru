@@ -1,0 +1,124 @@
+meta {
+  name: get-single-rocket
+  type: http
+  seq: 2
+}
+
+get {
+  url: https://lldev.thespacedevs.com/2.2.0/config/launcher/133/
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+example {
+  name: example-success
+  
+  request: {
+    url: https://lldev.thespacedevs.com/2.2.0/config/launcher/133/
+    method: GET
+    mode: none
+  }
+  
+  response: {
+    headers: {
+      date: Sat, 22 Aug 2026 13:57:01 GMT
+      content-type: application/json
+      content-length: 1255
+      connection: keep-alive
+      server: cloudflare
+      vary: Accept, Cookie, Accept-Encoding, origin
+      allow: GET
+      x-frame-options: SAMEORIGIN
+      x-content-type-options: nosniff
+      referrer-policy: same-origin
+      cross-origin-opener-policy: same-origin
+      alt-svc: h3=":443"; ma=86400
+      cf-cache-status: DYNAMIC
+      nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+      report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=%2FqWsz1FDockuFtjmi9FpXcgOlEi%2BqbuvMghDsvqIbycZXRmXFOC9QLSu1azCcTp1e49WRmuxQz6gULYP6fpCYc038H8ZWcFgKYrI3sPRJ5YyfWIm54sxuk2QvCba2xbx7fwdcSGVWB49z95YLucdxxmr7eEP"}]}
+      cf-ray: a2f262590f77fe21-SIN
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "id": 133,
+          "url": "https://lldev.thespacedevs.com/2.2.0/config/launcher/133/",
+          "name": "Falcon 1",
+          "active": false,
+          "reusable": false,
+          "description": "The Falcon 1 was the first launch vehicle developed and manufactured by SpaceX in 2006. It is an expendable, two stage rocket where each stage is powered by a single LOX/RP1 engine.",
+          "family": "Falcon",
+          "full_name": "Falcon 1",
+          "manufacturer": {
+            "id": 121,
+            "url": "https://lldev.thespacedevs.com/2.2.0/agencies/121/",
+            "name": "SpaceX",
+            "featured": true,
+            "type": "Commercial",
+            "country_code": "USA",
+            "abbrev": "SpX",
+            "description": "Space Exploration Technologies Corp., known as SpaceX, is an American aerospace manufacturer and space transport services company headquartered in Hawthorne, California. It was founded in 2002 by entrepreneur Elon Musk with the goal of reducing space transportation costs and enabling the colonization of Mars. SpaceX operates from many pads, on the East Coast of the US they operate from SLC-40 at Cape Canaveral Space Force Station and historic LC-39A at Kennedy Space Center. They also operate from SLC-4E at Vandenberg Space Force Base, California, usually for polar launches. Another launch site is being developed at Boca Chica, Texas.",
+            "administrator": "CEO: Elon Musk",
+            "founding_year": "2002",
+            "launchers": "Falcon | Starship",
+            "spacecraft": "Dragon",
+            "launch_library_url": null,
+            "total_launch_count": 718,
+            "consecutive_successful_launches": 203,
+            "successful_launches": 703,
+            "failed_launches": 15,
+            "pending_launches": 127,
+            "consecutive_successful_landings": 10,
+            "successful_landings": 661,
+            "failed_landings": 29,
+            "attempted_landings": 689,
+            "info_url": "https://www.spacex.com/",
+            "wiki_url": "https://en.wikipedia.org/wiki/SpaceX",
+            "logo_url": "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/spacex_logo_20220826094919.png",
+            "image_url": "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/falcon_9_image_20230807133459.jpeg",
+            "nation_url": "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/spacex_social_l_image_20260407054626.jpg"
+          },
+          "program": [],
+          "variant": "1",
+          "alias": "",
+          "min_stage": 2,
+          "max_stage": 2,
+          "length": 22.25,
+          "diameter": 1.7,
+          "maiden_flight": "2006-03-24",
+          "launch_cost": "7000000",
+          "launch_mass": 33,
+          "leo_capacity": 470,
+          "gto_capacity": null,
+          "to_thrust": 454,
+          "apogee": null,
+          "vehicle_range": null,
+          "image_url": "https://thespacedevs-dev.nyc3.digitaloceanspaces.com/media/images/falcon_image_20190222030438.jpeg",
+          "info_url": null,
+          "wiki_url": "https://en.wikipedia.org/wiki/Falcon_1",
+          "total_launch_count": 5,
+          "consecutive_successful_launches": 2,
+          "successful_launches": 2,
+          "failed_launches": 3,
+          "pending_launches": 0,
+          "attempted_landings": 2,
+          "successful_landings": 0,
+          "failed_landings": 2,
+          "consecutive_successful_landings": 0
+        }
+      '''
+    }
+  }
+}
