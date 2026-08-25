@@ -61,13 +61,7 @@ export const useRocketStore = defineStore('rockets', () => {
       return existingRocket
     }
 
-    try {
-      return await fetchRocketById(id)
-    } catch (err) {
-      console.error(err)
-
-      return null
-    }
+    return await fetchRocketById(id)
   }
 
   function addRocket(rocket: Rocket) {
