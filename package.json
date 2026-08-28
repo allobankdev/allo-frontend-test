@@ -13,13 +13,17 @@
   },
   "dependencies": {
     "@mdi/font": "7.4.47",
+    "autoprefixer": "^10.4.22",
     "core-js": "^3.37.1",
+    "pinia": "^3.0.4",
     "roboto-fontface": "*",
     "vue": "^3.4.31",
     "vuetify": "^3.6.14"
   },
   "devDependencies": {
     "@eslint/js": "^9.14.0",
+    "@tailwindcss/postcss": "^4.1.17",
+    "@tailwindcss/vite": "^4.1.17",
     "@tsconfig/node22": "^22.0.0",
     "@types/node": "^22.9.0",
     "@vitejs/plugin-vue": "^5.1.4",
@@ -30,6 +34,7 @@
     "npm-run-all2": "^7.0.1",
     "sass": "1.77.8",
     "sass-embedded": "^1.77.8",
+    "tailwindcss": "^4.1.17",
     "typescript": "~5.6.3",
     "unplugin-fonts": "^1.1.1",
     "unplugin-vue-components": "^0.27.2",
