@@ -29,7 +29,7 @@
             variant="outlined"
           >
             <template #image>
-              <v-img position="top right" />
+            <v-img position="top right" />
             </template>
 
             <template #title>
