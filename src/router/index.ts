@@ -6,8 +6,24 @@
 
 // Composables
 import { createRouter, createWebHistory } from 'vue-router/auto'
-import { routes } from 'vue-router/auto-routes'
+// import { routes } from 'vue-router/auto-routes'
 
+import RocketListPage from '@/pages/Rocket/List.vue';
+import RocketDetailPage from '@/pages/Rocket/Detail.vue';
+
+const routes = [
+  {
+    path: '/',
+    name: 'RocketList',
+    component: RocketListPage,
+  },
+  {
+    path: '/rocket/:id',
+    name: 'RocketDetail',
+    component: RocketDetailPage,
+    props: true,
+  },
+];
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
