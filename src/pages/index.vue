@@ -1,7 +1,7 @@
-<template>
-  <HelloWorld />
-</template>
+  <script setup lang="ts">
+    import { useRouter } from "vue-router";
+    
+    const router = useRouter();
+    router.replace("/rockets");
+  </script>
 
-<script lang="ts" setup>
-  //
-</script>
