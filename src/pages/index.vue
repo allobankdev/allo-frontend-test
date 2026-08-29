@@ -1,7 +1,9 @@
 <template>
-  <HelloWorld />
+  <div>
+    <h1>Home Page</h1>
+  </div>
 </template>
 
-<script lang="ts" setup>
-  //
+<script setup lang="ts">
+// Konten home page
 </script>
