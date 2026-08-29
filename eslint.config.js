@@ -4,8 +4,10 @@
  * ESLint configuration file.
  */
 
-import pluginVue from 'eslint-plugin-vue'
-import vueTsEslintConfig from '@vue/eslint-config-typescript'
+import pluginVue from 'eslint-plugin-vue';
+import pluginPrettier from 'eslint-plugin-prettier';
+import eslintConfigPrettier from 'eslint-config-prettier/flat';
+import vueTsEslintConfig from '@vue/eslint-config-typescript';
 
 export default [
   {
@@ -20,7 +22,12 @@ export default [
 
   ...pluginVue.configs['flat/recommended'],
   ...vueTsEslintConfig(),
-
+  eslintConfigPrettier,
+  {
+    plugins: {
+      prettier: pluginPrettier,
+    },
+  },
   {
     rules: {
       '@typescript-eslint/no-unused-expressions': [
@@ -31,6 +38,6 @@ export default [
         },
       ],
       'vue/multi-word-component-names': 'off',
-    }
-  }
-]
+    },
+  },
+];
