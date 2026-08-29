@@ -8,3 +8,16 @@
 // @use 'vuetify/settings' with (
 //   $color-pack: false
 // );
+
+.app-background {
+    background: radial-gradient(circle at 20% 20%,
+            rgba(80, 110, 255, 0.25),
+            rgba(10, 10, 30, 0.9) 40%,
+            #05060a 100%),
+        radial-gradient(circle at 85% 40%,
+            rgba(100, 160, 255, 0.15),
+            transparent 60%),
+        linear-gradient(180deg, #0a0d14, #05060a);
+    background-blend-mode: screen, overlay, normal;
+    backdrop-filter: blur(32px);
+}
