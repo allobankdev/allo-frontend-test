@@ -1,6 +1,9 @@
 <template>
   <v-app>
     <v-main>
+      <v-app-bar>
+        <v-app-bar-title>SpaceX Rockets</v-app-bar-title>
+      </v-app-bar>
       <router-view />
     </v-main>
   </v-app>
