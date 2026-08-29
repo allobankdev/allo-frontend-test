@@ -8,3 +8,10 @@
 // @use 'vuetify/settings' with (
 //   $color-pack: false
 // );
+
+.hover-scale {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.hover-scale:hover {
+  transform: scale(1.02);
+}
