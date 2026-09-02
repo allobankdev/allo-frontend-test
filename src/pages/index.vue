@@ -1,8 +1,15 @@
 <template>
   <v-container>
-    <h1 class="mb-4">SpaceX Rockets</h1>
+    <div class="d-flex align-center justify-space-between mb-4 flex-wrap ga-2">
+      <h1>SpaceX Rockets</h1>
+      <v-btn color="primary" prepend-icon="mdi-plus" @click="isDialogOpen = true">
+        Add rocket
+      </v-btn>
+    </div>
 
     <RocketFilter v-model="filterText" />
+
+    <AddRocketDialog v-model="isDialogOpen" @submit="handleAdd" />
 
     <StateLoading v-if="store.status === 'loading'" />
 
@@ -35,9 +42,11 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useRocketStore } from '@/stores/rockets'
+import type { Rocket } from '@/types/rocket'
 
 const store = useRocketStore()
 const filterText = ref('')
+const isDialogOpen = ref(false)
 
 onMounted(() => {
   store.fetchRockets()
@@ -48,4 +57,9 @@ const filteredRockets = computed(() => {
   if (!query) return store.rockets
   return store.rockets.filter((rocket) => rocket.fullName.toLowerCase().includes(query))
 })
+
+function handleAdd(rocket: Omit<Rocket, 'id' | 'isLocal'>) {
+  store.addLocalRocket(rocket)
+  isDialogOpen.value = false
+}
 </script>
