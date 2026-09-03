@@ -1,5 +1,10 @@
 <template>
-  <v-dialog :model-value="modelValue" max-width="480" @update:model-value="emit('update:modelValue', $event)">
+  <v-dialog
+    :model-value="modelValue"
+    :fullscreen="mobile"
+    max-width="480"
+    @update:model-value="emit('update:modelValue', $event)"
+  >
     <v-card>
       <v-card-title>Add a rocket</v-card-title>
 
@@ -27,6 +32,7 @@
 
 <script setup lang="ts">
 import { reactive } from 'vue'
+import { useDisplay } from 'vuetify'
 import type { Rocket } from '@/types/rocket'
 
 defineProps<{ modelValue: boolean }>()
@@ -34,6 +40,8 @@ const emit = defineEmits<{
   'update:modelValue': [value: boolean]
   submit: [rocket: Omit<Rocket, 'id' | 'isLocal'>]
 }>()
+
+const { mobile } = useDisplay()
 
 const form = reactive({
   fullName: '',
