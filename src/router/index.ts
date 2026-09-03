@@ -1,12 +1,23 @@
-/**
- * router/index.ts
- *
- * Automatic routes for `./src/pages/*.vue`
- */
+import { createRouter, createWebHistory } from 'vue-router'
 
-// Composables
-import { createRouter, createWebHistory } from 'vue-router/auto'
-import { routes } from 'vue-router/auto-routes'
+const routes = [
+  {
+    path: '/',
+    name: 'rocket-list',
+    component: import('@/views/RocketListView.vue'),
+  },
+  {
+    path: '/rockets/:id',
+    name: 'rocket-detail',
+    component: import('@/views/RocketDetailView.vue'),
+    props: true,
+  },
+  {
+    // Fallback for unknown paths
+    path: '/:pathMatch(.*)*',
+    redirect: { name: 'rocket-list' },
+  },
+]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
