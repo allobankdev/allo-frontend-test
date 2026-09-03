@@ -3,9 +3,10 @@
     <v-progress-circular
       indeterminate
       color="primary"
-      size="48"
+      size="40"
+      width="2"
     />
-    <p class="mt-4">
+    <p class="text-body-2 text-on-surface-variant mt-4">
       Loading rockets…
     </p>
   </v-container>

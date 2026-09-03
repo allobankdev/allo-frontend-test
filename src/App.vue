@@ -1,14 +1,23 @@
 <template>
   <v-app>
-    <v-app-bar>
-      <v-app-bar-title>
+    <v-app-bar
+      class="u-divider"
+      color="surface"
+      height="72"
+    >
+      <v-container class="d-flex align-center">
         <router-link
           to="/"
-          class="text-decoration-none text-white"
+          class="d-flex align-center text-decoration-none text-high-emphasis"
         >
-          SpaceX Rockets
+          <v-icon
+            icon="mdi-rocket-launch-outline"
+            size="22"
+            class="mr-2"
+          />
+          <span class="text-subtitle-1 font-weight-bold">SpaceX Rockets</span>
         </router-link>
-      </v-app-bar-title>
+      </v-container>
     </v-app-bar>
 
     <v-main>

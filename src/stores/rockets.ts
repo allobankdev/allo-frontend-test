@@ -17,6 +17,14 @@ export const useRocketStore = defineStore('rockets', {
       return (id: string | number): Rocket | undefined =>
         state.rockets.find((rocket) => String(rocket.id) === String(id))
     },
+
+    families: (state) => {
+      const set = new Set<string>()
+      for (const rocket of state.rockets) {
+        if (rocket.family) set.add(rocket.family)
+      }
+      return Array.from(set).sort()
+    },
   },
 
   actions: {

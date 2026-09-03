@@ -1,14 +1,11 @@
 <template>
   <v-container class="text-center py-16">
-    <v-alert
-      type="error"
-      variant="tonal"
-      class="mb-4"
-    >
+    <p class="text-body-2 text-on-surface-variant mb-5">
       {{ message }}
-    </v-alert>
+    </p>
     <v-btn
       color="primary"
+      variant="flat"
       @click="emit('retry')"
     >
       Retry

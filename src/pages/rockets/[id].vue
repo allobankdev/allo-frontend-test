@@ -4,7 +4,7 @@
       to="/"
       variant="text"
       prepend-icon="mdi-arrow-left"
-      class="mb-4"
+      class="mb-6"
     >
       Back to list
     </v-btn>
@@ -20,7 +20,7 @@
     <template v-else-if="store.status === 'success'">
       <p
         v-if="!rocket"
-        class="text-medium-emphasis"
+        class="text-body-2 text-on-surface-variant"
       >
         We couldn't find this rocket.
       </p>
@@ -32,15 +32,21 @@
         >
           <v-img
             :src="rocket.imageUrl ?? undefined"
-            height="280"
+            :alt="rocket.fullName"
+            :aspect-ratio="4 / 3"
             cover
-            class="rounded"
+            rounded="lg"
           >
             <template
               v-if="!rocket.imageUrl"
               #placeholder
             >
-              <div class="d-flex align-center justify-center fill-height text-medium-emphasis">
+              <div class="d-flex align-center justify-center fill-height text-caption text-on-surface-variant bg-surface-variant">
+                No image
+              </div>
+            </template>
+            <template #error>
+              <div class="d-flex align-center justify-center fill-height text-caption text-on-surface-variant bg-surface-variant">
                 No image
               </div>
             </template>
@@ -51,25 +57,59 @@
           cols="12"
           md="6"
         >
-          <h1>{{ rocket.fullName }}</h1>
-          <p class="mb-4">
+          <div class="d-flex align-center ga-2 mb-3">
+            <h1 class="text-h5 font-weight-bold">
+              {{ rocket.fullName }}
+            </h1>
+            <span
+              v-if="rocket.reusable"
+              class="u-badge text-caption font-weight-medium text-primary"
+            >
+              Reusable
+            </span>
+          </div>
+
+          <p class="text-body-2 text-on-surface-variant mb-6">
             {{ rocket.description ?? 'No description available.' }}
           </p>
 
-          <v-list density="compact">
-            <v-list-item
-              title="Cost per launch"
-              :subtitle="formatCost(rocket.launchCost)"
-            />
-            <v-list-item
-              title="Country"
-              :subtitle="rocket.countryCode ?? 'Not available'"
-            />
-            <v-list-item
-              title="First flight"
-              :subtitle="rocket.maidenFlight ?? 'Not available'"
-            />
-          </v-list>
+          <dl>
+            <div class="d-flex align-baseline justify-space-between ga-4 py-3 u-divider">
+              <dt class="text-caption text-on-surface-variant ma-0">
+                Cost per launch
+              </dt>
+              <dd class="text-body-2 font-weight-medium text-right ma-0">
+                {{ formatCurrency(rocket.launchCost) }}
+              </dd>
+            </div>
+            <div class="d-flex align-baseline justify-space-between ga-4 py-3 u-divider">
+              <dt class="text-caption text-on-surface-variant ma-0">
+                Country
+              </dt>
+              <dd class="text-body-2 font-weight-medium text-right ma-0">
+                {{ formatCountry(rocket.countryCode) }}
+              </dd>
+            </div>
+            <div class="d-flex align-baseline justify-space-between ga-4 py-3 u-divider">
+              <dt class="text-caption text-on-surface-variant ma-0">
+                First flight
+              </dt>
+              <dd class="text-body-2 font-weight-medium text-right ma-0">
+                {{ formatDate(rocket.maidenFlight) }}
+              </dd>
+            </div>
+            <div
+              v-if="rocket.family"
+              class="d-flex align-baseline justify-space-between ga-4 py-3 u-divider"
+            >
+              <dt class="text-caption text-on-surface-variant ma-0">
+                Family
+              </dt>
+              <dd class="text-body-2 font-weight-medium text-right ma-0">
+                {{ rocket.family }}
+              </dd>
+            </div>
+          </dl>
         </v-col>
       </v-row>
     </template>
@@ -80,6 +120,8 @@
 import { computed, onMounted } from 'vue'
 import { useRocketStore } from '@/stores/rockets'
 import { useRoute } from 'vue-router'
+import { formatCountry } from '@/utils/countries'
+import { formatCurrency, formatDate } from '@/utils/format'
 
 const route = useRoute()
 const store = useRocketStore()
@@ -91,9 +133,4 @@ onMounted(() => {
 })
 
 const rocket = computed(() => store.findById(route.params.id as string))
-
-function formatCost(cost: number | null): string {
-  if (cost === null) return 'Not available'
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(cost)
-}
 </script>
