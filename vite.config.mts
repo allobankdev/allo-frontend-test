@@ -27,8 +27,8 @@ export default defineConfig({
     ViteFonts({
       google: {
         families: [ {
-          name: 'Roboto',
-          styles: 'wght@100;300;400;500;700;900',
+          name: 'Space Grotesk',
+          styles: 'wght@300;400;500;700',
         }],
       },
     }),
