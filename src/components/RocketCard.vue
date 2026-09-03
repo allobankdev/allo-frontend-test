@@ -5,7 +5,10 @@
       height="160"
       cover
     >
-      <template v-if="!rocket.imageUrl" #placeholder>
+      <template
+        v-if="!rocket.imageUrl"
+        #placeholder
+      >
         <div class="d-flex align-center justify-center fill-height text-medium-emphasis">
           No image
         </div>
@@ -14,7 +17,12 @@
 
     <v-card-title>
       {{ rocket.fullName }}
-      <v-chip v-if="rocket.isLocal" size="x-small" color="primary" class="ml-2">
+      <v-chip
+        v-if="rocket.isLocal"
+        size="x-small"
+        color="primary"
+        class="ml-2"
+      >
         added by you
       </v-chip>
     </v-card-title>

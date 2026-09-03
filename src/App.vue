@@ -2,7 +2,10 @@
   <v-app>
     <v-app-bar>
       <v-app-bar-title>
-        <router-link to="/" class="text-decoration-none text-white">
+        <router-link
+          to="/"
+          class="text-decoration-none text-white"
+        >
           SpaceX Rockets
         </router-link>
       </v-app-bar-title>

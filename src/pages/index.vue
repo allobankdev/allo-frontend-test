@@ -2,14 +2,21 @@
   <v-container>
     <div class="d-flex align-center justify-space-between mb-4 flex-wrap ga-2">
       <h1>SpaceX Rockets</h1>
-      <v-btn color="primary" prepend-icon="mdi-plus" @click="isDialogOpen = true">
+      <v-btn
+        color="primary"
+        prepend-icon="mdi-plus"
+        @click="isDialogOpen = true"
+      >
         Add rocket
       </v-btn>
     </div>
 
     <RocketFilter v-model="filterText" />
 
-    <AddRocketDialog v-model="isDialogOpen" @submit="handleAdd" />
+    <AddRocketDialog
+      v-model="isDialogOpen"
+      @submit="handleAdd"
+    />
 
     <StateLoading v-if="store.status === 'loading'" />
 
@@ -20,7 +27,10 @@
     />
 
     <template v-else-if="store.status === 'success'">
-      <p v-if="filteredRockets.length === 0" class="text-medium-emphasis">
+      <p
+        v-if="filteredRockets.length === 0"
+        class="text-medium-emphasis"
+      >
         No rockets match "{{ filterText }}".
       </p>
 
