@@ -3,6 +3,13 @@ import { fetchLaunchers, fetchLauncherById } from '@/api/ll2'
 import type { Launcher } from '@/types/ll2'
 
 export type FetchState = 'idle' | 'loading' | 'success' | 'error'
+export type SortDirection = 'none' | 'asc' | 'desc'
+
+export interface VisibleOptions {
+  query: string
+  country?: string | null
+  sort?: SortDirection
+}
 
 /**
  * Owns the rocket list and the per-id detail cache. UI components ask the
@@ -29,14 +36,41 @@ export const useLaunchersStore = defineStore('launchers', {
       return (id: string): Launcher | undefined =>
         state.detailById[id] ?? state.items.find(r => String(r.id) === id)
     },
+    /**
+     * Country codes derived from the loaded list, so the filter only ever
+     * offers values that actually exist in the data.
+     */
+    countries(state): string[] {
+      return [...new Set(
+        state.items
+          .map(r => r.manufacturer?.country_code?.trim())
+          .filter((c): c is string => !!c),
+      )].sort()
+    },
     filtered(state) {
-      return (query: string): Launcher[] => {
-        const q = query.trim().toLowerCase()
-        if (!q) return state.items
-        return state.items.filter(r =>
-          r.full_name.toLowerCase().includes(q) ||
-          (r.description ?? '').toLowerCase().includes(q),
-        )
+      return (options: VisibleOptions): Launcher[] => {
+        const q = options.query.trim().toLowerCase()
+        const country = options.country?.trim().toUpperCase() || null
+
+        let result = state.items
+        if (q) {
+          result = result.filter(r =>
+            r.full_name.toLowerCase().includes(q) ||
+            (r.description ?? '').toLowerCase().includes(q),
+          )
+        }
+        if (country) {
+          result = result.filter(r =>
+            r.manufacturer?.country_code?.trim().toUpperCase() === country,
+          )
+        }
+        if (options.sort === 'asc' || options.sort === 'desc') {
+          result = [...result].sort((a, b) =>
+            a.full_name.localeCompare(b.full_name),
+          )
+          if (options.sort === 'desc') result.reverse()
+        }
+        return result
       }
     },
   },
