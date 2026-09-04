@@ -54,49 +54,17 @@
         sm="6"
         md="4"
       >
-        <RocketCard :rocket="rocket" @detail="showDetail(rocket)" />
+        <RocketCard :rocket="rocket" />
       </v-col>
     </v-row>
 
-    <v-dialog v-model="detailRocket" max-width="700">
-      <v-card v-if="selectedRocket">
-        <v-img :src="selectedRocket?.image || undefined" height="300" cover>
-          <template #placeholder>
-            <div class="d-flex align-center justify-center fill-height">
-              No Image
-            </div>
-          </template>
-        </v-img>
+    <v-snackbar v-model="apiSuccess" :timeout="3000">
+      Successfully loaded rocket data.
 
-        <v-card-title class="ml-2">{{ selectedRocket?.name }}</v-card-title>
-
-        <v-card-text>
-          <p class="mb-4">
-            {{ selectedRocket.description || "No description available" }}
-          </p>
-
-          <div class="mb-2">
-            <strong>Cost per Launch:</strong>
-            {{ selectedRocket.cost_perlaunch || " " }}
-          </div>
-
-          <div class="mb-2">
-            <strong>Country:</strong> {{ selectedRocket.country || " " }}
-          </div>
-
-          <div>
-            <strong>First Flight:</strong>
-            {{ selectedRocket.first_flight || " " }}
-          </div>
-        </v-card-text>
-
-        <v-card-actions>
-          <v-spacer />
-          <v-btn color="red" @click="detailRocket = false"> Close </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
+      <template #actions>
+        <v-btn variant="text" @click="apiSuccess = false"> Close </v-btn>
+      </template>
+    </v-snackbar>
     <v-snackbar v-model="successSnackbar" :timeout="3000">
       {{ successMessage }}
 
@@ -108,7 +76,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useRocketStore } from "@/stores/rocket_store";
 import RocketCard from "@/components/RocketCard.vue";
@@ -116,10 +84,16 @@ import type { Rocket } from "@/types/rocket";
 
 const rocket_store = useRocketStore();
 
-const { filteredRockets, loading, error, filter } = storeToRefs(rocket_store);
+const { filteredRockets, loading, error, success, filter } =
+  storeToRefs(rocket_store);
 
-const selectedRocket = ref<Rocket | null>(null);
-const detailRocket = ref(false);
+const apiSuccess = ref(false);
+
+watch(success, (value) => {
+  if (value) {
+    apiSuccess.value = true;
+  }
+});
 
 const successMessage = ref("");
 const successSnackbar = ref(false);
@@ -145,15 +119,6 @@ const addRocket = () => {
   successMessage.value = `${newRocket.name} added successfully`;
   successSnackbar.value = true;
 };
-
-const showDetail = (rocket: Rocket) => {
-  selectedRocket.value = rocket;
-  detailRocket.value = true;
-};
-
-// const updateSearch = (value: string) => {
-//   rocket_store.setFilter(value)
-// }
 
 onMounted(() => {
   rocket_store.fetchRockets();

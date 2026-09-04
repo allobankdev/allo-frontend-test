@@ -11,7 +11,12 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <v-card class="rocket-card" elevation="2" @click="emit('detail')">
+  <v-card
+    class="rocket-card"
+    elevation="2"
+    variant="text"
+    :to="`/rockets/${rocket.id}`"
+  >
     <v-img :src="rocket.image || undefined" height="220" cover>
       <template #error>
         <div class="image-placeholder">No Image</div>
@@ -28,6 +33,10 @@ const emit = defineEmits<{
         {{ rocket.description || " " }}
       </div>
     </v-card-text>
+
+    <!-- <v-card-actions>
+      <v-btn variant="text" :to="`/rockets/${rocket.id}`"></v-btn>
+    </v-card-actions> -->
   </v-card>
 </template>
 
@@ -36,11 +45,10 @@ const emit = defineEmits<{
   height: 100%;
 }
 
-.imagae-placeholder {
+.image-placeholder {
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #eeee;
 }
 </style>

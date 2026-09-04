@@ -8,6 +8,7 @@ export const useRocketStore = defineStore("rocket", () => {
   const loading = ref(false);
   const error = ref<string | null>(null);
   const filter = ref("");
+  const success = ref(false);
 
   const filteredRockets = computed(() => {
     const keyword = filter.value.trim().toLowerCase();
@@ -24,10 +25,14 @@ export const useRocketStore = defineStore("rocket", () => {
   async function fetchRockets() {
     loading.value = true;
     error.value = null;
+    success.value = false;
 
     try {
       rockets.value = await getSpaceXRockets();
+      success.value = true;
     } catch (err) {
+      success.value = false;
+
       error.value =
         err instanceof Error ? err.message : "Failed to fetch rockets";
     } finally {
@@ -47,6 +52,7 @@ export const useRocketStore = defineStore("rocket", () => {
     rockets,
     loading,
     error,
+    success,
     filter,
     filteredRockets,
     fetchRockets,
