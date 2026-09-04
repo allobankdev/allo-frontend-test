@@ -1,7 +1,68 @@
-<template>
-  <HelloWorld />
-</template>
+<script setup lang="ts">
+import { computed, ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useLaunchersStore } from '@/stores/launchers'
+import RocketCard from '@/components/RocketCard.vue'
+import RocketFilter from '@/components/RocketFilter.vue'
+import RocketAddDialog from '@/components/RocketAddDialog.vue'
+import StateBlock from '@/components/StateBlock.vue'
 
-<script lang="ts" setup>
-  //
+const store = useLaunchersStore()
+const { items, listState, listError } = storeToRefs(store)
+
+const filter = ref('')
+const visible = computed(() => store.filtered(filter.value))
+
+store.loadList()
 </script>
+
+<template>
+  <v-container>
+    <div class="d-flex align-center flex-wrap ga-3 mb-6">
+      <div>
+        <h1 class="text-h4 font-weight-bold">
+          SpaceX Rockets
+        </h1>
+        <p class="text-medium-emphasis text-body-2 mt-1">
+          {{ items.length }} rockets from the Launch Library 2 API
+        </p>
+      </div>
+      <v-spacer />
+      <RocketAddDialog @add="store.addLocal" />
+    </div>
+
+    <div class="mb-6">
+      <RocketFilter v-model="filter" />
+    </div>
+
+    <StateBlock
+      v-if="listState !== 'success'"
+      :state="listState === 'idle' ? 'loading' : listState"
+      :error="listError"
+      empty-message="No rockets available."
+      @retry="store.loadList"
+    />
+
+    <v-row v-else-if="visible.length === 0">
+      <v-col>
+        <StateBlock
+          state="success"
+          empty-message="No rockets match your filter."
+        />
+      </v-col>
+    </v-row>
+
+    <v-row v-else>
+      <v-col
+        v-for="rocket in visible"
+        :key="rocket.id"
+        cols="12"
+        sm="6"
+        md="4"
+        lg="3"
+      >
+        <RocketCard :rocket="rocket" />
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
