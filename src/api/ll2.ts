@@ -12,9 +12,23 @@ const BASE = 'https://lldev.thespacedevs.com/2.2.0/config/launcher'
  */
 const DETAILED = 'mode=detailed&limit=20'
 
+/**
+ * The production host allows 15 requests/hour and answers 429 with a
+ * Retry-After header once exhausted. Surface that wait instead of a raw
+ * status code so the retry affordance in the UI is actionable.
+ */
+function rateLimitError(res: Response): Error {
+  const seconds = Number(res.headers.get('retry-after'))
+  const wait = Number.isFinite(seconds) && seconds > 0
+    ? `${seconds} second${seconds === 1 ? '' : 's'}`
+    : 'about a minute'
+  return new Error(`Rate limited by Launch Library 2 (HTTP 429). Wait ${wait}, then retry.`)
+}
+
 async function getJson<T>(url: string): Promise<T> {
   const res = await fetch(url)
   if (!res.ok) {
+    if (res.status === 429) throw rateLimitError(res)
     throw new Error(`HTTP ${res.status} for ${url}`)
   }
   return res.json() as Promise<T>
