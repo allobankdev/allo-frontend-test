@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { storeToRefs } from "pinia";
 
 import RocketCard from "@/components/rockets/RocketCard.vue";
+import RocketFormDialog from "@/components/rockets/RocketFormDialog.vue";
 import { useRocketStore } from "@/stores/rocket";
 
 const rocketStore = useRocketStore();
+const addRocketDialog = ref(false);
 
 const { filteredRockets, searchQuery, loading, error } =
   storeToRefs(rocketStore);
@@ -19,11 +21,19 @@ onMounted(() => {
   <v-app>
     <v-app-bar elevation="1">
       <v-container class="d-flex align-center">
-        <v-icon class="mr-2" icon="mdi-rocket-launch" />
+        <v-icon
+          class="mr-2"
+          icon="mdi-rocket-launch"
+        />
 
         <v-app-bar-title>SpaceX Rockets</v-app-bar-title>
 
-        <v-btn color="primary" prepend-icon="mdi-plus" variant="flat">
+        <v-btn
+          color="primary"
+          prepend-icon="mdi-plus"
+          variant="flat"
+          @click="addRocketDialog = true"
+        >
           Add Rocket
         </v-btn>
       </v-container>
@@ -48,7 +58,9 @@ onMounted(() => {
           type="error"
           variant="tonal"
         >
-          <p class="mb-4">{{ error }}</p>
+          <p class="mb-4">
+            {{ error }}
+          </p>
 
           <v-btn
             color="error"
@@ -60,9 +72,21 @@ onMounted(() => {
           </v-btn>
         </v-alert>
 
-        <v-row v-else-if="loading" class="mt-4">
-          <v-col v-for="item in 6" :key="item" cols="12" md="6" lg="4">
-            <v-skeleton-loader elevation="2" type="image, heading, paragraph" />
+        <v-row
+          v-else-if="loading"
+          class="mt-4"
+        >
+          <v-col
+            v-for="item in 6"
+            :key="item"
+            cols="12"
+            md="6"
+            lg="4"
+          >
+            <v-skeleton-loader
+              elevation="2"
+              type="image, heading, paragraph"
+            />
           </v-col>
         </v-row>
 
@@ -75,7 +99,10 @@ onMounted(() => {
           variant="tonal"
         />
 
-        <v-row v-else class="mt-4">
+        <v-row
+          v-else
+          class="mt-4"
+        >
           <v-col
             v-for="rocket in filteredRockets"
             :key="rocket.id"
@@ -88,5 +115,6 @@ onMounted(() => {
         </v-row>
       </v-container>
     </v-main>
+    <RocketFormDialog v-model="addRocketDialog" />
   </v-app>
 </template>
