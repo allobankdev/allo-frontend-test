@@ -41,6 +41,7 @@ function countryLabel(m?: { country_code?: string }) {
       v-if="!rocket"
       :state="state"
       :error="error"
+      variant="block"
       @retry="store.loadOne(id)"
     />
 

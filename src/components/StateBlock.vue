@@ -1,28 +1,52 @@
 <script setup lang="ts">
 import type { FetchState } from '@/stores/launchers'
 
-defineProps<{
-  state: FetchState
-  error?: string | null
-  emptyMessage?: string
-}>()
+withDefaults(
+  defineProps<{
+    state: FetchState
+    error?: string | null
+    emptyMessage?: string
+    /**
+     * Shape of the loading placeholder: 'block' mirrors a detail page
+     * (hero image + heading + paragraphs), 'grid' mirrors the rocket
+     * card grid on the list page.
+     */
+    variant?: 'block' | 'grid'
+  }>(),
+  { variant: 'block' },
+)
 
 const emit = defineEmits<{ (e: 'retry'): void }>()
 </script>
 
 <template>
-  <div
-    v-if="state === 'loading' || state === 'idle'"
-    class="text-center py-12"
-  >
-    <v-progress-circular
-      indeterminate
-      color="primary"
-      size="48"
+  <div v-if="state === 'loading' || state === 'idle'">
+    <v-skeleton-loader
+      v-if="variant === 'block'"
+      type="image, heading, paragraph@2"
+      class="skeleton-block"
     />
-    <p class="mt-4 text-medium-emphasis">
-      Loading…
-    </p>
+    <v-row v-else>
+      <v-col
+        v-for="n in 8"
+        :key="n"
+        cols="12"
+        sm="6"
+        md="4"
+        lg="3"
+      >
+        <v-card
+          variant="outlined"
+          rounded="lg"
+          class="h-100"
+        >
+          <v-skeleton-loader
+            type="image, article, actions"
+            class="skeleton-card"
+          />
+        </v-card>
+      </v-col>
+    </v-row>
   </div>
 
   <div
@@ -63,3 +87,16 @@ const emit = defineEmits<{ (e: 'retry'): void }>()
     </p>
   </div>
 </template>
+
+<style scoped>
+/* Mirror the real content shapes: 420px hero on the detail page, 180px
+   card image on the list grid — the swap from skeleton to data is
+   seamless instead of a layout jump. */
+.skeleton-block :deep(.v-skeleton-loader__image) {
+  height: 420px;
+  border-radius: 12px;
+}
+.skeleton-card :deep(.v-skeleton-loader__image) {
+  height: 180px;
+}
+</style>

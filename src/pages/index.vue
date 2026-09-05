@@ -88,6 +88,7 @@ store.loadList()
       v-if="listState !== 'success'"
       :state="listState === 'idle' ? 'loading' : listState"
       :error="listError"
+      variant="grid"
       empty-message="No rockets available."
       @retry="store.loadList"
     />
