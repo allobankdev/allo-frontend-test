@@ -7,7 +7,12 @@ defineProps<{
 </script>
 
 <template>
-  <v-card :to="`/rockets/${rocket.id}`" class="h-100" elevation="2" hover>
+  <v-card
+    :to="`/rockets/${rocket.id}`"
+    class="h-100"
+    elevation="2"
+    hover
+  >
     <v-img
       v-if="rocket.image_url"
       :alt="rocket.full_name || 'Rocket image'"
@@ -17,13 +22,22 @@ defineProps<{
     >
       <template #error>
         <div class="image-placeholder">
-          <v-icon icon="mdi-rocket-launch" size="64" />
+          <v-icon
+            icon="mdi-rocket-launch"
+            size="64"
+          />
         </div>
       </template>
     </v-img>
 
-    <div v-else class="image-placeholder">
-      <v-icon icon="mdi-rocket-launch" size="64" />
+    <div
+      v-else
+      class="image-placeholder"
+    >
+      <v-icon
+        icon="mdi-rocket-launch"
+        size="64"
+      />
     </div>
 
     <v-card-title>
