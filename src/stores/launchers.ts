@@ -11,6 +11,47 @@ export interface VisibleOptions {
   sort?: SortDirection
 }
 
+const LOCAL_STORAGE_KEY = 'allo-launchers:local'
+
+function isLauncherLike(value: unknown): value is Launcher {
+  if (typeof value !== 'object' || value === null) return false
+  const candidate = value as Record<string, unknown>
+  return (
+    (typeof candidate.id === 'number' || typeof candidate.id === 'string') &&
+    typeof candidate.full_name === 'string'
+  )
+}
+
+/**
+ * Best-effort persistence for locally-added rockets: written on add,
+ * re-hydrated ahead of the API results on load. The API list is always
+ * fetched fresh; only user-created entries live in localStorage. A corrupt
+ * payload is discarded entry-by-entry so the app starts from an empty local
+ * set instead of crashing, and unavailable storage (quota, privacy mode) is
+ * a no-op that leaves the in-memory list as the source of truth.
+ */
+function readLocalLaunchers(): Launcher[] {
+  try {
+    const raw = localStorage.getItem(LOCAL_STORAGE_KEY)
+    if (!raw) return []
+    const parsed: unknown = JSON.parse(raw)
+    return Array.isArray(parsed) ? parsed.filter(isLauncherLike) : []
+  } catch {
+    // Corrupt JSON or blocked storage: the local set starts empty and the
+    // rest of the app is unaffected.
+    return []
+  }
+}
+
+function writeLocalLaunchers(rockets: Launcher[]): void {
+  try {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(rockets))
+  } catch {
+    // Quota or privacy-mode storage blocks persistence; the in-memory list
+    // keeps working for the current session.
+  }
+}
+
 /**
  * Owns the rocket list and the per-id detail cache. UI components ask the
  * store for current state instead of holding their own fetch state, which is
@@ -81,7 +122,10 @@ export const useLaunchersStore = defineStore('launchers', {
       this.listState = 'loading'
       this.listError = null
       try {
-        this.items = await fetchLaunchers()
+        this.items = [
+          ...readLocalLaunchers(),
+          ...await fetchLaunchers(),
+        ]
         this.listState = 'success'
       } catch (e) {
         this.listError = e instanceof Error ? e.message : 'Unknown error'
@@ -91,7 +135,11 @@ export const useLaunchersStore = defineStore('launchers', {
 
     async loadOne(id: string) {
       if (this.detailById[id]) return
-      const local = this.items.find(r => String(r.id) === id)
+      // Storage is checked too: a direct URL load of a locally-added
+      // rocket's detail page happens before the list has been fetched.
+      const local =
+        this.items.find(r => String(r.id) === id) ??
+        readLocalLaunchers().find(r => String(r.id) === id)
       if (local) {
         this.detailById[id] = local
         this.detailState[id] = 'success'
@@ -111,6 +159,7 @@ export const useLaunchersStore = defineStore('launchers', {
       this.items = [rocket, ...this.items]
       this.detailById[String(rocket.id)] = rocket
       this.detailState[String(rocket.id)] = 'success'
+      writeLocalLaunchers([rocket, ...readLocalLaunchers()])
     },
   },
 })
