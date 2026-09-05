@@ -235,6 +235,18 @@ watch(
                   />
                 </v-list>
               </v-card-text>
+
+              <v-card-actions class="px-4 pb-4">
+                <v-spacer />
+
+                <v-btn
+                  prepend-icon="mdi-close"
+                  to="/"
+                  variant="outlined"
+                >
+                  Close
+                </v-btn>
+              </v-card-actions>
             </v-col>
           </v-row>
         </v-card>

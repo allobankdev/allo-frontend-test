@@ -9,7 +9,7 @@ export type NewRocket = Omit<Rocket, "id" | "isLocal">;
 export const useRocketStore = defineStore("rocket", () => {
   const apiRockets = ref<Rocket[]>([]);
   const localRockets = ref<Rocket[]>([]);
-  const searchQuery = ref("");
+  const searchQuery = ref<string | null>("");
   const loading = ref(false);
   const error = ref<string | null>(null);
   const hasLoaded = ref(false);
@@ -17,7 +17,7 @@ export const useRocketStore = defineStore("rocket", () => {
   const rockets = computed(() => [...localRockets.value, ...apiRockets.value]);
 
   const filteredRockets = computed(() => {
-    const query = searchQuery.value.trim().toLowerCase();
+    const query = (searchQuery.value ?? "").trim().toLowerCase();
 
     if (!query) {
       return rockets.value;

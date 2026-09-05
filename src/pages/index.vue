@@ -49,6 +49,7 @@ onMounted(() => {
           label="Search rockets"
           prepend-inner-icon="mdi-magnify"
           variant="outlined"
+          @click:clear="searchQuery = ''"
         />
 
         <v-alert
