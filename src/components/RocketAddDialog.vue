@@ -39,7 +39,7 @@ function submit() {
     launch_cost: form.launch_cost ? Number(form.launch_cost) : undefined,
     maiden_flight: form.maiden_flight.trim() || undefined,
     manufacturer: form.country.trim()
-      ? { name: 'SpaceX', country_code: form.country.trim().toUpperCase() }
+      ? { country_code: form.country.trim().toUpperCase() }
       : undefined,
   }
   emit('add', rocket)
@@ -69,8 +69,8 @@ function submit() {
         Add a new rocket
       </v-card-title>
       <v-card-subtitle>
-        The Launch Library 2 API is read-only, so the new rocket stays in this
-        session.
+        The Launch Library 2 API is read-only, so rockets you add are stored
+        locally in your browser and persist across reloads.
       </v-card-subtitle>
 
       <v-card-text>
