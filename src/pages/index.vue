@@ -14,7 +14,7 @@ const filter = ref('')
 const country = ref<string | null>(null)
 const sort = ref<SortDirection>('none')
 
-const visible = computed(() => store.filtered({
+const filteredRockets = computed(() => store.filtered({
   query: filter.value,
   country: country.value,
   sort: sort.value,
@@ -93,7 +93,7 @@ store.loadList()
       @retry="store.loadList"
     />
 
-    <v-row v-else-if="visible.length === 0">
+    <v-row v-else-if="filteredRockets.length === 0">
       <v-col>
         <StateBlock
           state="success"
@@ -104,7 +104,7 @@ store.loadList()
 
     <v-row v-else>
       <v-col
-        v-for="rocket in visible"
+        v-for="rocket in filteredRockets"
         :key="rocket.id"
         cols="12"
         sm="6"

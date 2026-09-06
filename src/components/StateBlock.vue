@@ -13,7 +13,11 @@ withDefaults(
      */
     variant?: 'block' | 'grid'
   }>(),
-  { variant: 'block' },
+  {
+    error: null,
+    emptyMessage: 'No items match your filter.',
+    variant: 'block',
+  },
 )
 
 const emit = defineEmits<{ (e: 'retry'): void }>()

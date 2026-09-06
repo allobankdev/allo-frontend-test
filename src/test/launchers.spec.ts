@@ -100,6 +100,8 @@ describe('launchers store — filtered getter', () => {
     expect(store.filtered({ query: 'starship description' }).map(r => r.id)).toEqual([2])
     expect(store.filtered({ query: 'nothing matches' })).toEqual([])
     expect(store.filtered({ query: '' })).toHaveLength(3)
+    // Vuetify clearable fields emit null when cleared
+    expect(store.filtered({ query: null })).toHaveLength(3)
   })
 
   it('filters by country code case-insensitively', () => {
@@ -133,12 +135,13 @@ describe('launchers store — filtered getter', () => {
     expect(store.items.map(r => r.full_name)).toEqual(['Zephyr', 'Alpha', 'Midway'])
   })
 
-  it('derives the country options from the loaded list', () => {
+  it('derives the country options from the loaded list, uppercased', () => {
     const store = freshStore()
     store.items = [
       rocket(1, 'A', 'US'),
       rocket(2, 'B'),
       rocket(3, 'C', 'FR'),
+      rocket(4, 'D', 'us'),
     ]
 
     expect(store.countries).toEqual(['FR', 'US'])
@@ -200,5 +203,16 @@ describe('launchers store — detail loading', () => {
     await Promise.all([first, second])
 
     expect(mockedList).toHaveBeenCalledTimes(1)
+  })
+
+  it('caches a successful list fetch instead of refetching on remount', async () => {
+    mockedList.mockResolvedValue([rocket(1, 'Falcon 9')])
+
+    const store = freshStore()
+    await store.loadList()
+    await store.loadList()
+
+    expect(mockedList).toHaveBeenCalledTimes(1)
+    expect(store.items.map(r => r.id)).toEqual([1])
   })
 })

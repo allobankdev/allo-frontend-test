@@ -6,7 +6,11 @@ export type FetchState = 'idle' | 'loading' | 'success' | 'error'
 export type SortDirection = 'none' | 'asc' | 'desc'
 
 export interface VisibleOptions {
-  query: string
+  /**
+   * Nullable because Vuetify's clearable fields emit `null` when cleared,
+   * so the value arrives from the UI as null despite its string typing.
+   */
+  query?: string | null
   country?: string | null
   sort?: SortDirection
 }
@@ -84,13 +88,13 @@ export const useLaunchersStore = defineStore('launchers', {
     countries(state): string[] {
       return [...new Set(
         state.items
-          .map(r => r.manufacturer?.country_code?.trim())
+          .map(r => r.manufacturer?.country_code?.trim().toUpperCase())
           .filter((c): c is string => !!c),
       )].sort()
     },
     filtered(state) {
       return (options: VisibleOptions): Launcher[] => {
-        const q = options.query.trim().toLowerCase()
+        const q = (options.query ?? '').trim().toLowerCase()
         const country = options.country?.trim().toUpperCase() || null
 
         let result = state.items
@@ -117,8 +121,14 @@ export const useLaunchersStore = defineStore('launchers', {
   },
 
   actions: {
+    /**
+     * The launcher list changes rarely and the LL2 quota is tight, so a
+     * successful fetch is cached for the session instead of re-firing on
+     * every mount; retry stays available from the error state.
+     */
     async loadList() {
       if (this.listState === 'loading') return
+      if (this.listState === 'success') return
       this.listState = 'loading'
       this.listError = null
       try {

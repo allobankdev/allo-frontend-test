@@ -1,7 +1,13 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
 import type { Launcher } from '@/types/ll2'
 
-defineProps<{ rocket: Launcher }>()
+const props = defineProps<{ rocket: Launcher }>()
+const router = useRouter()
+
+function openDetail(): void {
+  router.push(`/rocket/${props.rocket.id}`)
+}
 </script>
 
 <template>
@@ -9,6 +15,10 @@ defineProps<{ rocket: Launcher }>()
     variant="outlined"
     rounded="lg"
     class="rocket-card h-100"
+    role="button"
+    tabindex="0"
+    @click="openDetail"
+    @keyup.enter="openDetail"
   >
     <v-img
       v-if="rocket.image_url"
@@ -44,6 +54,7 @@ defineProps<{ rocket: Launcher }>()
         variant="text"
         color="primary"
         append-icon="mdi-arrow-right"
+        @click.stop
       >
         Detail
       </v-btn>
@@ -52,6 +63,9 @@ defineProps<{ rocket: Launcher }>()
 </template>
 
 <style scoped>
+.rocket-card {
+  cursor: pointer;
+}
 .rocket-card__placeholder {
   height: 180px;
   background: rgb(var(--v-theme-surface-variant));
