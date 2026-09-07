@@ -1,8 +1,9 @@
 {
-  "name": "allo-frontend-test",
+  "name": "spacex-rockets",
   "private": true,
   "type": "module",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Browse SpaceX launch vehicles",
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
@@ -13,7 +14,9 @@
   },
   "dependencies": {
     "@mdi/font": "7.4.47",
+    "axios": "^1.20.0",
     "core-js": "^3.37.1",
+    "pinia": "^4.0.3",
     "roboto-fontface": "*",
     "vue": "^3.4.31",
     "vuetify": "^3.6.14"
