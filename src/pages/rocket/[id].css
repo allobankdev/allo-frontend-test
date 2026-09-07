@@ -1,0 +1,235 @@
+.page {
+  width:
+    min(
+      1200px,
+      calc(100% - 48px)
+    );
+
+  margin:
+    0 auto;
+
+  padding:
+    50px 50px 100px;
+}
+
+
+.back-link {
+  display: inline-block;
+
+  margin-bottom: 35px;
+
+  color: #f5eeee;
+
+  text-decoration: none;
+
+  font-weight: 600;
+}
+
+
+.rocket-detail {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+
+  gap: 60px;
+}
+
+
+.rocket-image {
+  overflow: hidden;
+
+  min-height: 500px;
+
+  border-radius: 12px;
+
+  background: #eee;
+}
+
+
+.rocket-image img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+
+.image-placeholder {
+  min-height: 500px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #dcdada;
+}
+
+
+.rocket-information h1 {
+  margin:
+    8px 0 20px;
+
+  color: #ebeaea;
+
+  font-size: 42px;
+
+  line-height: 1.1;
+}
+
+
+.description {
+  margin:
+    0 0 40px;
+
+  color: #ebeaea;
+
+  font-size: 17px;
+
+  line-height: 1.7;
+}
+
+
+.local-badge {
+  display: inline-block;
+
+  padding:
+    5px 9px;
+
+  border-radius: 20px;
+
+  background: #f6f3f3;
+  color:black;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+
+.specifications {
+  margin: 0;
+}
+
+
+.specifications > div {
+  display: grid;
+
+  grid-template-columns:
+    160px 1fr;
+
+  gap: 20px;
+
+  padding:
+    18px 0;
+
+  border-top:
+    1px solid #ddd;
+}
+
+
+dt {
+  color: #ebeaea;
+}
+
+
+dd {
+  margin: 0;
+
+  color: #ebeaea;
+
+  font-weight: 600;
+}
+
+
+.status,
+.error-state {
+  padding:
+    100px 20px;
+
+  text-align: center;
+}
+
+
+.error-state p {
+  color: #666;
+}
+
+
+.error-state button {
+  margin-top: 10px;
+
+  padding:
+    12px 22px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: #111;
+  color: white;
+
+  cursor: pointer;
+}
+
+
+
+
+
+@media (max-width: 640px) {
+  .page {
+    width: calc(100% - 24px);
+
+    padding: 50px 1px 10px 10px;
+  }
+
+  .rocket-detail {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+
+  gap: 20px;
+}
+  .back-link {
+    margin-bottom: 22px;
+
+    font-size: 13px;
+  }
+
+  .detail-image {
+    height: 260px;
+  }
+
+  .rocket-information h1 {
+    margin-bottom: 14px;
+
+    font-size: 29px;
+  }
+
+  .description {
+    margin-bottom: 25px;
+
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .specifications > div {
+    grid-template-columns: 1fr;
+
+    gap: 5px;
+
+    padding: 13px 0;
+  }
+
+  .specifications dt {
+    font-size: 12px;
+  }
+
+  .specifications dd {
+    font-size: 14px;
+  }
+}
