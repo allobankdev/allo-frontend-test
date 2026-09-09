@@ -1,6 +1,6 @@
 <template>
   <div class="rocket-filter">
-    <div class="d-flex flex-column flex-sm-row ga-3">
+    <div class="d-flex flex-column flex-sm-row ga-3 rocket-filter__search">
       <v-text-field
         class="flex-grow-1"
         clearable
@@ -102,6 +102,12 @@
 </script>
 
 <style scoped>
+  /* The comfortable-density text field is 48px tall while a default v-btn is
+     36px, so match any action passed into the slot to the field's height. */
+  .rocket-filter__search :deep(.v-btn) {
+    height: 48px;
+  }
+
   .rocket-filter__select {
     min-width: 12rem;
     flex: 1 1 12rem;
