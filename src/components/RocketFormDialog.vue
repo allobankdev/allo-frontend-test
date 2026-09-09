@@ -19,6 +19,10 @@ const form = reactive({
   full_name: '',
   description: '',
   image_url: '',
+  manufacturer_name: '',
+  launch_cost: '',
+  country_code: '',
+  maiden_flight: '',
 })
 
 const formRef = ref<InstanceType<typeof VForm> | null>(null)
@@ -44,13 +48,23 @@ const submit = async () => {
   }
 
   emit('submit', {
-    ...form,
+    name: form.name,
+    full_name: form.full_name,
+    description: form.description,
+    image_url: form.image_url,
+    launch_cost: form.launch_cost || null,
+    maiden_flight: form.maiden_flight || null,
+    manufacturer: { name: form.manufacturer_name, country_code: form.country_code,},
   })
 
   form.name = ''
   form.full_name = ''
   form.description = ''
   form.image_url = ''
+  form.manufacturer_name = ''
+  form.launch_cost = ''
+  form.country_code = ''
+  form.maiden_flight = ''
 
   close()
 }
@@ -92,8 +106,38 @@ const submit = async () => {
           />
 
           <v-text-field
+            v-model="form.manufacturer_name"
+            label="Manufacturer"
+            placeholder="SpaceX"
+            variant="outlined"
+            class="mb-3"
+          />
+
+          <v-text-field
             v-model="form.image_url"
             label="Image URL"
+            variant="outlined"
+          />
+          <v-text-field
+            v-model="form.launch_cost"
+            label="Launch Cost (USD)"
+            type="number"
+            variant="outlined"
+            class="mb-3"
+          />
+
+          <v-text-field
+            v-model="form.country_code"
+            label="Country Code"
+            placeholder="USA"
+            variant="outlined"
+            class="mb-3"
+          />
+
+          <v-text-field
+            v-model="form.maiden_flight"
+            label="Maiden Flight"
+            type="date"
             variant="outlined"
           />
         </v-form>
