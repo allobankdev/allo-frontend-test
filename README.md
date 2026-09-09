@@ -77,3 +77,53 @@ You don’t need to worry about the detailed design, we’re not interested in y
 4.  Please complete the form to submit your technical test: [Click Here](https://forms.gle/nZKQ2EjTCPfAKHog7)
 
 Good luck with your assignment! Don't hesitate to contact us if you have any questions about the assignment process.
+
+---
+
+## Solution
+
+Vue 3 (`<script setup>` + TypeScript), Vuetify 3, Vite. File-based routing via
+`unplugin-vue-router`.
+
+### Running
+
+    npm install
+    npm run dev        # http://localhost:3000
+    npm run build      # type-check + production build
+    npm run lint
+
+Requires Node 18+. No env vars — the API base URL is hardcoded to the dev host
+`lldev.thespacedevs.com` (generous rate limit, per the API note above).
+
+### Structure
+
+    src/services/spaceDevs.ts     # the only place that touches fetch + the Rocket type
+    src/composable/useRockets.ts  # store: rocket state, fetch, add, lookup by id
+    src/pages/index.vue           # list + filter + add-rocket dialog
+    src/pages/rockets/[id].vue    # detail
+    src/components/               # RocketCard, RocketFormDialog
+
+### Decisions
+
+- **State management** is a composable with module-scope `ref`s
+  (`useRockets`), so the state is a singleton shared by the list and detail
+  pages. Pinia was deliberately skipped: there is a single collection of data,
+  so Vue's own reactivity covers it with zero extra dependencies.
+- **One request only.** The API returns all 13 rockets at once, so the detail
+  page reads from that same state (`getRocketById`) instead of hitting the
+  `/:id` endpoint. `fetchRockets()` runs `onMounted` on both pages and skips
+  when data is already loaded, so deep-linking to `/rockets/:id` works without
+  a duplicate request — which matters given the 15 requests/hour anonymous
+  limit.
+- **UI states**: loading (skeleton/spinner), error with a Retry button
+  (`fetchRockets(true)`), and success are handled on both screens.
+- **Missing data** (`launch_cost`, `maiden_flight`, `image_url` returning null)
+  falls back to `N/A` / a placeholder image, so the layout never breaks.
+- **New rockets** are kept in memory with a `local-*` id and an `isLocal` flag,
+  per the brief (the API is read-only). They are lost on refresh — not
+  persisted to localStorage since that wasn't asked for.
+
+### Known limitations
+
+- Filtering is name-only and client-side.
+- No unit tests.
