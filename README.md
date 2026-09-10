@@ -1,5 +1,51 @@
 # Allo Bank Frontend Technical Assignment
 
+## Solution
+
+Vue 3 + TypeScript + Vuetify 3 app showing SpaceX rockets from the Launch
+Library 2 API.
+
+### Running
+
+```bash
+npm install
+npm run dev        # http://localhost:3000
+npm run build      # type-check + production build
+npm run lint       # eslint
+```
+
+### Architecture
+
+Server state and client state are deliberately separated:
+
+| Layer | Location | Responsibility |
+| ----- | -------- | -------------- |
+| API client | `src/services/rocketApi.ts` | Axios instance; maps LL2 responses to the app's `Rocket` type and normalises every failure into a user-readable `RocketApiError`. |
+| Server state | `src/queries/rockets.ts` | TanStack Query — fetching, caching, retries, and the loading/error flags the screens render. |
+| Client state | `src/stores/rockets.ts` | Pinia — the search filter and rockets added in-app (the API is read-only, so those live in memory and survive a refetch). |
+| Routing | `src/pages/` | File-based routes via `unplugin-vue-router`: `index.vue` (list) and `rockets.[id].vue` (detail). |
+| Presentation | `src/components/` | Presentational components; the pages own the data wiring. |
+
+### How the requirements are met
+
+- **Rocket list** — `src/pages/index.vue` renders image, name and description per card.
+- **Filter** — multi-criteria, combined with AND and all driven from the store: a case-insensitive keyword match on name and description, a country select whose options are derived from the loaded data, a flight-status filter (`maiden_flight` present or not), and a launch-cost availability filter. A result counter and a reset button appear alongside them.
+- **Add a rocket** — `AddRocketDialog` writes to the Pinia store, so the new rocket shows up in the list and has a working detail page. Local ids are prefixed `local-` so they can never collide with API ids.
+- **Detail screen** — image, name, description, cost per launch, country and first flight.
+- **Missing data** — every API-optional field is typed nullable and rendered through `src/utils/format.ts`, which returns `Not available` instead of blanks. A missing or broken `image_url` falls back to a placeholder icon.
+- **UI states** — `StateLoading`, `StateError` (with a retry button that refetches) and `StateEmpty` cover loading, failure and no-results.
+- **Verified in-browser** — the list, detail, filter combinations, add-rocket flow, retry-after-failure, missing-data fallbacks and the 390px layout were each exercised with Playwright against the running app.
+- **Lifecycles** — TanStack Query drives fetching on mount and on retry; the detail query is keyed by route param and disabled for local rockets.
+- **Responsive** — 1/2/3/4-column grid across breakpoints; verified with no horizontal overflow at 390px.
+
+### Notes
+
+- Requests go to the `lldev` host, which mirrors production data with a far more generous rate limit.
+- `RocketApiError` responses (404, 429) are not retried automatically — the user retries explicitly instead.
+- Two pre-existing boilerplate issues were fixed to make `npm run build` pass: TypeScript was raised to 5.9 (`@tsconfig/node22` requests `lib: es2024`, unsupported by 5.6), and `src/router/index.ts` now imports from `vue-router` rather than the deprecated `vue-router/auto`.
+
+---
+
 In this assignment, you’re assigned to create a website that displays rockets. This website only has two screens: rocket list screen and rocket detail screen. Here are the requirements:
 
 ### Functional Requirements
