@@ -10,7 +10,6 @@ declare module 'vue' {
     AppEmptyState: typeof import('./src/components/common/AppEmptyState.vue')['default']
     AppError: typeof import('./src/components/common/AppError.vue')['default']
     AppLoading: typeof import('./src/components/common/AppLoading.vue')['default']
-    HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     RocketCard: typeof import('./src/components/rocket/RocketCard.vue')['default']
     RocketForm: typeof import('./src/components/rocket/RocketForm.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

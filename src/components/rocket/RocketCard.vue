@@ -15,8 +15,14 @@
         @error="imageError = true"
       />
 
-      <div v-else class="image-placeholder">
-        <v-icon icon="mdi-rocket-launch" size="64" />
+      <div
+        v-else
+        class="image-placeholder"
+      >
+        <v-icon
+          icon="mdi-rocket-launch"
+          size="64"
+        />
       </div>
     </div>
 
@@ -26,7 +32,11 @@
           {{ rocket.full_name }}
         </v-card-title>
 
-        <v-icon icon="mdi-arrow-top-right" size="20" color="primary" />
+        <v-icon
+          icon="mdi-arrow-top-right"
+          size="20"
+          color="primary"
+        />
       </div>
     </v-card-item>
 

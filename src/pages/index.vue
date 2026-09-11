@@ -1,7 +1,9 @@
 <template>
   <v-container class="py-8 rocket-list-page">
     <div class="mb-8">
-      <h1 class="text-h3 font-weight-bold text-secondary">Explore Rockets</h1>
+      <h1 class="text-h3 font-weight-bold text-secondary">
+        Explore Rockets
+      </h1>
 
       <p class="text-body-1 text-medium-emphasis">
         Discover SpaceX launch vehicles and their specifications.
@@ -26,10 +28,15 @@
         <strong>"{{ search }}"</strong>
       </template>
 
-      <template v-else> {{ filteredRockets.length }} rockets </template>
+      <template v-else>
+        {{ filteredRockets.length }} rockets
+      </template>
     </p>
 
-    <AppLoading v-if="rocketStore.loading" message="Loading rockets..." />
+    <AppLoading
+      v-if="rocketStore.loading"
+      message="Loading rockets..."
+    />
 
     <AppError
       v-else-if="rocketStore.error"
@@ -69,7 +76,10 @@
     Add Rocket
   </v-btn>
 
-  <v-dialog v-model="addDialog" max-width="600">
+  <v-dialog
+    v-model="addDialog"
+    max-width="600"
+  >
     <v-card>
       <v-card-item class="pa-6 pb-2">
         <v-card-title class="text-h5 font-weight-bold">
@@ -82,16 +92,28 @@
       </v-card-item>
 
       <v-card-text>
-        <RocketForm @submit="handleAddRocket" @cancel="addDialog = false" />
+        <RocketForm
+          @submit="handleAddRocket"
+          @cancel="addDialog = false"
+        />
       </v-card-text>
     </v-card>
   </v-dialog>
 
-  <v-snackbar v-model="snackbar" timeout="3000" location="bottom right">
+  <v-snackbar
+    v-model="snackbar"
+    timeout="3000"
+    location="bottom right"
+  >
     Rocket added successfully.
 
     <template #actions>
-      <v-btn variant="text" @click="snackbar = false"> Close </v-btn>
+      <v-btn
+        variant="text"
+        @click="snackbar = false"
+      >
+        Close
+      </v-btn>
     </template>
   </v-snackbar>
 </template>

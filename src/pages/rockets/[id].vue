@@ -9,9 +9,16 @@
       Back to rockets
     </v-btn>
 
-    <AppLoading v-if="loading" message="Loading rocket details..." />
+    <AppLoading
+      v-if="loading"
+      message="Loading rocket details..."
+    />
 
-    <AppError v-else-if="error" :message="error" @retry="loadRocket" />
+    <AppError
+      v-else-if="error"
+      :message="error"
+      @retry="loadRocket"
+    />
 
     <AppEmptyState
       v-else-if="notFound"
@@ -20,8 +27,15 @@
       message="The rocket you're looking for doesn't exist."
     />
 
-    <v-row v-else-if="rocket" align="start" class="ga-md-4">
-      <v-col cols="12" md="5">
+    <v-row
+      v-else-if="rocket"
+      align="start"
+      class="ga-md-4"
+    >
+      <v-col
+        cols="12"
+        md="5"
+      >
         <div class="image-wrapper">
           <v-img
             v-if="rocket.image_url && !imageError"
@@ -33,17 +47,30 @@
             @error="imageError = true"
           />
 
-          <div v-else class="image-placeholder">
-            <v-icon icon="mdi-rocket-launch" size="96" />
+          <div
+            v-else
+            class="image-placeholder"
+          >
+            <v-icon
+              icon="mdi-rocket-launch"
+              size="96"
+            />
           </div>
         </div>
       </v-col>
 
-      <v-col cols="12" md="6">
+      <v-col
+        cols="12"
+        md="6"
+      >
         <div class="detail-content">
           <div class="mb-6">
             <div class="d-flex align-center ga-2 mb-2">
-              <v-icon icon="mdi-rocket-launch" color="primary" size="20" />
+              <v-icon
+                icon="mdi-rocket-launch"
+                color="primary"
+                size="20"
+              />
 
               <span class="text-overline text-primary font-weight-bold">
                 ROCKET DETAILS
@@ -60,8 +87,15 @@
           </div>
 
           <v-row>
-            <v-col cols="12" sm="4">
-              <v-card variant="outlined" rounded="lg" height="100%">
+            <v-col
+              cols="12"
+              sm="4"
+            >
+              <v-card
+                variant="outlined"
+                rounded="lg"
+                height="100%"
+              >
                 <v-card-text>
                   <v-icon
                     icon="mdi-cash"
@@ -81,8 +115,15 @@
               </v-card>
             </v-col>
 
-            <v-col cols="12" sm="4">
-              <v-card variant="outlined" rounded="lg" height="100%">
+            <v-col
+              cols="12"
+              sm="4"
+            >
+              <v-card
+                variant="outlined"
+                rounded="lg"
+                height="100%"
+              >
                 <v-card-text>
                   <v-icon
                     icon="mdi-earth"
@@ -102,8 +143,15 @@
               </v-card>
             </v-col>
 
-            <v-col cols="12" sm="4">
-              <v-card variant="outlined" rounded="lg" height="100%">
+            <v-col
+              cols="12"
+              sm="4"
+            >
+              <v-card
+                variant="outlined"
+                rounded="lg"
+                height="100%"
+              >
                 <v-card-text>
                   <v-icon
                     icon="mdi-calendar"

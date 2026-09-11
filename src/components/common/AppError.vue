@@ -1,11 +1,18 @@
 <template>
-  <v-alert type="error" variant="tonal">
+  <v-alert
+    type="error"
+    variant="tonal"
+  >
     <div class="d-flex align-center justify-space-between flex-wrap ga-4">
       <span>
         {{ message }}
       </span>
 
-      <v-btn v-if="retryable" variant="outlined" @click="emit('retry')">
+      <v-btn
+        v-if="retryable"
+        variant="outlined"
+        @click="emit('retry')"
+      >
         Retry
       </v-btn>
     </div>

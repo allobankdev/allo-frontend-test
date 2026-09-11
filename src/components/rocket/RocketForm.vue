@@ -1,10 +1,19 @@
 <template>
-  <v-form ref="formRef" @submit.prevent="submitForm">
+  <v-form
+    ref="formRef"
+    @submit.prevent="submitForm"
+  >
     <div class="mb-6">
       <div class="d-flex align-center ga-2 mb-4">
-        <v-icon icon="mdi-text-box-outline" color="primary" size="20" />
+        <v-icon
+          icon="mdi-text-box-outline"
+          color="primary"
+          size="20"
+        />
 
-        <h3 class="text-subtitle-1 font-weight-bold">Basic Information</h3>
+        <h3 class="text-subtitle-1 font-weight-bold">
+          Basic Information
+        </h3>
       </div>
 
       <v-text-field
@@ -35,9 +44,15 @@
 
     <div class="mb-6">
       <div class="d-flex align-center ga-2 mb-4">
-        <v-icon icon="mdi-image-outline" color="primary" size="20" />
+        <v-icon
+          icon="mdi-image-outline"
+          color="primary"
+          size="20"
+        />
 
-        <h3 class="text-subtitle-1 font-weight-bold">Rocket Image</h3>
+        <h3 class="text-subtitle-1 font-weight-bold">
+          Rocket Image
+        </h3>
       </div>
 
       <v-file-input
@@ -53,11 +68,23 @@
         clearable
       />
 
-      <div v-if="previewUrl" class="image-preview mt-3">
-        <v-img :src="previewUrl" height="220" cover class="rounded-lg" />
+      <div
+        v-if="previewUrl"
+        class="image-preview mt-3"
+      >
+        <v-img
+          :src="previewUrl"
+          height="220"
+          cover
+          class="rounded-lg"
+        />
 
         <div class="image-preview__label">
-          <v-icon icon="mdi-check-circle" size="16" class="mr-1" />
+          <v-icon
+            icon="mdi-check-circle"
+            size="16"
+            class="mr-1"
+          />
           Image selected
         </div>
       </div>
@@ -67,13 +94,22 @@
 
     <div class="mb-6">
       <div class="d-flex align-center ga-2 mb-4">
-        <v-icon icon="mdi-rocket-launch-outline" color="primary" size="20" />
+        <v-icon
+          icon="mdi-rocket-launch-outline"
+          color="primary"
+          size="20"
+        />
 
-        <h3 class="text-subtitle-1 font-weight-bold">Launch Information</h3>
+        <h3 class="text-subtitle-1 font-weight-bold">
+          Launch Information
+        </h3>
       </div>
 
       <v-row>
-        <v-col cols="12" sm="7">
+        <v-col
+          cols="12"
+          sm="7"
+        >
           <v-text-field
             v-model="form.launch_cost"
             label="Cost per launch"
@@ -87,7 +123,10 @@
           />
         </v-col>
 
-        <v-col cols="12" sm="5">
+        <v-col
+          cols="12"
+          sm="5"
+        >
           <v-text-field
             v-model="form.country_code"
             label="Country code"
@@ -112,9 +151,20 @@
     </div>
 
     <div class="d-flex justify-end ga-3 pt-2">
-      <v-btn variant="text" size="large" @click="handleCancel"> Cancel </v-btn>
+      <v-btn
+        variant="text"
+        size="large"
+        @click="handleCancel"
+      >
+        Cancel
+      </v-btn>
 
-      <v-btn type="submit" color="primary" size="large" prepend-icon="mdi-plus">
+      <v-btn
+        type="submit"
+        color="primary"
+        size="large"
+        prepend-icon="mdi-plus"
+      >
         Add Rocket
       </v-btn>
     </div>
