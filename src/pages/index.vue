@@ -45,7 +45,10 @@
           lg="3"
           class="d-flex"
         >
-          <RocketCard :rocket="rocket" />
+          <RocketCard
+            :rocket="rocket"
+            @click="router.push(`/rockets/${rocket.id}`)"
+          />
         </v-col>
       </v-row>
       <v-empty-state
@@ -60,13 +63,15 @@
 
 <script lang="ts" setup>
   import { onMounted } from 'vue'
+  import { useRouter } from 'vue-router'
   import { useRocketsStore } from '@/stores/rockets'
   import { useRocketFilters } from '@/composables/useRocketFilters'
 
   const rocketsStore = useRocketsStore()
+  const router = useRouter()
   const { filteredRockets } = useRocketFilters()
 
   onMounted(() => {
-    rocketsStore.fetchRockets()
+    if (rocketsStore.rockets.length === 0) rocketsStore.fetchRockets()
   })
 </script>

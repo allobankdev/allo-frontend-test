@@ -1,6 +1,7 @@
 <template>
   <v-card
     class="d-flex flex-column flex-grow-1"
+    link
     @click="$emit('click')"
   >
     <v-img
