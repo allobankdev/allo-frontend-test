@@ -24,6 +24,47 @@
     <v-card-title>{{ rocket.full_name }}</v-card-title>
 
     <v-card-text class="pb-4">
+      <div class="d-flex flex-nowrap text-no-wrap overflow-hidden ga-3 text-caption text-medium-emphasis mb-2">
+        <span class="d-flex align-center ga-1">
+          <v-icon
+            icon="mdi-circle"
+            size="10"
+            :color="rocket.active ? 'success' : 'grey'"
+          />
+          {{ rocket.active ? "Active" : "Retired" }}
+        </span>
+        <span
+          v-if="rocket.manufacturer?.country_code"
+          class="d-flex align-center ga-1"
+        >
+          <v-icon
+            icon="mdi-earth"
+            size="14"
+          />
+          {{ rocket.manufacturer.country_code }}
+        </span>
+        <span
+          v-if="launchCost"
+          class="d-flex align-center ga-1"
+        >
+          <v-icon
+            icon="mdi-currency-usd"
+            size="14"
+          />
+          {{ launchCost }}
+        </span>
+        <span
+          v-if="maidenFlight"
+          class="d-flex align-center ga-1"
+        >
+          <v-icon
+            icon="mdi-calendar"
+            size="14"
+          />
+          {{ maidenFlight }}
+        </span>
+      </div>
+
       <p class="description">
         {{ rocket.description || "No description available." }}
       </p>
@@ -32,13 +73,17 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
+import { formatCurrency, formatDate } from "@/lib/utils/helper";
 import type { Rocket } from "@/types/rocket";
 
-defineProps<{ rocket: Rocket }>();
+const props = defineProps<{ rocket: Rocket }>();
 defineEmits<{ click: [] }>();
 
 const imgError = ref(false);
+
+const launchCost = computed(() => formatCurrency(props.rocket.launch_cost));
+const maidenFlight = computed(() => formatDate(props.rocket.maiden_flight));
 </script>
 
 <style scoped>
