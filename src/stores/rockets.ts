@@ -18,6 +18,7 @@ export const useRocketsStore = defineStore('rockets', {
     rockets: [] as Rocket[],
     loading: false,
     error: false,
+    loaded: false,
   }),
   actions: {
     async fetchRockets () {
@@ -26,6 +27,7 @@ export const useRocketsStore = defineStore('rockets', {
 
       try {
         this.rockets = await fetchRockets()
+        this.loaded = true
       } catch {
         this.error = true
       } finally {

@@ -82,6 +82,6 @@
   const { filteredRockets } = useRocketFilters()
 
   onMounted(() => {
-    if (rocketsStore.rockets.length === 0) rocketsStore.fetchRockets()
+    if (!rocketsStore.loaded) rocketsStore.fetchRockets()
   })
 </script>

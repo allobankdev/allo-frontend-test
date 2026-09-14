@@ -230,8 +230,10 @@
     wiki_url: '',
   })
 
-  function submit () {
+  async function submit () {
     if (!form.full_name) return
+
+    if (!rocketsStore.loaded) await rocketsStore.fetchRockets()
 
     const rocket: Rocket = {
       id: Date.now(),
