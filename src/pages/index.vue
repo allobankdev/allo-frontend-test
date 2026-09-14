@@ -3,6 +3,8 @@
     fluid
     class="py-6 px-4 px-sm-6"
   >
+    <RocketFilterBar />
+
     <div
       v-if="rocketsStore.loading"
       class="d-flex justify-center py-12"
@@ -33,9 +35,9 @@
     </v-alert>
 
     <template v-else>
-      <v-row v-if="rockets.length">
+      <v-row v-if="filteredRockets.length">
         <v-col
-          v-for="rocket in rockets"
+          v-for="rocket in filteredRockets"
           :key="rocket.id"
           cols="12"
           sm="6"
@@ -50,18 +52,19 @@
         v-else
         icon="mdi-rocket-launch-outline"
         title="No rockets found"
-        text="Try a different search term."
+        text="Try adjusting your search or filters."
       />
     </template>
   </v-container>
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, computed } from 'vue'
+  import { onMounted } from 'vue'
   import { useRocketsStore } from '@/stores/rockets'
+  import { useRocketFilters } from '@/composables/useRocketFilters'
 
   const rocketsStore = useRocketsStore()
-  const rockets = computed(() => rocketsStore.rockets)
+  const { filteredRockets } = useRocketFilters()
 
   onMounted(() => {
     rocketsStore.fetchRockets()

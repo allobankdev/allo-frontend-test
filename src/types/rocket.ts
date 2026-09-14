@@ -5,6 +5,8 @@ export interface Rocket {
   image_url: string | null
   launch_cost: number | null
   maiden_flight: string | null
+  active: boolean
+  family: string | null
   manufacturer: {
     country_code: string | null
   } | null
