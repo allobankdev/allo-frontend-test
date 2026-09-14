@@ -3,7 +3,17 @@
     fluid
     class="py-6 px-4 px-sm-6"
   >
-    <RocketFilterBar />
+    <RocketFilterBar>
+      <template #actions>
+        <v-btn
+          color="primary"
+          prepend-icon="mdi-plus"
+          to="/rockets/new"
+        >
+          Add rocket
+        </v-btn>
+      </template>
+    </RocketFilterBar>
 
     <div
       v-if="rocketsStore.loading"

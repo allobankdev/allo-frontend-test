@@ -56,6 +56,14 @@
         hide-details
       />
     </v-col>
+    <v-col
+      cols="12"
+      sm="auto"
+      md="auto"
+      class="d-flex align-center ms-sm-auto"
+    >
+      <slot name="actions" />
+    </v-col>
   </v-row>
 </template>
 
