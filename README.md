@@ -1,5 +1,12 @@
 # Allo Bank Frontend Technical Assignment
 
+### Contents
+
+- [Assignment brief](#allo-bank-frontend-technical-assignment)
+- [Requirements checklist](#requirements-checklist)
+- [Project structure](#project-structure)
+- [How to run the project](#how-to-run-the-project)
+
 In this assignment, you’re assigned to create a website that displays rockets. This website only has two screens: rocket list screen and rocket detail screen. Here are the requirements:
 
 ### Functional Requirements
@@ -77,3 +84,72 @@ You don’t need to worry about the detailed design, we’re not interested in y
 4.  Please complete the form to submit your technical test: [Click Here](https://forms.gle/nZKQ2EjTCPfAKHog7)
 
 Good luck with your assignment! Don't hesitate to contact us if you have any questions about the assignment process.
+
+---
+
+## Requirements checklist
+
+### Functional
+- [x] List screen shows each rocket's image, name, and description
+- [x] List screen is filterable (search text, status, family, country)
+- [x] Add rocket from the list screen (appears in-app only, API is read-only)
+- [x] Detail screen on click, showing image, name, description, cost per launch, country, first flight
+- [x] Both screens display correctly when rocket data is missing (fallback text, optional fields hidden)
+
+### Non-functional
+- [x] Uses the Launch Library 2 API pinned to `2.2.0`
+- [x] Routing via `unplugin-vue-router` (file-based routes in `src/pages`)
+- [x] State management via Pinia (`src/stores/rockets.ts`)
+- [x] Lifecycle hooks (`onMounted` fetch-if-not-loaded on both pages)
+- [x] Componentized (`RocketCard`, `RocketFilterBar`, `AddRocketDialog`)
+- [x] UI states: loading spinner, error alert with retry, success/result rendering
+
+### Nice to have
+- [x] Responsive layout (mobile/tablet/desktop breakpoints via Vuetify grid)
+- [x] Unit tests for business logic and components (`npm run test`)
+
+## Project structure
+
+```
+src/
+├── api/
+│   └── rockets.ts            # fetchRockets() — Launch Library 2 API call
+├── components/
+│   ├── RocketCard.vue        # Rocket summary card used in the list grid
+│   ├── RocketFilterBar.vue   # Search + filter controls, backed by useRocketFilters
+│   └── AddRocketDialog.vue   # Modal form for adding a rocket (list screen)
+├── composables/
+│   └── useRocketFilters.ts   # Filter state synced with the route query (source of truth)
+├── lib/utils/
+│   └── helper.ts             # formatCurrency / formatNumber / formatDate
+├── pages/                    # File-based routes (unplugin-vue-router)
+│   ├── index.vue             # Rocket list screen
+│   └── rockets/[id].vue      # Rocket detail screen
+├── plugins/                  # Vuetify, Pinia, and app plugin registration
+├── router/                   # Router instance (auto-generated routes)
+├── stores/
+│   └── rockets.ts            # Pinia store: rockets, loading/error/loaded, addRocket
+├── styles/                   # Vuetify SCSS settings
+├── test/                     # Shared test helpers (fixture, Vuetify instance, jsdom setup)
+└── types/
+    └── rocket.ts              # Rocket interface
+```
+
+Each source file has a matching `*.spec.ts` alongside it.
+
+## How to run the project
+
+```bash
+npm install
+npm run dev
+```
+
+Other scripts:
+
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the Vite dev server |
+| `npm run build` | Type-check and build for production |
+| `npm run preview` | Preview the production build locally |
+| `npm run lint` | Lint and auto-fix with ESLint |
+| `npm run test` | Run the unit test suite with Vitest |
