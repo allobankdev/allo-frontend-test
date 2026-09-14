@@ -4,22 +4,24 @@
     link
     @click="$emit('click')"
   >
-    <v-img
-      v-if="rocket.image_url && !imgError"
-      :src="rocket.image_url"
-      height="160"
-      cover
-      @error="imgError = true"
-    />
-    <div
-      v-else
-      class="d-flex align-center justify-center bg-surface-variant"
-      style="height: 160px"
-    >
-      <v-icon
-        icon="mdi-rocket-launch-outline"
-        size="48"
+    <div>
+      <v-img
+        v-if="rocket.image_url && !imgError"
+        :src="rocket.image_url"
+        height="160"
+        cover
+        @error="imgError = true"
       />
+      <div
+        v-else
+        class="d-flex align-center justify-center bg-surface-variant"
+        style="height: 160px"
+      >
+        <v-icon
+          icon="mdi-rocket-launch-outline"
+          size="48"
+        />
+      </div>
     </div>
 
     <v-card-title>{{ rocket.full_name }}</v-card-title>
@@ -94,5 +96,15 @@ const maidenFlight = computed(() => formatDate(props.rocket.maiden_flight));
   -webkit-box-orient: vertical;
   overflow: hidden;
   line-clamp: 3;
+}
+
+.rocket-card__media {
+  flex: 0 0 160px;
+  height: 160px;
+  overflow: hidden;
+}
+
+.rocket-card__media :deep(.v-img) {
+  height: 160px !important;
 }
 </style>
