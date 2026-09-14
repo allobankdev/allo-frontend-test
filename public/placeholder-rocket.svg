@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <rect width="800" height="450" fill="#1e1e2e"/>
+  <g fill="none" stroke="#8b8ba3" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M400 60 C 430 110, 440 170, 430 230 L 370 230 C 360 170, 370 110, 400 60 Z"/>
+    <circle cx="400" cy="150" r="14"/>
+    <path d="M370 200 L 340 260 L 370 250 Z"/>
+    <path d="M430 200 L 460 260 L 430 250 Z"/>
+    <path d="M385 230 L 385 270 M400 230 L 400 280 M415 230 L 415 270"/>
+  </g>
+  <text x="400" y="340" text-anchor="middle" font-family="sans-serif" font-size="28" fill="#8b8ba3">No image available</text>
+</svg>
