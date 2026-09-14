@@ -1,18 +1,9 @@
 <template>
-  <v-container
-    fluid
-    class="py-6 px-4 px-sm-6"
-    style="max-width: 600px"
+  <v-dialog
+    v-model="model"
+    max-width="600"
+    scrollable
   >
-    <v-btn
-      variant="text"
-      prepend-icon="mdi-arrow-left"
-      class="mb-4"
-      to="/"
-    >
-      Back to rockets
-    </v-btn>
-
     <v-card>
       <v-card-title class="text-h5">
         Add rocket
@@ -178,62 +169,75 @@
         <v-spacer />
         <v-btn
           variant="text"
-          to="/"
+          @click="model = false"
         >
           Cancel
         </v-btn>
         <v-btn
           color="primary"
           :disabled="!form.full_name"
+          :loading="submitting"
           @click="submit"
         >
           Add rocket
         </v-btn>
       </v-card-actions>
     </v-card>
-  </v-container>
+  </v-dialog>
 </template>
 
 <script lang="ts" setup>
-  import { reactive } from 'vue'
-  import { useRouter } from 'vue-router'
+  import { reactive, ref, watch } from 'vue'
   import { useRocketsStore } from '@/stores/rockets'
   import type { Rocket } from '@/types/rocket'
 
-  const router = useRouter()
   const rocketsStore = useRocketsStore()
 
-  const form = reactive({
-    full_name: '',
-    description: '',
-    image_url: '',
-    family: '',
-    country_code: '',
-    launch_cost: null as number | null,
-    maiden_flight: '',
-    active: true,
-    manufacturer_name: '',
-    variant: '',
-    reusable: false,
-    min_stage: null as number | null,
-    max_stage: null as number | null,
-    length: null as number | null,
-    diameter: null as number | null,
-    launch_mass: null as number | null,
-    leo_capacity: null as number | null,
-    gto_capacity: null as number | null,
-    total_launch_count: null as number | null,
-    successful_launches: null as number | null,
-    failed_launches: null as number | null,
-    successful_landings: null as number | null,
-    failed_landings: null as number | null,
-    wiki_url: '',
+  const model = defineModel<boolean>({ default: false })
+
+  const submitting = ref(false)
+
+  function initialForm () {
+    return {
+      full_name: '',
+      description: '',
+      image_url: '',
+      family: '',
+      country_code: '',
+      launch_cost: null as number | null,
+      maiden_flight: '',
+      active: true,
+      manufacturer_name: '',
+      variant: '',
+      reusable: false,
+      min_stage: null as number | null,
+      max_stage: null as number | null,
+      length: null as number | null,
+      diameter: null as number | null,
+      launch_mass: null as number | null,
+      leo_capacity: null as number | null,
+      gto_capacity: null as number | null,
+      total_launch_count: null as number | null,
+      successful_launches: null as number | null,
+      failed_launches: null as number | null,
+      successful_landings: null as number | null,
+      failed_landings: null as number | null,
+      wiki_url: '',
+    }
+  }
+
+  const form = reactive(initialForm())
+
+  watch(model, value => {
+    if (value) Object.assign(form, initialForm())
   })
 
   async function submit () {
     if (!form.full_name) return
 
+    submitting.value = true
     if (!rocketsStore.loaded) await rocketsStore.fetchRockets()
+    submitting.value = false
 
     const rocket: Rocket = {
       id: Date.now(),
@@ -265,6 +269,6 @@
     }
 
     rocketsStore.addRocket(rocket)
-    router.push('/')
+    model.value = false
   }
 </script>

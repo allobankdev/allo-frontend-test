@@ -8,7 +8,7 @@
         <v-btn
           color="primary"
           prepend-icon="mdi-plus"
-          to="/rockets/new"
+          @click="showAddDialog = true"
         >
           Add rocket
         </v-btn>
@@ -68,11 +68,13 @@
         text="Try adjusting your search or filters."
       />
     </template>
+
+    <AddRocketDialog v-model="showAddDialog" />
   </v-container>
 </template>
 
 <script lang="ts" setup>
-  import { onMounted } from 'vue'
+  import { onMounted, ref } from 'vue'
   import { useRouter } from 'vue-router'
   import { useRocketsStore } from '@/stores/rockets'
   import { useRocketFilters } from '@/composables/useRocketFilters'
@@ -80,6 +82,8 @@
   const rocketsStore = useRocketsStore()
   const router = useRouter()
   const { filteredRockets } = useRocketFilters()
+
+  const showAddDialog = ref(false)
 
   onMounted(() => {
     if (!rocketsStore.loaded) rocketsStore.fetchRockets()
