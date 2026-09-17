@@ -1,11 +1,10 @@
 <template>
   <v-app>
+    <AppHeader />
     <v-main>
-      <router-view />
+      <v-container class="py-6 py-md-8">
+        <router-view />
+      </v-container>
     </v-main>
   </v-app>
 </template>
-
-<script lang="ts" setup>
-  //
-</script>
