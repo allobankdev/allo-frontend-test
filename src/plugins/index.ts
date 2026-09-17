@@ -1,18 +1,11 @@
-/**
- * plugins/index.ts
- *
- * Automatically included in `./src/main.ts`
- */
-
-// Plugins
-import vuetify from './vuetify'
+import '@mdi/font/css/materialdesignicons.css'
+import '@/styles/main.css'
 import router from '../router'
-
-// Types
+import { createPinia } from 'pinia'
 import type { App } from 'vue'
 
 export function registerPlugins (app: App) {
   app
-    .use(vuetify)
+    .use(createPinia())
     .use(router)
 }
