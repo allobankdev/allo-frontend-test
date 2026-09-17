@@ -1,31 +1,26 @@
 <template>
-  <section>
-    <div class="d-flex flex-wrap align-center justify-space-between ga-3 mb-6">
-      <div>
-        <h1 class="text-h5 font-weight-bold">
-          SpaceX Rockets
-        </h1>
-        <p
-          v-if="store.listStatus === 'success'"
-          class="text-body-2 text-medium-emphasis"
-        >
-          Showing {{ store.filteredRockets.length }} of {{ store.rockets.length }} rockets
-        </p>
-      </div>
-      <v-btn
-        color="primary"
-        prepend-icon="mdi-plus"
-        @click="dialogOpen = true"
+  <section class="flex flex-col gap-6">
+    <PageHeader
+      subtitle="Browse, filter, and add SpaceX launch vehicles."
+      title="Rockets"
+    >
+      <button
+        class="btn btn-primary"
+        type="button"
+        @click="ui.rocketFormOpen = true"
       >
-        Add rocket
-      </v-btn>
-    </div>
-
-    <RocketFilterBar
-      v-model:active="store.filters.active"
-      v-model:search="store.filters.search"
-      class="mb-4"
-    />
+        <i class="mdi mdi-plus text-base" />
+        Add Rocket
+      </button>
+      <button
+        class="btn btn-outline"
+        :disabled="store.listStatus === 'loading'"
+        type="button"
+        @click="store.loadRockets"
+      >
+        Refresh Data
+      </button>
+    </PageHeader>
 
     <AsyncState
       :error="store.listError"
@@ -33,66 +28,105 @@
       :status="store.listStatus"
       @retry="store.loadRockets"
     >
-      <v-row v-if="store.filteredRockets.length">
-        <v-col
+      <div class="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
+        <StatCard
+          highlighted
+          hint="SpaceX launch vehicles"
+          icon="mdi-rocket-launch"
+          label="Total Rockets"
+          :selected="store.filters.active === 'all'"
+          selectable
+          :value="store.counts.all"
+          @select="store.filters.active = 'all'"
+        />
+        <StatCard
+          hint="Currently in service"
+          icon="mdi-check"
+          label="Active Rockets"
+          :selected="store.filters.active === 'active'"
+          selectable
+          :value="store.counts.active"
+          @select="store.filters.active = 'active'"
+        />
+        <StatCard
+          hint="No longer flying"
+          icon="mdi-history"
+          label="Retired Rockets"
+          :selected="store.filters.active === 'retired'"
+          selectable
+          :value="store.counts.retired"
+          @select="store.filters.active = 'retired'"
+        />
+        <StatCard
+          hint="Added this session"
+          icon="mdi-plus"
+          label="Your Rockets"
+          :value="store.counts.local"
+        />
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="text-lg font-semibold">
+            Rocket List
+          </h2>
+          <p class="text-sm text-muted">
+            Showing {{ store.filteredRockets.length }} of {{ store.counts.all }} rockets
+          </p>
+        </div>
+        <RocketFilterBar
+          v-model:active="store.filters.active"
+          :counts="store.counts"
+        />
+      </div>
+
+      <div
+        v-if="store.filteredRockets.length"
+        class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"
+      >
+        <RocketCard
           v-for="rocket in store.filteredRockets"
           :key="rocket.id"
-          cols="12"
-          lg="3"
-          md="4"
-          sm="6"
-        >
-          <RocketCard :rocket="rocket" />
-        </v-col>
-      </v-row>
+          :rocket="rocket"
+        />
+      </div>
 
       <div
         v-else
-        class="empty text-medium-emphasis"
+        class="card flex flex-col items-center gap-4 py-16 text-center"
       >
-        <v-icon
-          icon="mdi-magnify-close"
-          size="36"
-        />
-        <p>No rockets match your filters.</p>
-        <v-btn
-          variant="outlined"
+        <span class="flex size-14 items-center justify-center rounded-full bg-canvas text-3xl text-muted">
+          <i class="mdi mdi-magnify-close" />
+        </span>
+        <div>
+          <p class="font-semibold">
+            No rockets found
+          </p>
+          <p class="mt-1 text-sm text-muted">
+            Try a different keyword or status.
+          </p>
+        </div>
+        <button
+          class="btn btn-outline"
+          type="button"
           @click="store.resetFilters"
         >
           Clear filters
-        </v-btn>
+        </button>
       </div>
     </AsyncState>
-
-    <RocketFormDialog
-      v-model="dialogOpen"
-      @submit="store.addRocket"
-    />
   </section>
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, ref } from 'vue'
+  import { onMounted } from 'vue'
   import { useRocketStore } from '@/stores/rockets'
+  import { useUiStore } from '@/stores/ui'
 
   const store = useRocketStore()
-  const dialogOpen = ref(false)
+  const ui = useUiStore()
 
   onMounted(() => {
     if (store.listStatus !== 'success') store.loadRockets()
   })
 </script>
-
-<style scoped>
-.empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  padding: 64px 16px;
-}
-
-.empty p {
-  margin: 0;
-}
-</style>

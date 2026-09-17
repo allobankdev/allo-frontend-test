@@ -1,59 +1,49 @@
 <template>
-  <v-card
-    class="rocket-card h-100 d-flex flex-column"
+  <router-link
+    class="group flex h-full flex-col rounded-3xl bg-white p-3 transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-brand-900/5"
     :to="{ name: '/rockets/[id]', params: { id: String(rocket.id) } }"
   >
     <RocketImage
       :alt="name"
+      class="aspect-[4/3] rounded-2xl"
       :src="rocket.image_url"
     />
 
-    <v-card-item>
-      <div class="d-flex align-center ga-2">
-        <v-card-title class="pa-0 text-truncate">
+    <div class="flex flex-1 flex-col px-2 pt-4 pb-2">
+      <div class="flex items-start justify-between gap-3">
+        <h3 class="line-clamp-2 text-base font-semibold">
           {{ name }}
-        </v-card-title>
-        <v-chip
-          v-if="rocket.isLocal"
-          class="flex-shrink-0"
-        >
-          New
-        </v-chip>
+        </h3>
+        <span class="icon-btn size-8 border-ink text-base transition group-hover:bg-ink group-hover:text-white">
+          <i class="mdi mdi-arrow-top-right" />
+        </span>
       </div>
-    </v-card-item>
 
-    <v-card-text class="pt-0">
-      <p class="description">
+      <p class="mt-2 line-clamp-3 text-sm leading-relaxed text-muted">
         {{ description }}
       </p>
-    </v-card-text>
-  </v-card>
+
+      <div class="mt-auto flex items-center justify-between gap-2 pt-4">
+        <RocketStatusBadges :rocket="rocket" />
+        <span class="text-xs text-muted">
+          {{ firstFlight }}
+        </span>
+      </div>
+    </div>
+  </router-link>
 </template>
 
 <script lang="ts" setup>
   import { computed } from 'vue'
-  import { getRocketDescription, getRocketName } from '@/utils/rocket'
+  import { FALLBACK_TEXT, formatDate, getRocketDescription, getRocketName } from '@/utils/rocket'
   import type { Rocket } from '@/types/rocket'
 
   const props = defineProps<{ rocket: Rocket }>()
 
   const name = computed(() => getRocketName(props.rocket))
   const description = computed(() => getRocketDescription(props.rocket))
+  const firstFlight = computed(() => {
+    const date = formatDate(props.rocket.maiden_flight)
+    return date === FALLBACK_TEXT ? 'First flight N/A' : `Since ${date}`
+  })
 </script>
-
-<style scoped>
-.rocket-card {
-  transition: border-color 0.15s ease;
-}
-
-.rocket-card:hover {
-  border-color: rgb(var(--v-theme-on-surface)) !important;
-}
-
-.description {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-</style>

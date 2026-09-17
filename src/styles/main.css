@@ -1,0 +1,61 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+
+  --color-brand-50: #edf7f1;
+  --color-brand-100: #d5ecde;
+  --color-brand-200: #acd9bd;
+  --color-brand-400: #4fae78;
+  --color-brand-500: #2d8f5a;
+  --color-brand-600: #1f7a4a;
+  --color-brand-700: #17633b;
+  --color-brand-800: #124d2f;
+  --color-brand-900: #0c3a23;
+
+  --color-canvas: #f4f5f4;
+  --color-ink: #1b1f1d;
+  --color-muted: #8a918d;
+}
+
+@layer base {
+  body {
+    @apply bg-canvas font-sans text-ink antialiased;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-3xl bg-white p-5;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition
+      focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply bg-linear-to-br from-brand-600 to-brand-900 text-white shadow-sm hover:from-brand-700;
+  }
+
+  .btn-outline {
+    @apply border border-brand-800 text-brand-900 hover:bg-brand-50;
+  }
+
+  .icon-btn {
+    @apply inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-current text-lg transition;
+  }
+
+  .input {
+    @apply w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm outline-none transition
+      placeholder:text-muted focus:border-brand-500 focus:ring-4 focus:ring-brand-100;
+  }
+
+  .badge {
+    @apply inline-flex items-center rounded-md border px-2 py-0.5 text-[11px] font-medium;
+  }
+
+  .hatch {
+    background-image: repeating-linear-gradient(-45deg, #9fb5a8 0 3px, transparent 3px 9px);
+  }
+}

@@ -18,6 +18,16 @@ export const useRocketStore = defineStore('rockets', () => {
 
   const rockets = computed(() => [...localRockets.value, ...remoteRockets.value])
 
+  const counts = computed(() => {
+    const active = rockets.value.filter(rocket => rocket.active).length
+    return {
+      all: rockets.value.length,
+      active,
+      retired: rockets.value.length - active,
+      local: localRockets.value.length,
+    }
+  })
+
   const filteredRockets = computed(() => {
     const query = (filters.search ?? '').trim().toLowerCase()
 
@@ -94,6 +104,7 @@ export const useRocketStore = defineStore('rockets', () => {
 
   return {
     rockets,
+    counts,
     filteredRockets,
     listStatus,
     listError,

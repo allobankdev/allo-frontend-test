@@ -1,38 +1,37 @@
 <template>
-  <v-row dense>
-    <v-col
-      cols="12"
-      sm="8"
+  <div
+    class="inline-flex rounded-full bg-white p-1"
+    role="tablist"
+  >
+    <button
+      v-for="option in options"
+      :key="option.value"
+      :aria-selected="active === option.value"
+      class="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition"
+      :class="active === option.value ? 'bg-brand-900 text-white' : 'text-muted hover:text-ink'"
+      role="tab"
+      type="button"
+      @click="active = option.value"
     >
-      <v-text-field
-        v-model="search"
-        clearable
-        label="Search by name or description"
-        prepend-inner-icon="mdi-magnify"
-      />
-    </v-col>
-    <v-col
-      cols="12"
-      sm="4"
-    >
-      <v-select
-        v-model="active"
-        item-title="label"
-        item-value="value"
-        :items="activeOptions"
-        label="Status"
-      />
-    </v-col>
-  </v-row>
+      {{ option.label }}
+      <span
+        class="rounded-full px-1.5 text-[11px]"
+        :class="active === option.value ? 'bg-white/20' : 'bg-canvas'"
+      >
+        {{ counts[option.value] }}
+      </span>
+    </button>
+  </div>
 </template>
 
 <script lang="ts" setup>
   import type { ActiveFilter } from '@/types/rocket'
 
-  const search = defineModel<string | null>('search', { required: true })
+  defineProps<{ counts: Record<ActiveFilter, number> }>()
+
   const active = defineModel<ActiveFilter>('active', { required: true })
 
-  const activeOptions: { label: string, value: ActiveFilter }[] = [
+  const options: { label: string, value: ActiveFilter }[] = [
     { label: 'All', value: 'all' },
     { label: 'Active', value: 'active' },
     { label: 'Retired', value: 'retired' },

@@ -7,14 +7,18 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    AppHeader: typeof import('./src/components/AppHeader.vue')['default']
+    AppSidebar: typeof import('./src/components/AppSidebar.vue')['default']
+    AppTopbar: typeof import('./src/components/AppTopbar.vue')['default']
     AsyncState: typeof import('./src/components/AsyncState.vue')['default']
-    DetailItem: typeof import('./src/components/DetailItem.vue')['default']
+    FormField: typeof import('./src/components/FormField.vue')['default']
+    PageHeader: typeof import('./src/components/PageHeader.vue')['default']
     RocketCard: typeof import('./src/components/RocketCard.vue')['default']
     RocketFilterBar: typeof import('./src/components/RocketFilterBar.vue')['default']
     RocketFormDialog: typeof import('./src/components/RocketFormDialog.vue')['default']
     RocketImage: typeof import('./src/components/RocketImage.vue')['default']
+    RocketStatusBadges: typeof import('./src/components/RocketStatusBadges.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    StatCard: typeof import('./src/components/StatCard.vue')['default']
   }
 }

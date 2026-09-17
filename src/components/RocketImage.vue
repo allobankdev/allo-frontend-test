@@ -1,37 +1,31 @@
 <template>
-  <v-img
-    v-if="src && !failed"
-    :alt="alt"
-    :aspect-ratio="aspectRatio"
-    class="bg-grey-lighten-3"
-    cover
-    :src="src"
-    @error="failed = true"
-  >
-    <template #placeholder>
-      <div class="fill">
-        <v-progress-circular
-          indeterminate
-          size="24"
-          width="2"
-        />
-      </div>
-    </template>
-  </v-img>
+  <div class="relative overflow-hidden bg-canvas">
+    <img
+      v-if="src && !failed"
+      :alt="alt"
+      class="size-full object-cover transition-opacity duration-300"
+      :class="loaded ? 'opacity-100' : 'opacity-0'"
+      loading="lazy"
+      :src="src"
+      @error="failed = true"
+      @load="loaded = true"
+    >
 
-  <v-responsive
-    v-else
-    :aspect-ratio="aspectRatio"
-    class="bg-grey-lighten-3"
-  >
-    <div class="fill text-medium-emphasis">
-      <v-icon
-        icon="mdi-image-off-outline"
-        size="32"
-      />
-      <span class="text-caption">No image</span>
+    <div
+      v-if="src && !failed && !loaded"
+      class="absolute inset-0 animate-pulse bg-brand-50"
+    />
+
+    <div
+      v-if="!src || failed"
+      class="hatch absolute inset-0 flex flex-col items-center justify-center gap-1 text-muted"
+    >
+      <span class="flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-xs font-medium">
+        <i class="mdi mdi-image-off-outline text-base" />
+        No image
+      </span>
     </div>
-  </v-responsive>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -40,27 +34,16 @@
   const props = withDefaults(defineProps<{
     src?: string | null
     alt?: string
-    aspectRatio?: number
   }>(), {
     src: null,
     alt: '',
-    aspectRatio: 4 / 3,
   })
 
   const failed = ref(false)
+  const loaded = ref(false)
 
   watch(() => props.src, () => {
     failed.value = false
+    loaded.value = false
   })
 </script>
-
-<style scoped>
-.fill {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  height: 100%;
-}
-</style>

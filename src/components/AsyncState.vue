@@ -1,36 +1,37 @@
 <template>
   <div
     v-if="status === 'loading' || status === 'idle'"
-    class="state"
+    class="card flex flex-col items-center gap-4 py-20 text-center"
   >
-    <v-progress-circular
-      indeterminate
-      size="32"
-      width="3"
-    />
-    <p class="text-medium-emphasis">
+    <span class="size-10 animate-spin rounded-full border-4 border-brand-100 border-t-brand-700" />
+    <p class="text-sm text-muted">
       {{ loadingText }}
     </p>
   </div>
 
   <div
     v-else-if="status === 'error'"
-    class="state"
+    class="card flex flex-col items-center gap-4 py-20 text-center"
   >
-    <v-icon
-      icon="mdi-alert-circle-outline"
-      size="36"
-    />
-    <p class="text-medium-emphasis">
-      {{ error || 'Something went wrong.' }}
-    </p>
-    <v-btn
-      color="primary"
-      prepend-icon="mdi-refresh"
+    <span class="flex size-14 items-center justify-center rounded-full bg-red-50 text-3xl text-red-600">
+      <i class="mdi mdi-alert-circle-outline" />
+    </span>
+    <div>
+      <p class="font-semibold">
+        Failed to load data
+      </p>
+      <p class="mt-1 text-sm text-muted">
+        {{ error || 'Something went wrong.' }}
+      </p>
+    </div>
+    <button
+      class="btn btn-primary"
+      type="button"
       @click="emit('retry')"
     >
+      <i class="mdi mdi-refresh text-base" />
       Retry
-    </v-btn>
+    </button>
   </div>
 
   <slot v-else />
@@ -50,18 +51,3 @@
 
   const emit = defineEmits<{ retry: [] }>()
 </script>
-
-<style scoped>
-.state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  padding: 72px 16px;
-  text-align: center;
-}
-
-.state p {
-  margin: 0;
-}
-</style>
