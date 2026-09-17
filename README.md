@@ -1,79 +1,90 @@
-# Allo Bank Frontend Technical Assignment
+# SpaceX Rocket Explorer - Allo Bank Frontend Technical Assignment
 
-In this assignment, you’re assigned to create a website that displays rockets. This website only has two screens: rocket list screen and rocket detail screen. Here are the requirements:
+Repositori ini berisi solusi untuk Frontend Technical Assignment di Allo Bank. Aplikasi ini dibuat menggunakan Vue 3, TypeScript, dan Tailwind CSS untuk menampilkan katalog roket SpaceX dengan memanfaatkan Launch Library 2 API dari The Space Devs.
 
-### Functional Requirements
-- As a user, I want to see a list of rockets in the rocket list screen (Show each rocket image, rocket name, and rocket description)
-- As a user, I want to be able to filter the rockets in the rocket list screen
-- As a user, I want to be able to add the new rocket in the rocket list screen (the API is read-only, so the new rocket only needs to appear in the running app)
-- As a user, I want to be able to see the rocket detail by clicking a rocket in the rocket list screen (Show rocket image, rocket name, rocket description, cost per launch, country, first flight)
-- As a user, I want both screens to still display correctly when some rocket data is missing
+Aplikasi terdiri dari dua halaman utama:
+1. Halaman daftar roket (Rocket List Screen)
+2. Halaman detail spesifikasi roket (Rocket Detail Screen)
 
-### API
+---
 
-Use the Launch Library 2 API by The Space Devs for rocket data.
-Docs: https://thespacedevs.com/llapi
+## Pembahasan Soal dan Implementasi
 
-Rocket list (returns all 13 SpaceX rockets in a single request):
+Berikut adalah penjelasan teknis mengenai bagaimana setiap kebutuhan fungsional dan non-fungsional diimplementasikan dalam aplikasi ini.
 
-    GET https://lldev.thespacedevs.com/2.2.0/config/launcher/?manufacturer__name=SpaceX&mode=detailed&limit=20
+### 1. Functional Requirements
 
-Single rocket:
+- **Daftar Roket**
+  Aplikasi memuat seluruh data roket SpaceX dari API dan menampilkannya dalam bentuk grid responsif. Setiap kartu roket memuat gambar roket, nama lengkap (`full_name`), serta ringkasan deskripsi (`description`).
 
-    GET https://lldev.thespacedevs.com/2.2.0/config/launcher/:id/
+- **Fitur Filter / Pencarian**
+  Pengguna dapat memfilter roket berdasarkan nama secara langsung (real-time). Input pencarian ini terhubung dengan computed property reaktif di Vue, sehingga daftar roket langsung ter-filter tanpa perlu memuat ulang halaman. Jika kata kunci tidak cocok dengan roket manapun, aplikasi menampilkan pesan bahwa roket tidak ditemukan beserta tombol untuk mereset pencarian.
 
-`mode=detailed` is required — without it the response omits `description`
-and the other detail fields. `limit=20` is required too — the default page size
-is 10, so without it you get 10 rockets and a `next` page instead of all 13.
+- **Menambah Roket Baru (Client-side Persistence)**
+  Karena API yang disediakan bersifat read-only, penambahan roket baru diimplementasikan pada sisi klien. Pengguna dapat membuka form modal untuk menambahkan roket dengan mengisi nama dan deskripsi (wajib), serta beberapa data opsional seperti URL gambar, biaya peluncuran, kode negara, dan tanggal peluncuran pertama.
+  Data roket baru ini disimpan ke dalam state global dan dipersistensikan ke `localStorage` browser. Dengan cara ini, roket yang baru ditambahkan tetap muncul di daftar dan bisa dibuka detailnya meskipun halaman di-refresh.
 
-**API version:** use `2.2.0` as shown above. The docs site now showcases
-`2.3.0`, but `2.2.0` is still live with no announced end-of-life, and the field
-names in the table below are the `2.2.0` ones. Don't migrate: `2.3.0` renames
-the endpoint to `/2.3.0/launcher_configurations/` and moves several of these
-fields (`image_url` becomes `image.image_url`, `manufacturer.country_code`
-becomes a `manufacturer.country` array). Both versions return the same 13
-rockets.
+- **Halaman Detail Roket**
+  Saat salah satu kartu roket diklik, aplikasi berpindah ke rute `/rocket/:id`. Halaman ini menampilkan detail lengkap meliputi gambar roket, nama roket, deskripsi panjang, perkiraan biaya peluncuran (*cost per launch*), negara pembuat, dan tanggal penerbangan perdana (*maiden flight*). Disediakan juga tombol navigasi untuk kembali ke daftar utama.
 
-| Requirement      | Field                              |
-| ---------------- | ---------------------------------- |
-| rocket image     | `image_url`                        |
-| rocket name      | `full_name`                        |
-| description      | `description`                      |
-| cost per launch  | `launch_cost`                      |
-| country          | `manufacturer.country_code`        |
-| first flight     | `maiden_flight`                    |
+- **Penanganan Data yang Tidak Lengkap (Missing Data)**
+  Beberapa roket dari API tidak memiliki nilai untuk atribut tertentu seperti `launch_cost`, `maiden_flight`, atau `image_url`. Aplikasi menangani kondisi ini dengan:
+  - Menyediakan tampilan placeholder khusus jika gambar roket bernilai null atau gagal dimuat oleh browser.
+  - Memformat biaya peluncuran menjadi format mata uang dolar jika ada, atau menampilkan teks "Data tidak tersedia" jika nilainya kosong.
+  - Menampilkan tanda strip ("-") jika negara atau tanggal penerbangan perdana tidak tercantum pada data API.
+  - Menampilkan teks fallback deskripsi jika roket belum memiliki deskripsi resmi.
 
-**Rate limit:** the API allows 15 requests/hour for anonymous users. Use the
-`lldev.thespacedevs.com` host shown above during development — it serves the
-same data with a far more generous limit. The production host,
-`ll.thespacedevs.com`, will throttle you quickly.
+---
 
-Note that some rockets have missing values for `launch_cost`, `maiden_flight`,
-and `image_url`.
+### 2. Penggunaan Launch Library 2 API
 
-### Non-Functional Requirements
-- Use the Launch Library 2 API (see the API section above) for getting the rocket data
-- Implement routers
-- Implement state management
-- Implement lifecycles
-- Create components based will be + points
-- UI states (Loading, Fail/Retry, and Success)
-- Show loading when waiting response from API
-- If an error occurred, user can retry by pressing retry button
-- Show result when get response from API
+Sesuai panduan tugas, aplikasi ini terhubung ke Launch Library 2 API versi 2.2.0:
 
-### Nice to have characteristics
-Responsive design
-You don’t need to worry about the detailed design, we’re not interested in your artistic prowess (for now), put your efforts on creating a readable/clean/maintainable source code.
+- **Host Development:**
+  Menggunakan `https://lldev.thespacedevs.com/2.2.0/` sesuai anjuran, karena host pengujian ini memiliki batasan rate limit yang jauh lebih longgar dibanding host produksi yang membatasi 15 request per jam untuk pengguna anonim.
 
-### Submission
+- **Endpoint List Roket:**
+  `GET https://lldev.thespacedevs.com/2.2.0/config/launcher/?manufacturer__name=SpaceX&mode=detailed&limit=20`
+  - Parameter `mode=detailed` digunakan agar respon API menyertakan deskripsi dan spesifikasi lengkap roket.
+  - Parameter `limit=20` digunakan agar ke-13 roket SpaceX dapat dimuat sekaligus dalam satu panggilan API tanpa harus melakukan pagination tambahan.
 
-1.  **Fork** this repository.
+- **Endpoint Detail Roket:**
+  `GET https://lldev.thespacedevs.com/2.2.0/config/launcher/:id/`
+  - Endpoint ini dipanggil ketika halaman detail dibuka langsung melalui URL.
+  - Aplikasi juga memiliki logika fallback: jika ID yang dibuka berawalan `local_` (roket buatan pengguna), sistem akan langsung membacanya dari penyimpanan lokal tanpa memanggil server SpaceX untuk mencegah terjadinya respon error 404.
 
-2.  Implement your solution on a dedicated feature branch (e.g., `feat/allo-spacex`).
+- **Alasan Pemilihan Versi 2.2.0:**
+  Versi 2.2.0 dipertahankan sesuai instruksi karena memiliki struktur field yang konsisten dengan kebutuhan tugas (`image_url`, `full_name`, `description`, `launch_cost`, `manufacturer.country_code`, dan `maiden_flight`).
 
-3.  When complete, submit your solution via a **Pull Request (PR)** back to the main repository.
-   
-4.  Please complete the form to submit your technical test: [Click Here](https://forms.gle/nZKQ2EjTCPfAKHog7)
+---
 
-Good luck with your assignment! Don't hesitate to contact us if you have any questions about the assignment process.
+### 3. Non-Functional Requirements
+
+- **Routing:**
+  Menggunakan Vue Router 4 dengan konfigurasi rute eksplisit:
+  - `/` untuk halaman list roket.
+  - `/rocket/:id` untuk halaman detail roket.
+  - Redirect otomatis ke `/` jika pengguna mengakses URL yang tidak terdaftar.
+  - Mengatur `scrollBehavior` agar posisi layar selalu kembali ke paling atas saat berpindah rute.
+
+- **State Management:**
+  Menggunakan pola Composable Vue 3 (`useRockets`) yang menyediakan reactive state global untuk daftar roket, roket yang sedang dipilih, status loading, dan pesan error. Composable ini mempermudah pemisahan logika bisnis dari komponen tampilan.
+
+- **Lifecycle Hooks:**
+  - `onMounted` digunakan untuk memicu pemanggilan data roket saat komponen dimuat pertama kali.
+  - `watch` digunakan pada halaman detail untuk memantau perubahan parameter ID di rute dan memuat ulang data jika pengguna berpindah ke roket lain.
+
+- **Component-Based Architecture:**
+  Kode disusun secara modular agar mudah dibaca dan dipelihara:
+  - `Header.vue`: Komponen header navigasi atas.
+  - `RocketCard.vue`: Komponen kartu roket dengan penanganan fallback gambar.
+  - `AddRocketModal.vue`: Modal form tambah roket lengkap dengan validasi.
+  - `Spinner.vue`: Komponen indikator loading.
+  - `index.vue` dan `[id].vue`: Halaman list dan detail.
+
+- **Tiga Kondisi Tampilan (UI States):**
+  - **Loading:** Menampilkan indikator loading saat aplikasi sedang menunggu respon dari server.
+  - **Fail / Error & Retry:** Jika koneksi terputus atau server mengembalikan error, aplikasi menampilkan pesan kesalahan yang ramah dan menyediakan tombol "Coba Lagi" (Retry) agar pengguna dapat melakukan request ulang tanpa me-refresh seluruh browser.
+  - **Success:** Menampilkan data roket atau tampilan kosong yang rapi jika filter tidak menemukan hasil.
+
+---
