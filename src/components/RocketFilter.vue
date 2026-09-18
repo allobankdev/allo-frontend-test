@@ -9,7 +9,6 @@
       align="center"
       dense
     >
-      <!-- Search Input -->
       <v-col
         cols="12"
         md="6"
@@ -27,7 +26,6 @@
         />
       </v-col>
 
-      <!-- Family Filter -->
       <v-col
         cols="12"
         sm="6"
@@ -46,7 +44,6 @@
         />
       </v-col>
 
-      <!-- Add New Rocket Button -->
       <v-col
         cols="12"
         sm="6"
@@ -68,7 +65,6 @@
       </v-col>
     </v-row>
 
-    <!-- Quick stats / badges bar -->
     <div class="d-flex align-center justify-space-between mt-3 px-1">
       <span class="text-caption text-medium-emphasis">
         Showing <strong>{{ currentCount }}</strong> of <strong>{{ totalCount }}</strong> rockets

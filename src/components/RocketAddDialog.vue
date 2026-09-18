@@ -45,7 +45,6 @@
           @submit.prevent="submitRocket"
         >
           <v-row dense>
-            <!-- Rocket Name -->
             <v-col cols="12">
               <v-text-field
                 v-model="form.full_name"
@@ -59,7 +58,6 @@
               />
             </v-col>
 
-            <!-- Rocket Family & Country -->
             <v-col
               cols="12"
               sm="6"
@@ -88,7 +86,6 @@
               />
             </v-col>
 
-            <!-- Cost Per Launch & First Flight Date -->
             <v-col
               cols="12"
               sm="6"
@@ -119,7 +116,6 @@
               />
             </v-col>
 
-            <!-- Image URL -->
             <v-col cols="12">
               <v-text-field
                 v-model="form.image_url"
@@ -133,7 +129,6 @@
               />
             </v-col>
 
-            <!-- Description -->
             <v-col
               cols="12"
               class="mt-2"

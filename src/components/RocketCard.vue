@@ -5,7 +5,6 @@
     hover
     @click="goToDetail"
   >
-    <!-- Image with Fallback Handling -->
     <div class="image-wrapper position-relative">
       <v-img
         v-if="rocket.image_url"
@@ -35,7 +34,6 @@
         </template>
       </v-img>
 
-      <!-- Fallback when image_url is completely null/missing -->
       <div
         v-else
         class="d-flex flex-column align-center justify-center bg-surface-variant text-center px-4"
@@ -50,7 +48,6 @@
         <span class="text-caption text-medium-emphasis">No image available</span>
       </div>
 
-      <!-- Custom Rocket Chip -->
       <v-chip
         v-if="rocket.isCustom"
         color="secondary"
@@ -62,7 +59,6 @@
         Custom
       </v-chip>
 
-      <!-- Family Chip -->
       <v-chip
         v-else-if="rocket.family"
         color="primary"
@@ -75,7 +71,6 @@
       </v-chip>
     </div>
 
-    <!-- Content -->
     <v-card-item class="pb-1">
       <v-card-title
         class="text-h6 font-weight-bold text-truncate"
@@ -145,6 +140,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import type { Rocket } from '@/types/rocket'
+import { formatCost, formatFlightDate } from '@/utils/formatters'
 
 const props = defineProps<{
   rocket: Rocket
@@ -154,28 +150,6 @@ const router = useRouter()
 
 function goToDetail() {
   router.push(`/rockets/${props.rocket.id}`)
-}
-
-function formatCost(cost: string | null | undefined): string {
-  if (!cost) return 'N/A'
-  const num = Number(cost)
-  if (isNaN(num)) return cost
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0,
-  }).format(num)
-}
-
-function formatFlightDate(dateStr: string | null | undefined): string {
-  if (!dateStr) return 'N/A'
-  try {
-    const d = new Date(dateStr)
-    if (isNaN(d.getTime())) return dateStr
-    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
-  } catch {
-    return dateStr
-  }
 }
 </script>
 

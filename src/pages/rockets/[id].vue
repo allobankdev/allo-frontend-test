@@ -3,7 +3,6 @@
     fluid
     class="py-6 px-4 px-md-6"
   >
-    <!-- Top Navigation / Back Button -->
     <div class="d-flex align-center justify-space-between mb-6">
       <v-btn
         variant="tonal"
@@ -26,21 +25,18 @@
       </v-chip>
     </div>
 
-    <!-- Loading State -->
     <StateLoading
       v-if="isLoading"
       title="Loading Rocket Details..."
       subtitle="Fetching vehicle specifications and telemetry"
     />
 
-    <!-- Error State -->
     <StateError
       v-else-if="hasError"
       :message="errorMessage"
       @retry="fetchRocketData"
     />
 
-    <!-- Success State / Rocket Detail View -->
     <div v-else-if="rocket">
       <v-card
         class="rounded-2xl overflow-hidden mb-6"
@@ -48,7 +44,6 @@
         border
       >
         <v-row no-gutters>
-          <!-- Rocket Image Section -->
           <v-col
             cols="12"
             md="5"
@@ -84,7 +79,6 @@
               </template>
             </v-img>
 
-            <!-- Fallback for null/missing image_url -->
             <div
               v-else
               class="d-flex flex-column align-center justify-center fill-height text-center pa-8"
@@ -99,7 +93,6 @@
               <span class="text-body-1 font-weight-medium text-medium-emphasis">No image available for this vehicle</span>
             </div>
 
-            <!-- Custom Badge -->
             <v-chip
               v-if="rocket.isCustom"
               color="secondary"
@@ -111,13 +104,11 @@
             </v-chip>
           </v-col>
 
-          <!-- Main Info Section -->
           <v-col
             cols="12"
             md="7"
             class="pa-6 pa-md-8 d-flex flex-column"
           >
-            <!-- Header Badges -->
             <div class="d-flex flex-wrap align-center gap-2 mb-3">
               <v-chip
                 v-if="rocket.active !== null && rocket.active !== undefined"
@@ -140,12 +131,10 @@
               </v-chip>
             </div>
 
-            <!-- Rocket Name -->
             <h1 class="text-h4 font-weight-black mb-3">
               {{ rocket.full_name || rocket.name || 'Unnamed Rocket' }}
             </h1>
 
-            <!-- Manufacturer & Country -->
             <div class="d-flex align-center text-body-1 text-medium-emphasis mb-4">
               <v-icon
                 icon="mdi-domain"
@@ -162,7 +151,6 @@
               <span>Country: <strong>{{ rocket.manufacturer?.country_code || 'USA' }}</strong></span>
             </div>
 
-            <!-- Description -->
             <p
               class="text-body-1 text-medium-emphasis mb-6"
               style="line-height: 1.7;"
@@ -174,7 +162,6 @@
 
             <v-divider class="my-4" />
 
-            <!-- Core Required Metrics Grid -->
             <v-row dense>
               <v-col
                 cols="12"
@@ -228,7 +215,6 @@
         </v-row>
       </v-card>
 
-      <!-- Additional Technical Specifications (if available) -->
       <v-card
         class="rounded-2xl pa-6 mb-6"
         elevation="2"
@@ -323,7 +309,6 @@
           </v-col>
         </v-row>
 
-        <!-- External Links if available -->
         <div
           v-if="rocket.wiki_url || rocket.info_url"
           class="d-flex gap-3 mt-6"
@@ -363,6 +348,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useRocketStore } from '@/stores/rocketStore'
 import type { Rocket } from '@/types/rocket'
+import { formatCost, formatFlightDate } from '@/utils/formatters'
 import StateLoading from '@/components/StateLoading.vue'
 import StateError from '@/components/StateError.vue'
 
@@ -406,28 +392,6 @@ async function fetchRocketData() {
 
 function goBack() {
   router.push('/')
-}
-
-function formatCost(cost: string | null | undefined): string {
-  if (!cost) return 'N/A'
-  const num = Number(cost)
-  if (isNaN(num)) return cost
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0,
-  }).format(num)
-}
-
-function formatFlightDate(dateStr: string | null | undefined): string {
-  if (!dateStr) return 'N/A'
-  try {
-    const d = new Date(dateStr)
-    if (isNaN(d.getTime())) return dateStr
-    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
-  } catch {
-    return dateStr
-  }
 }
 
 onMounted(() => {

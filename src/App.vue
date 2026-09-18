@@ -1,6 +1,5 @@
 <template>
   <v-app>
-    <!-- App Navigation Bar -->
     <v-app-bar
       elevation="1"
       border
@@ -53,10 +52,6 @@
     </v-main>
   </v-app>
 </template>
-
-<script lang="ts" setup>
-//
-</script>
 
 <style scoped>
 .lh-tight {

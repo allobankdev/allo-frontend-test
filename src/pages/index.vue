@@ -3,7 +3,6 @@
     fluid
     class="py-6 px-4 px-md-6"
   >
-    <!-- Header Hero Banner -->
     <div class="mb-8 text-center text-md-start d-md-flex align-center justify-space-between">
       <div>
         <div class="d-flex align-center justify-center justify-md-start mb-2">
@@ -41,23 +40,19 @@
       </div>
     </div>
 
-    <!-- UI State 1: Loading -->
     <StateLoading
       v-if="store.status === 'loading'"
       title="Loading SpaceX Fleet..."
       subtitle="Connecting to Launch Library 2 API"
     />
 
-    <!-- UI State 2: Error / Retry -->
     <StateError
       v-else-if="store.status === 'error'"
       :message="store.errorMessage"
       @retry="store.loadRockets(true)"
     />
 
-    <!-- UI State 3: Success -->
     <div v-else>
-      <!-- Filter & Search Controls -->
       <RocketFilter
         :search-query="store.searchQuery"
         :family-filter="store.familyFilter"
@@ -70,7 +65,6 @@
         @reset-filter="resetFilters"
       />
 
-      <!-- Empty Filter State -->
       <v-sheet
         v-if="store.filteredRockets.length === 0"
         class="pa-12 text-center rounded-2xl"
@@ -100,7 +94,6 @@
         </v-btn>
       </v-sheet>
 
-      <!-- Rocket Grid -->
       <v-row v-else>
         <v-col
           v-for="rocket in store.filteredRockets"
@@ -114,13 +107,11 @@
       </v-row>
     </div>
 
-    <!-- Add Rocket Dialog Modal -->
     <RocketAddDialog
       v-model="isAddDialogOpen"
       @add-rocket="handleAddRocket"
     />
 
-    <!-- Success Snackbar Notification -->
     <v-snackbar
       v-model="showSnackbar"
       color="success"
@@ -167,7 +158,6 @@ function resetFilters() {
 }
 
 onMounted(() => {
-  // Trigger initial fetch when component mounts
   store.loadRockets()
 })
 </script>
