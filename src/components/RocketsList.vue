@@ -7,14 +7,14 @@ import AddRocketDialog from "./AddRocketDialog.vue";
 const store = useRocketStore();
 
 const showModal = ref(false);
-const successMessage = ref("");
+
 const errorMessage = ref("");
 
 onMounted(() => {
   if (store.rockets.length === 0) {
     store.fetchRockets().then(() => {
       store.searchQuery = "";
-      successMessage.value = "Rockets data fetched successfully!";
+      store.successMessage = "Rockets data fetched successfully!";
     });
   }
 });
@@ -23,14 +23,14 @@ onMounted(() => {
 <template>
   <v-container class="py-8">
     <v-snackbar
-      :model-value="!!successMessage"
+      :model-value="!!store.successMessage"
       color="success"
       location="bottom right"
       title="Successfully"
       :timeout="3000"
     >
       <p class="mb-4">
-        {{ successMessage }}
+        {{ store.successMessage }}
       </p>
     </v-snackbar>
 
@@ -42,7 +42,7 @@ onMounted(() => {
       :timeout="3000"
     >
       <p class="mb-4">
-        {{ errorMessage }}
+        {{ store.error || "Error occurred" }}
       </p>
     </v-snackbar>
     <v-row

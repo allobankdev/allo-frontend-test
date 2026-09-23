@@ -13,11 +13,14 @@ const fallbackImage =
   "https://via.placeholder.com/800x400?text=No+Rocket+Image";
 
 onMounted(() => {
-  store.detailRocket(rocketId);
+  store.detailRocket(rocketId).then(() => {
+    if (!store.selectedRocket) {
+      router.replace({ name: "RocketList" });
+    }
+  });
   console.log("Found local rocket:", store.selectedRocket);
+  store.successMessage = "Rocket details fetched successfully!";
 });
-
-
 </script>
 
 <template>
@@ -34,6 +37,17 @@ onMounted(() => {
     >
       Go back to Rocket List
     </v-btn>
+    <v-snackbar
+      :model-value="!!store.successMessage"
+      color="success"
+      location="bottom right"
+      title="Successfully"
+      :timeout="3000"
+    >
+      <p class="mb-4">
+        {{ store.successMessage }}
+      </p>
+    </v-snackbar>
 
     <div
       v-if="store.loading"

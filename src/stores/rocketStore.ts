@@ -11,6 +11,14 @@ export const useRocketStore = defineStore("rocketStore", () => {
   const loading = ref<boolean>(false);
   const error = ref<string | null>(null);
   const searchQuery = ref<string>("");
+  const successMessage = ref<string | null>("");
+
+
+  function clearMessage(){
+    successMessage.value = null;
+    error.value = null;
+  }
+
 
   async function fetchRockets() {
     loading.value = true;
@@ -24,6 +32,7 @@ export const useRocketStore = defineStore("rocketStore", () => {
         err instanceof Error ? err.message : "An unknown error occurred";
     } finally {
       loading.value = false;
+      setTimeout(() => clearMessage(), 3000);
     }
   }
 
@@ -49,6 +58,7 @@ export const useRocketStore = defineStore("rocketStore", () => {
         err instanceof Error ? err.message : "An unknown error occurred";
     } finally {
       loading.value = false;
+      setTimeout(() => clearMessage(), 3000);
     }
   }
 
@@ -60,6 +70,8 @@ export const useRocketStore = defineStore("rocketStore", () => {
       isLocal: true,
     };
     rockets.value.unshift(createdRocket);
+    successMessage.value = "Rocket added successfully!";
+    setTimeout(() => clearMessage(), 3000);
   }
 
   const filteredRockets = computed(() => {
@@ -77,9 +89,11 @@ export const useRocketStore = defineStore("rocketStore", () => {
     loading,
     error,
     searchQuery,
+    successMessage,
     fetchRockets,
     detailRocket,
     addRocket,
+    clearMessage,
     filteredRockets,
   }
 });
