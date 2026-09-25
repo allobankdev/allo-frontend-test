@@ -16,7 +16,6 @@ declare module 'vue' {
     RocketImage: typeof import('./src/components/RocketImage.vue')['default']
     RocketImagePlaceholder: typeof import('./src/components/RocketImagePlaceholder.vue')['default']
     RocketSpecGrid: typeof import('./src/components/RocketSpecGrid.vue')['default']
-    RocketSpecList: typeof import('./src/components/RocketSpecList.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     StatusMessage: typeof import('./src/components/StatusMessage.vue')['default']
