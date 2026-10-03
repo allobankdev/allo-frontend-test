@@ -42,7 +42,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen max-w-7xl mx-auto mt-4 sm:mt-6 lg:mt-8">
+  <div class="min-h-screen max-w-7xl mx-auto mt-4 sm:mt-6 lg:mt-8 px-4 sm:px-6 lg:px-8">
 
     <LoadingState v-if="loading" />
 
