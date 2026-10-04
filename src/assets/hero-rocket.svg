@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 420" fill="none">
+  <defs>
+    <linearGradient id="body" x1="65" x2="182" y1="105" y2="310" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff8ff"/>
+      <stop offset=".46" stop-color="#d7d6ff"/>
+      <stop offset="1" stop-color="#9075e9"/>
+    </linearGradient>
+    <linearGradient id="fin" x1="62" x2="137" y1="244" y2="332" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fd4e9c"/>
+      <stop offset="1" stop-color="#8b4cec"/>
+    </linearGradient>
+    <linearGradient id="flame" x1="120" x2="120" y1="318" y2="418" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff5a3"/>
+      <stop offset=".38" stop-color="#ffb637"/>
+      <stop offset="1" stop-color="#ff4e96" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="window" x1="90" x2="151" y1="179" y2="227" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#86fff0"/>
+      <stop offset=".55" stop-color="#4ec8fa"/>
+      <stop offset="1" stop-color="#8365ec"/>
+    </linearGradient>
+    <filter id="shadow" width="2" height="2" x="-.5" y="-.5">
+      <feGaussianBlur stdDeviation="8"/>
+    </filter>
+  </defs>
+  <ellipse cx="120" cy="330" fill="#ff519b" opacity=".28" rx="45" ry="31" filter="url(#shadow)"/>
+  <path fill="url(#flame)" d="M97 292h46l-8 91-15 34-15-34z"/>
+  <path fill="#ffef9a" d="M108 301h24l-5 58-7 20-7-20z"/>
+  <path fill="url(#fin)" d="M78 235 34 305l54-23zm84 0 44 70-54-23z"/>
+  <path fill="url(#body)" stroke="#fff" stroke-opacity=".72" stroke-width="3" d="M120 22c-11 19-51 69-58 128-8 67 8 117 24 155h68c16-38 32-88 24-155-7-59-47-109-58-128Z"/>
+  <path fill="#ff58a0" d="M120 23c-8 14-31 43-45 79h90c-14-36-37-65-45-79Z"/>
+  <path stroke="#fff" stroke-opacity=".65" stroke-width="3" d="M87 125c20 9 46 9 66 0M79 262c25 14 57 14 82 0"/>
+  <circle cx="120" cy="204" r="32" fill="#242151"/>
+  <circle cx="120" cy="204" r="24" fill="url(#window)" stroke="#f7fbff" stroke-width="4"/>
+  <path fill="#fff" fill-opacity=".56" d="M104 194c5-9 15-13 25-10l-16 21z"/>
+  <path fill="#fff" fill-opacity=".52" d="M70 165c3-13 6-24 10-35m90 0c4 11 7 22 10 35" stroke="#fff" stroke-linecap="round" stroke-width="4"/>
+</svg>
