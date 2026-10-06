@@ -74,6 +74,6 @@ You don’t need to worry about the detailed design, we’re not interested in y
 
 3.  When complete, submit your solution via a **Pull Request (PR)** back to the main repository.
    
-4.  Please complete the form to submit your technical test: [Click Here](https://forms.gle/nZKQ2EjTCPfAKHog7)
+4.  Please complete the form to submit your technical test: [Click Here](https://forms.gle/YAbAQxPuJAdDYmRW7)
 
 Good luck with your assignment! Don't hesitate to contact us if you have any questions about the assignment process.
