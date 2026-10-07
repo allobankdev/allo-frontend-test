@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520">
+  <rect width="800" height="520" fill="#F3F3EF"/>
+  <path d="M0 430h800M0 390h800M0 350h800M0 310h800M0 270h800M0 230h800M0 190h800M0 150h800M0 110h800M0 70h800" stroke="#1C293C" stroke-width="2" opacity=".12"/>
+  <path d="M80 0v520M120 0v520M160 0v520M200 0v520M240 0v520M280 0v520M320 0v520M360 0v520M400 0v520M440 0v520M480 0v520M520 0v520M560 0v520M600 0v520M640 0v520M680 0v520M720 0v520" stroke="#1C293C" stroke-width="2" opacity=".12"/>
+  <path d="M410 80c-34 35-52 96-52 158v112l-42 62h83v44h42v-44h83l-42-62V238c0-62-18-123-52-158z" fill="#432DD7" stroke="#1C293C" stroke-width="10"/>
+  <path d="M358 250h-44l-39 78h83M442 250h44l39 78h-83" fill="#FDC800" stroke="#1C293C" stroke-width="10"/>
+  <circle cx="420" cy="185" r="25" fill="#FDC800" stroke="#1C293C" stroke-width="9"/>
+  <path d="M389 412h62l-15 50h-32z" fill="#FDC800" stroke="#1C293C" stroke-width="10"/>
+  <path d="M404 462h32l-8 32h-16z" fill="#F05A47" stroke="#1C293C" stroke-width="8"/>
+  <text x="32" y="54" font-family="monospace" font-size="22" font-weight="700" fill="#1C293C">IMAGE OFFLINE / ROCKET ARCHIVE</text>
+</svg>

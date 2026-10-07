@@ -5,6 +5,7 @@
  */
 
 // Composables
+// @ts-expect-error: unplugin-vue-router generated module
 import { createRouter, createWebHistory } from 'vue-router/auto'
 import { routes } from 'vue-router/auto-routes'
 
@@ -14,12 +15,12 @@ const router = createRouter({
 })
 
 // Workaround for https://github.com/vitejs/vite/issues/11804
-router.onError((err, to) => {
-  if (err?.message?.includes?.('Failed to fetch dynamically imported module')) {
+router.onError((err: unknown, to: unknown) => {
+  if ((err as Error)?.message?.includes?.('Failed to fetch dynamically imported module')) {
     if (!localStorage.getItem('vuetify:dynamic-reload')) {
       console.log('Reloading page to fix dynamic import error')
       localStorage.setItem('vuetify:dynamic-reload', 'true')
-      location.assign(to.fullPath)
+      location.assign((to as { fullPath: string }).fullPath)
     } else {
       console.error('Dynamic import error, reloading page did not fix it', err)
     }
