@@ -1,7 +1,4 @@
 <template>
-  <HelloWorld />
+  <Filter />
+  <RocketCardList />
 </template>
-
-<script lang="ts" setup>
-  //
-</script>
