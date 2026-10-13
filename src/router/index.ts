@@ -1,11 +1,11 @@
 /**
  * router/index.ts
  *
- * Automatic routes for `./src/pages/*.vue`
+ * File-based routing powered by unplugin-vue-router.
+ * Routes are auto-generated from src/pages/ at build time.
  */
 
-// Composables
-import { createRouter, createWebHistory } from 'vue-router/auto'
+import { createRouter, createWebHistory } from 'vue-router'
 import { routes } from 'vue-router/auto-routes'
 
 const router = createRouter({
@@ -14,7 +14,7 @@ const router = createRouter({
 })
 
 // Workaround for https://github.com/vitejs/vite/issues/11804
-router.onError((err, to) => {
+router.onError((err: Error, to: { fullPath: string }) => {
   if (err?.message?.includes?.('Failed to fetch dynamically imported module')) {
     if (!localStorage.getItem('vuetify:dynamic-reload')) {
       console.log('Reloading page to fix dynamic import error')
