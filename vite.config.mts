@@ -6,7 +6,7 @@ import ViteFonts from 'unplugin-fonts/vite'
 import VueRouter from 'unplugin-vue-router/vite'
 
 // Utilities
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 import { fileURLToPath, URL } from 'node:url'
 
 // https://vitejs.dev/config/
@@ -50,6 +50,16 @@ export default defineConfig({
   },
   server: {
     port: 3000,
+  },
+  test: {
+    environment: 'happy-dom',
+    include: ['src/**/*.{spec,test}.ts'],
+    setupFiles: ['./src/__tests__/setup.ts'],
+    server: {
+      deps: {
+        inline: ['vuetify'],
+      },
+    },
   },
   css: {
     preprocessorOptions: {
