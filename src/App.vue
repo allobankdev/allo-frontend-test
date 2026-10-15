@@ -1,9 +1,7 @@
 <template>
-  <v-app>
-    <v-main>
-      <router-view />
-    </v-main>
-  </v-app>
+  <div class="min-h-screen bg-slate-50 font-sans text-slate-900 antialiased">
+    <router-view />
+  </div>
 </template>
 
 <script lang="ts" setup>
