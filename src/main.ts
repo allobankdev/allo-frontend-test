@@ -1,7 +1,7 @@
 /**
  * main.ts
  *
- * Bootstraps Vuetify and other plugins then mounts the App`
+ * Bootstraps plugins then mounts the App`
  */
 
 // Plugins
