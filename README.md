@@ -1,79 +1,114 @@
-# Allo Bank Frontend Technical Assignment
+# SpaceX Rocket Explorer
 
-In this assignment, you’re assigned to create a website that displays rockets. This website only has two screens: rocket list screen and rocket detail screen. Here are the requirements:
+A responsive web application built for the Allo Bank Frontend Technical Assignment. The application displays SpaceX rockets using Launch Library 2 API and provides search, local rocket creation, and rocket detail views.
 
-### Functional Requirements
-- As a user, I want to see a list of rockets in the rocket list screen (Show each rocket image, rocket name, and rocket description)
-- As a user, I want to be able to filter the rockets in the rocket list screen
-- As a user, I want to be able to add the new rocket in the rocket list screen (the API is read-only, so the new rocket only needs to appear in the running app)
-- As a user, I want to be able to see the rocket detail by clicking a rocket in the rocket list screen (Show rocket image, rocket name, rocket description, cost per launch, country, first flight)
-- As a user, I want both screens to still display correctly when some rocket data is missing
+## Features
 
-### API
+- **Rocket listing:** Displays SpaceX rockets with their images, names, and descriptions.
+- **Debounced search:** Filters rockets by name after 300 ms of inactivity.
+- **Add rocket:** Adds a custom rocket to the current application session without writing to the read-only API.
+- **Rocket details:** Displays the rocket image, name, description, launch cost, country, and first-flight date.
+- **Client-side routing:** Supports navigation between the list and detail pages, including direct detail URLs.
+- **Error handling:** Provides loading, retry, missing-data, and not-found states.
+- **Responsive layout:** Uses a responsive grid for mobile, tablet, and desktop screens.
+- **Missing-data fallbacks:** Handles unavailable images and optional rocket information without breaking the UI.
 
-Use the Launch Library 2 API by The Space Devs for rocket data.
-Docs: https://thespacedevs.com/llapi
+## Technology Stack
 
-Rocket list (returns all 13 SpaceX rockets in a single request):
+- Vue 3
+- TypeScript
+- Vuetify 3
+- Vue Router
+- Vite
+- Launch Library 2 API
 
-    GET https://lldev.thespacedevs.com/2.2.0/config/launcher/?manufacturer__name=SpaceX&mode=detailed&limit=20
+## Getting Started
 
-Single rocket:
+### Prerequisites
 
-    GET https://lldev.thespacedevs.com/2.2.0/config/launcher/:id/
+- Node.js and npm
+- Git
 
-`mode=detailed` is required — without it the response omits `description`
-and the other detail fields. `limit=20` is required too — the default page size
-is 10, so without it you get 10 rockets and a `next` page instead of all 13.
+### Installation
 
-**API version:** use `2.2.0` as shown above. The docs site now showcases
-`2.3.0`, but `2.2.0` is still live with no announced end-of-life, and the field
-names in the table below are the `2.2.0` ones. Don't migrate: `2.3.0` renames
-the endpoint to `/2.3.0/launcher_configurations/` and moves several of these
-fields (`image_url` becomes `image.image_url`, `manufacturer.country_code`
-becomes a `manufacturer.country` array). Both versions return the same 13
-rockets.
+Clone the repository:
 
-| Requirement      | Field                              |
-| ---------------- | ---------------------------------- |
-| rocket image     | `image_url`                        |
-| rocket name      | `full_name`                        |
-| description      | `description`                      |
-| cost per launch  | `launch_cost`                      |
-| country          | `manufacturer.country_code`        |
-| first flight     | `maiden_flight`                    |
+```bash
+git clone https://github.com/firdausbasyuni/allobank-frontend.git
+cd allobank-frontend
+```
 
-**Rate limit:** the API allows 15 requests/hour for anonymous users. Use the
-`lldev.thespacedevs.com` host shown above during development — it serves the
-same data with a far more generous limit. The production host,
-`ll.thespacedevs.com`, will throttle you quickly.
+Install dependencies:
 
-Note that some rockets have missing values for `launch_cost`, `maiden_flight`,
-and `image_url`.
+```bash
+npm install
+```
 
-### Non-Functional Requirements
-- Use the Launch Library 2 API (see the API section above) for getting the rocket data
-- Implement routers
-- Implement state management
-- Implement lifecycles
-- Create components based will be + points
-- UI states (Loading, Fail/Retry, and Success)
-- Show loading when waiting response from API
-- If an error occurred, user can retry by pressing retry button
-- Show result when get response from API
+Start the development server:
 
-### Nice to have characteristics
-Responsive design
-You don’t need to worry about the detailed design, we’re not interested in your artistic prowess (for now), put your efforts on creating a readable/clean/maintainable source code.
+```bash
+npm run dev
+```
 
-### Submission
+Open the local URL displayed by Vite. The application uses port `3000` in the current Vite configuration.
 
-1.  **Fork** this repository.
+## API
 
-2.  Implement your solution on a dedicated feature branch (e.g., `feat/allo-spacex`).
+The application uses Launch Library 2 API version `2.2.0`.
 
-3.  When complete, submit your solution via a **Pull Request (PR)** back to the main repository.
-   
-4.  Please complete the form to submit your technical test: [Click Here](https://forms.gle/YAbAQxPuJAdDYmRW7)
+### Rocket list
 
-Good luck with your assignment! Don't hesitate to contact us if you have any questions about the assignment process.
+```http
+GET https://lldev.thespacedevs.com/2.2.0/config/launcher/?manufacturer__name=SpaceX&mode=detailed&limit=20
+```
+
+The `mode=detailed` parameter provides the detail fields required by the assignment. The `limit=20` parameter allows all 13 SpaceX rockets to be returned in one request.
+
+### Rocket detail
+
+```http
+GET https://lldev.thespacedevs.com/2.2.0/config/launcher/:id/
+```
+
+The API is read-only for this application. Custom rockets are stored in client-side reactive state and are not persisted to the API or across a full page refresh.
+
+## Project Structure
+
+```text
+src/
+├── components/
+│   ├── AddRocketDialog.vue
+│   └── RocketCard.vue
+├── composables/
+│   └── useRockets.ts
+├── pages/
+│   ├── index.vue
+│   ├── [...path].vue
+│   └── rockets/
+│       └── [id].vue
+├── services/
+│   └── rocketService.ts
+├── types/
+│   └── rocket.ts
+├── plugins/
+├── router/
+├── styles/
+├── App.vue
+└── main.ts
+```
+
+## Validation
+
+Run the TypeScript check:
+
+```bash
+npm run type-check
+```
+
+Create a production build:
+
+```bash
+npm run build
+```
+
+Both commands should complete successfully before submission.
