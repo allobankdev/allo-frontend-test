@@ -1,7 +1,7 @@
 /**
  * plugins/vuetify.ts
  *
- * Framework documentation: https://vuetifyjs.com`
+ * Framework documentation: https://vuetifyjs.com
  */
 
 // Styles
@@ -11,9 +11,26 @@ import 'vuetify/styles'
 // Composables
 import { createVuetify } from 'vuetify'
 
-// https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
   theme: {
-    defaultTheme: 'dark',
+    defaultTheme: 'spaceDark',
+    themes: {
+      spaceDark: {
+        dark: true,
+        colors: {
+          background: '#0a0d14',
+          surface: '#121826',
+          'surface-bright': '#1a2234',
+          'surface-light': '#222d42',
+          primary: '#38bdf8', // SpaceX vibrant sky blue
+          secondary: '#818cf8',
+          accent: '#06b6d4',
+          error: '#f43f5e',
+          info: '#38bdf8',
+          success: '#10b981',
+          warning: '#f59e0b',
+        },
+      },
+    },
   },
 })
