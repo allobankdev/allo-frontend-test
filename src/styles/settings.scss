@@ -1,10 +1,20 @@
-/**
- * src/styles/settings.scss
- *
- * Configures SASS variables and Vuetify overwrites
- */
+@use 'vuetify/settings' with (
+  $body-font-family: ('Helmet', 'Roboto', sans-serif)
+);
 
-// https://vuetifyjs.com/features/sass-variables/`
-// @use 'vuetify/settings' with (
-//   $color-pack: false
-// );
+@font-face {
+  font-family: 'Helmet';
+  src: url('/helmet-1.0/Helmet-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+html,
+body,
+#app,
+.v-application,
+.v-application * {
+  font-family: 'Helmet', 'Roboto', sans-serif;
+}
+
