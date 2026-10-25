@@ -1,13 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <link rel="icon" href="/favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Vuetify 3</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Allo Rockets</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header class="header">
+    <div class="wrap">
+      <a href="#/" class="logo">Allo Rockets</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <!-- LIST VIEW -->
+    <section id="view-list" class="view">
+      <div class="row">
+        <input type="search" id="filter-input" class="input" placeholder="Filter rockets by name or description" aria-label="Filter rockets" />
+        <button type="button" id="add-rocket-btn" class="btn">+ Add Rocket</button>
+      </div>
+
+      <div id="list-content"></div>
+
+      <div id="pagination" class="pagination"></div>
+    </section>
+
+    <!-- DETAIL VIEW -->
+    <section id="view-detail" class="view" hidden>
+      <a href="#/" class="back-link">&larr; Back to list</a>
+
+      <div class="detail">
+        <div class="detail__image-wrap">
+          <img id="detail-image" class="detail__image" alt="" hidden />
+          <div id="detail-placeholder" class="placeholder" hidden></div>
+        </div>
+        <div class="detail__body">
+          <h1 id="detail-name" class="detail__name"></h1>
+          <p id="detail-description" class="detail__description"></p>
+          <dl class="detail__meta">
+            <div><dt>Cost per launch</dt><dd id="detail-cost"></dd></div>
+            <div><dt>Country</dt><dd id="detail-country"></dd></div>
+            <div><dt>First flight</dt><dd id="detail-first-flight"></dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- NOT FOUND -->
+    <section id="view-not-found" class="view" hidden>
+      <div class="panel"><p>Page not found. <a href="#/">Go home</a></p></div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>Rocket data courtesy of the <a href="https://thespacedevs.com/llapi" target="_blank" rel="noopener noreferrer">Launch Library 2 API</a>.</p>
+  </footer>
+
+  <!-- ADD ROCKET MODAL -->
+  <div id="add-rocket-modal" class="overlay hidden">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <h2 id="modal-title">Add a new rocket</h2>
+      <form id="add-rocket-form">
+        <label class="field"><span>Name *</span>
+          <input type="text" name="full_name" required maxlength="120" />
+        </label>
+        <label class="field"><span>Description</span>
+          <textarea name="description" rows="3" maxlength="500"></textarea>
+        </label>
+        <label class="field"><span>Image URL</span>
+          <input type="url" name="image_url" placeholder="https://" />
+        </label>
+        <label class="field"><span>Cost per launch (USD)</span>
+          <input type="number" name="launch_cost" min="0" />
+        </label>
+        <label class="field"><span>Country code</span>
+          <input type="text" name="country_code" maxlength="10" placeholder="e.g. USA" />
+        </label>
+        <label class="field"><span>First flight</span>
+          <input type="date" name="maiden_flight" />
+        </label>
+        <div class="modal__actions">
+          <button type="button" id="cancel-add-btn" class="btn btn--ghost">Cancel</button>
+          <button type="submit" class="btn">Add rocket</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- REUSABLE TEMPLATES (kept out of JS-built HTML strings) -->
+  <template id="tpl-rocket-card">
+    <article class="card" tabindex="0" role="button">
+      <div class="card__image-wrap">
+        <img class="card__image" loading="lazy" alt="" hidden />
+        <div class="placeholder" hidden></div>
+      </div>
+      <div class="card__body">
+        <h3 class="card__name"></h3>
+        <p class="card__description"></p>
+      </div>
+    </article>
+  </template>
+
+  <template id="tpl-state-loading">
+    <div class="panel" role="status">
+      <div class="spinner" aria-hidden="true"></div>
+      <p>Loading&hellip;</p>
+    </div>
+  </template>
+
+  <template id="tpl-state-error">
+    <div class="panel">
+      <p class="panel__error"></p>
+      <button type="button" class="btn js-retry">Retry</button>
+    </div>
+  </template>
+
+  <template id="tpl-state-empty">
+    <div class="panel"><p>No rockets match your search.</p></div>
+  </template>
+
+  <script src="js/api.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/router.js"></script>
+  <script src="js/views/list.js"></script>
+  <script src="js/views/detail.js"></script>
+  <script src="js/main.js"></script>
+</body>
 </html>
