@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f1118"/>
+      <stop offset="100%" stop-color="#1b2030"/>
+    </linearGradient>
+    <linearGradient id="rocketGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <linearGradient id="flameGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fb923c"/>
+      <stop offset="50%" stop-color="#f97316"/>
+      <stop offset="100%" stop-color="#ef4444"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="400" height="300" fill="url(#bgGrad)"/>
+
+  <!-- Subtle starfield -->
+  <circle cx="50" cy="40" r="1.5" fill="#ffffff" opacity="0.4"/>
+  <circle cx="120" cy="80" r="1" fill="#ffffff" opacity="0.3"/>
+  <circle cx="340" cy="50" r="1.5" fill="#ffffff" opacity="0.5"/>
+  <circle cx="310" cy="110" r="1" fill="#ffffff" opacity="0.3"/>
+  <circle cx="80" cy="220" r="1" fill="#ffffff" opacity="0.3"/>
+  <circle cx="350" cy="240" r="1.5" fill="#ffffff" opacity="0.4"/>
+
+  <!-- Rocket Body -->
+  <g transform="translate(200, 130) rotate(45)">
+    <!-- Exhaust flame -->
+    <path d="M-8,55 Q0,95 0,95 Q0,95 8,55 Z" fill="url(#flameGrad)" opacity="0.9"/>
+    <path d="M-4,55 Q0,80 0,80 Q0,80 4,55 Z" fill="#fef08a"/>
+
+    <!-- Fins -->
+    <path d="M-14,30 L-32,54 L-12,50 Z" fill="#475569"/>
+    <path d="M14,30 L32,54 L12,50 Z" fill="#475569"/>
+
+    <!-- Main Fuselage -->
+    <path d="M-14,48 L-14,-10 C-14,-35 0,-60 0,-60 C0,-60 14,-35 14,-10 L14,48 Z" fill="url(#rocketGrad)"/>
+
+    <!-- Window -->
+    <circle cx="0" cy="-15" r="7" fill="url(#accentGrad)"/>
+    <circle cx="-2" cy="-17" r="2.5" fill="#ffffff" opacity="0.8"/>
+
+    <!-- Stripe -->
+    <rect x="-14" y="15" width="28" height="4" fill="#0284c7"/>
+  </g>
+
+  <!-- Text -->
+  <text x="200" y="255" text-anchor="middle" fill="#64748b" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="500" letter-spacing="0.5">
+    SPACEX LAUNCH VEHICLE
+  </text>
+</svg>
