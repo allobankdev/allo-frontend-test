@@ -77,3 +77,32 @@ You don’t need to worry about the detailed design, we’re not interested in y
 4.  Please complete the form to submit your technical test: [Click Here](https://forms.gle/YAbAQxPuJAdDYmRW7)
 
 Good luck with your assignment! Don't hesitate to contact us if you have any questions about the assignment process.
+
+---
+
+## Catatan Pengerjaan
+
+Aplikasi web sederhana untuk menampilkan katalog roket SpaceX menggunakan Launch Library 2 API, dibuat dengan Vue 3, Vuetify 3, dan Pinia.
+
+### Fitur yang Dibuat
+- **Katalog & Filter Roket:** Menampilkan daftar roket SpaceX dengan filter pencarian nama/deskripsi dan filter negara.
+- **Detail Roket:** Halaman `/rockets/:id` untuk melihat detail spesifikasi roket (biaya peluncuran, negara produsen, tanggal penerbangan perdana). Nilai yang kosong ditampilkan sebagai `N/A`.
+- **Tambah Roket Baru:** Dialog form untuk menambahkan roket baru secara lokal (disimpan di `localStorage` agar tidak hilang saat reload).
+- **Penanganan State (Loading & Error):** Tampilan loading saat fetch data dan alert error dengan tombol retry bila koneksi bermasalah.
+- **Unit Test:** Pengujian unit menggunakan Vitest untuk fungsi utilitas format dan mapper API.
+
+### Cara Menjalankan
+
+```bash
+# Install dependencies
+npm install
+
+# Jalankan dev server (port 3000)
+npm run dev
+
+# Jalankan unit test
+npm test
+
+# Build production
+npm run build
+```
