@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <!-- Dark aerospace background -->
+    <linearGradient id="blueprintBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b111e"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#090d16"/>
+    </linearGradient>
+
+    <!-- Blueprint grid pattern -->
+    <pattern id="gridMinor" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#38bdf8" stroke-width="0.5" stroke-opacity="0.06"/>
+    </pattern>
+    <pattern id="gridMajor" width="100" height="100" patternUnits="userSpaceOnUse">
+      <rect width="100" height="100" fill="url(#gridMinor)"/>
+      <path d="M 100 0 L 0 0 0 100" fill="none" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.12"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="url(#blueprintBg)"/>
+  <rect width="100%" height="100%" fill="url(#gridMajor)"/>
+
+  <!-- Technical Reticle Circles -->
+  <circle cx="400" cy="220" r="160" fill="none" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.15" stroke-dasharray="4,8"/>
+  <circle cx="400" cy="220" r="110" fill="none" stroke="#94a3b8" stroke-width="0.8" stroke-opacity="0.1"/>
+  <circle cx="400" cy="220" r="4" fill="#38bdf8" opacity="0.8"/>
+
+  <!-- Crosshairs -->
+  <line x1="200" y1="220" x2="600" y2="220" stroke="#38bdf8" stroke-width="0.7" stroke-opacity="0.15" stroke-dasharray="10,6"/>
+  <line x1="400" y1="40" x2="400" y2="400" stroke="#38bdf8" stroke-width="0.7" stroke-opacity="0.15" stroke-dasharray="10,6"/>
+
+  <!-- Sleek Aerospace Rocket Silhouette (Starship / Booster Architecture) -->
+  <g transform="translate(400, 220)">
+    <!-- Fairing / Nosecone -->
+    <path d="M 0 -130 Q -24 -80 -24 -20 L 24 -20 Q 24 -80 0 -130 Z" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5" stroke-opacity="0.7"/>
+
+    <!-- Interstage Line -->
+    <line x1="-24" y1="-20" x2="24" y2="-20" stroke="#38bdf8" stroke-width="1.5" stroke-opacity="0.9"/>
+
+    <!-- Booster Core Body -->
+    <rect x="-24" y="-20" width="48" height="120" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" stroke-opacity="0.7"/>
+
+    <!-- Grid Fins -->
+    <rect x="-38" y="-12" width="14" height="6" fill="#38bdf8" opacity="0.6"/>
+    <rect x="24" y="-12" width="14" height="6" fill="#38bdf8" opacity="0.6"/>
+
+    <!-- Center Spine & Weld Seams -->
+    <line x1="0" y1="-120" x2="0" y2="100" stroke="#38bdf8" stroke-width="0.8" stroke-opacity="0.3" stroke-dasharray="8,4"/>
+    <line x1="-24" y1="20" x2="24" y2="20" stroke="#94a3b8" stroke-width="0.8" stroke-opacity="0.4"/>
+    <line x1="-24" y1="60" x2="24" y2="60" stroke="#94a3b8" stroke-width="0.8" stroke-opacity="0.4"/>
+
+    <!-- Engine Skirt / Nozzles -->
+    <path d="M -24 100 L -28 116 L 28 116 L 24 100 Z" fill="#1e293b" stroke="#38bdf8" stroke-width="1.2" stroke-opacity="0.8"/>
+    <path d="M -16 116 L -19 126 L -7 126 L -10 116 Z" fill="#0284c7" opacity="0.8"/>
+    <path d="M -5 116 L -7 127 L 7 127 L 5 116 Z" fill="#38bdf8" opacity="0.9"/>
+    <path d="M 10 116 L 7 126 L 19 126 L 16 116 Z" fill="#0284c7" opacity="0.8"/>
+  </g>
+
+  <!-- Telemetry Coordinates and Blueprint Annotations -->
+  <text x="32" y="44" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600" opacity="0.8">SYSTEM: LL2 // SPACEX TELEMETRY</text>
+  <text x="32" y="62" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10" opacity="0.6">PHOTO FEED: ARCHIVAL SCHEMATIC</text>
+
+  <text x="768" y="44" text-anchor="end" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10" opacity="0.6">SCALE: 1:100 ORBITAL</text>
+  <text x="768" y="62" text-anchor="end" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="10" opacity="0.7">STATUS: NOMINAL CAD</text>
+
+  <!-- Bottom Annotation Bar -->
+  <rect x="250" y="440" width="300" height="26" fill="#090d16" stroke="#38bdf8" stroke-width="0.8" stroke-opacity="0.4" rx="2"/>
+  <text x="400" y="457" text-anchor="middle" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="10" letter-spacing="1.5">VEHICLE SCHEMATIC DATA</text>
+</svg>
