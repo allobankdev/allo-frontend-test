@@ -1,42 +1,36 @@
 <template>
   <v-dialog
     v-model="isOpen"
-    max-width="620"
+    max-width="640"
     persistent
     scrollable
   >
-    <v-card
-      color="surface"
-      class="rounded-lg border"
-      style="border-color: rgba(255, 255, 255, 0.12) !important;"
+    <div
+      class="cad-frame rounded-sm overflow-hidden"
+      style="background: var(--console-surface);"
     >
       <!-- Dialog Header -->
-      <v-card-title
+      <div
         class="d-flex align-center justify-space-between pa-4 pa-sm-5 border-b"
-        style="border-color: rgba(255, 255, 255, 0.08) !important;"
+        style="border-color: var(--titanium-border) !important;"
       >
         <div class="d-flex align-center">
-          <v-avatar
-            color="primary"
-            size="32"
-            class="me-3"
-            rounded="sm"
-          >
+          <div class="modal-icon-wrap me-3 d-flex align-center justify-center">
             <v-icon
               icon="mdi-plus"
-              color="#090d16"
+              color="primary"
               size="20"
             />
-          </v-avatar>
+          </div>
           <div>
-            <div
-              class="text-subtitle-1 font-weight-bold text-uppercase"
-              style="letter-spacing: 1px;"
-            >
-              Register New Rocket
+            <div class="text-subtitle-1 font-weight-bold tracking-tight">
+              Register New Launch Vehicle
             </div>
-            <div class="text-caption text-secondary">
-              In-Memory Configuration (SpaceX Fleet)
+            <div
+              class="font-mono text-caption text-secondary"
+              style="font-size: 0.7rem;"
+            >
+              IN-MEMORY MANIFEST REGISTRY // SPACEX FLEET
             </div>
           </div>
         </div>
@@ -48,10 +42,13 @@
           color="secondary"
           @click="closeModal"
         />
-      </v-card-title>
+      </div>
 
       <!-- Form Body -->
-      <v-card-text class="pa-4 pa-sm-5">
+      <div
+        class="pa-4 pa-sm-5"
+        style="max-height: 70vh; overflow-y: auto;"
+      >
         <v-form
           ref="formRef"
           v-model="isFormValid"
@@ -60,8 +57,8 @@
           <v-row dense>
             <!-- Full Name -->
             <v-col cols="12">
-              <label class="text-caption text-secondary font-weight-medium text-uppercase mb-1 d-block">
-                Rocket Full Name <span class="text-error">*</span>
+              <label class="font-mono text-caption text-secondary mb-1 d-block">
+                Vehicle Full Name *
               </label>
               <v-text-field
                 v-model="form.full_name"
@@ -70,17 +67,17 @@
                 variant="outlined"
                 density="comfortable"
                 color="primary"
-                class="mb-2"
+                class="mb-2 font-mono"
               />
             </v-col>
 
-            <!-- Short Name -->
+            <!-- Short Model Name -->
             <v-col
               cols="12"
               sm="6"
             >
-              <label class="text-caption text-secondary font-weight-medium text-uppercase mb-1 d-block">
-                Vehicle Name / Model
+              <label class="font-mono text-caption text-secondary mb-1 d-block">
+                Model Identifier
               </label>
               <v-text-field
                 v-model="form.name"
@@ -88,7 +85,7 @@
                 variant="outlined"
                 density="comfortable"
                 color="primary"
-                class="mb-2"
+                class="mb-2 font-mono"
               />
             </v-col>
 
@@ -97,16 +94,16 @@
               cols="12"
               sm="6"
             >
-              <label class="text-caption text-secondary font-weight-medium text-uppercase mb-1 d-block">
+              <label class="font-mono text-caption text-secondary mb-1 d-block">
                 Country Code
               </label>
               <v-text-field
                 v-model="form.country_code"
-                placeholder="e.g. USA"
+                placeholder="USA"
                 variant="outlined"
                 density="comfortable"
                 color="primary"
-                class="mb-2"
+                class="mb-2 font-mono"
               />
             </v-col>
 
@@ -115,18 +112,18 @@
               cols="12"
               sm="6"
             >
-              <label class="text-caption text-secondary font-weight-medium text-uppercase mb-1 d-block">
+              <label class="font-mono text-caption text-secondary mb-1 d-block">
                 Cost Per Launch (USD)
               </label>
               <v-text-field
                 v-model="form.launch_cost"
                 type="number"
-                placeholder="e.g. 10000000"
+                placeholder="e.g. 50000000"
                 prefix="$"
                 variant="outlined"
                 density="comfortable"
                 color="primary"
-                class="mb-2"
+                class="mb-2 font-mono"
               />
             </v-col>
 
@@ -134,8 +131,8 @@
               cols="12"
               sm="6"
             >
-              <label class="text-caption text-secondary font-weight-medium text-uppercase mb-1 d-block">
-                First Flight Date
+              <label class="font-mono text-caption text-secondary mb-1 d-block">
+                First Flight (Maiden Date)
               </label>
               <v-text-field
                 v-model="form.maiden_flight"
@@ -143,41 +140,41 @@
                 variant="outlined"
                 density="comfortable"
                 color="primary"
-                class="mb-2"
+                class="mb-2 font-mono"
               />
             </v-col>
 
             <!-- Image URL -->
             <v-col cols="12">
-              <label class="text-caption text-secondary font-weight-medium text-uppercase mb-1 d-block">
+              <label class="font-mono text-caption text-secondary mb-1 d-block">
                 Image URL (Optional)
               </label>
               <v-text-field
                 v-model="form.image_url"
-                placeholder="https://example.com/rocket.jpg"
+                placeholder="https://example.com/booster.jpg"
                 prepend-inner-icon="mdi-image-outline"
                 variant="outlined"
                 density="comfortable"
                 color="primary"
-                class="mb-2"
+                class="mb-1 font-mono"
               />
               <div
-                class="text-caption text-secondary"
-                style="margin-top: -8px; font-size: 0.72rem !important;"
+                class="font-mono text-caption text-secondary mb-2"
+                style="font-size: 0.68rem;"
               >
-                Leave empty to use our custom aerospace telemetry blueprint placeholder.
+                Optional: If omitted, the vehicle automatically renders our aerospace blueprint vector.
               </div>
             </v-col>
 
             <!-- Description -->
             <v-col cols="12">
-              <label class="text-caption text-secondary font-weight-medium text-uppercase mb-1 d-block">
-                Vehicle Description <span class="text-error">*</span>
+              <label class="font-mono text-caption text-secondary mb-1 d-block">
+                Engineering Summary &amp; Mission Profile *
               </label>
               <v-textarea
                 v-model="form.description"
                 :rules="[rules.required]"
-                placeholder="Describe the launch vehicle specs, payload capacity, and mission profile..."
+                placeholder="Detail the propulsion stages, payload to orbit capabilities, and mission parameters..."
                 rows="3"
                 variant="outlined"
                 density="comfortable"
@@ -186,7 +183,7 @@
               />
             </v-col>
 
-            <!-- Toggles for Active and Reusable -->
+            <!-- Operational Status Toggles -->
             <v-col
               cols="12"
               sm="6"
@@ -194,7 +191,7 @@
               <v-switch
                 v-model="form.active"
                 color="success"
-                label="Active Launch System"
+                label="Operational Hardware Status"
                 density="compact"
                 hide-details
               />
@@ -206,19 +203,19 @@
               <v-switch
                 v-model="form.reusable"
                 color="info"
-                label="Reusable Vehicle"
+                label="Reusable Architecture"
                 density="compact"
                 hide-details
               />
             </v-col>
           </v-row>
         </v-form>
-      </v-card-text>
+      </div>
 
-      <!-- Actions -->
-      <v-card-actions
+      <!-- Actions Footer -->
+      <div
         class="pa-4 pa-sm-5 border-t d-flex justify-end ga-2"
-        style="border-color: rgba(255, 255, 255, 0.08) !important;"
+        style="border-color: var(--titanium-border) !important;"
       >
         <v-btn
           variant="text"
@@ -238,10 +235,10 @@
           :disabled="!isFormValid"
           @click="handleSubmit"
         >
-          Add to Fleet
+          Register Vehicle
         </v-btn>
-      </v-card-actions>
-    </v-card>
+      </div>
+    </div>
   </v-dialog>
 </template>
 
@@ -256,23 +253,37 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: boolean): void
-  (e: 'rocket-added', rocketName: string): void
+  (e: 'rocket-added', name: string): void
 }>()
 
-interface FormInstance {
-  validate: () => Promise<{ valid: boolean }>
-  resetValidation: () => void
+const store = useRocketStore()
+const isOpen = ref(props.modelValue)
+const isFormValid = ref(false)
+const formRef = ref()
+
+const rules = {
+  required: (v: string) => (!!v && v.trim().length > 0) || 'This specification field is required.',
 }
 
-const store = useRocketStore()
-const formRef = ref<FormInstance | null>(null)
-const isFormValid = ref(false)
-const isOpen = ref(props.modelValue)
+const form = reactive<NewRocketPayload>({
+  name: '',
+  full_name: '',
+  description: '',
+  image_url: '',
+  launch_cost: '',
+  maiden_flight: '',
+  country_code: 'USA',
+  active: true,
+  reusable: true,
+})
 
 watch(
   () => props.modelValue,
   (val) => {
     isOpen.value = val
+    if (val) {
+      resetForm()
+    }
   }
 )
 
@@ -283,56 +294,48 @@ watch(
   }
 )
 
-const initialFormState: NewRocketPayload = {
-  full_name: '',
-  name: '',
-  description: '',
-  image_url: '',
-  launch_cost: '',
-  country_code: 'USA',
-  maiden_flight: '',
-  active: true,
-  reusable: true,
-}
-
-const form = reactive<NewRocketPayload>({ ...initialFormState })
-
-const rules = {
-  required: (v: unknown) => Boolean(v) || 'This field is required',
+function resetForm() {
+  form.name = ''
+  form.full_name = ''
+  form.description = ''
+  form.image_url = ''
+  form.launch_cost = ''
+  form.maiden_flight = ''
+  form.country_code = 'USA'
+  form.active = true
+  form.reusable = true
+  formRef.value?.resetValidation()
 }
 
 function closeModal() {
   isOpen.value = false
-  resetForm()
 }
 
-function resetForm() {
-  Object.assign(form, initialFormState)
-  if (formRef.value) {
-    formRef.value.resetValidation()
-  }
-}
-
-async function handleSubmit() {
-  if (formRef.value) {
-    const { valid } = await formRef.value.validate()
-    if (!valid) return
+function handleSubmit() {
+  if (!form.full_name.trim() || !form.description.trim()) {
+    return
   }
 
-  const payload: NewRocketPayload = {
-    full_name: form.full_name,
-    name: form.name || form.full_name,
-    description: form.description,
-    image_url: form.image_url || null,
-    launch_cost: form.launch_cost || null,
-    country_code: form.country_code || 'USA',
-    maiden_flight: form.maiden_flight || null,
-    active: form.active,
-    reusable: form.reusable,
-  }
+  const registeredRocket = store.addRocket({
+    ...form,
+    name: form.name.trim() || form.full_name.trim(),
+  })
 
-  const newRocket = store.addRocket(payload)
-  emit('rocket-added', newRocket.full_name)
+  emit('rocket-added', registeredRocket.full_name)
   closeModal()
 }
 </script>
+
+<style scoped>
+.modal-icon-wrap {
+  width: 32px;
+  height: 32px;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 4px;
+}
+
+:deep(.v-field__outline) {
+  --v-field-border-opacity: 0.15;
+}
+</style>

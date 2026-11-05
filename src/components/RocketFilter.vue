@@ -1,5 +1,8 @@
 <template>
-  <div class="filter-container mb-6">
+  <div
+    class="filter-panel p-3 mb-6 bg-surface border rounded-sm"
+    style="border-color: var(--titanium-border);"
+  >
     <v-row
       align="center"
       dense
@@ -7,7 +10,7 @@
       <!-- Search input -->
       <v-col
         cols="12"
-        md="6"
+        md="5"
         lg="5"
       >
         <v-text-field
@@ -15,25 +18,25 @@
           density="comfortable"
           variant="outlined"
           color="primary"
-          placeholder="Search by rocket name, family, description..."
+          placeholder="Search by vehicle name, family, description..."
           prepend-inner-icon="mdi-magnify"
           clearable
           hide-details
-          class="bg-surface rounded-lg"
-          style="border-color: rgba(255, 255, 255, 0.08);"
+          class="bg-surface-variant font-mono"
+          style="font-size: 0.9rem;"
         />
       </v-col>
 
-      <!-- Family chips -->
+      <!-- Family Filter Badges -->
       <v-col
         cols="12"
-        md="6"
+        md="7"
         lg="7"
         class="d-flex align-center justify-md-end flex-wrap ga-2 pt-2 pt-md-0"
       >
         <span
-          class="text-caption text-secondary font-weight-medium me-1 text-uppercase"
-          style="letter-spacing: 0.5px;"
+          class="font-mono text-caption text-secondary me-1"
+          style="font-size: 0.72rem; letter-spacing: 0.5px;"
         >
           Family:
         </span>
@@ -48,8 +51,9 @@
             variant="tonal"
             size="small"
             rounded="sm"
+            class="font-mono"
           >
-            All Vehicles
+            All Hardware
           </v-chip>
           <v-chip
             v-for="family in store.rocketFamilies"
@@ -59,22 +63,23 @@
             variant="tonal"
             size="small"
             rounded="sm"
+            class="font-mono"
           >
             {{ family }}
           </v-chip>
         </v-chip-group>
 
-        <!-- Reset Button -->
+        <!-- Active Reset Action -->
         <v-btn
           v-if="isFiltered"
           variant="text"
           color="secondary"
           size="small"
           prepend-icon="mdi-filter-remove-outline"
-          class="text-none"
+          class="text-none font-weight-medium"
           @click="store.clearFilters"
         >
-          Reset
+          Reset Filters
         </v-btn>
       </v-col>
     </v-row>
@@ -93,6 +98,10 @@ const isFiltered = computed(() => {
 </script>
 
 <style scoped>
+.filter-panel {
+  background-color: var(--console-surface) !important;
+}
+
 :deep(.v-field__outline) {
   --v-field-border-opacity: 0.15;
 }

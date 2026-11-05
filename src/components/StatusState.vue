@@ -1,35 +1,28 @@
 <template>
   <div>
     <!-- Error State -->
-    <v-card
+    <div
       v-if="type === 'error'"
-      class="pa-8 text-center rounded-lg border mx-auto my-8"
-      max-width="540"
-      color="surface"
-      elevation="0"
-      style="border-color: rgba(244, 63, 94, 0.3) !important;"
+      class="cad-frame pa-8 text-center rounded-sm mx-auto my-8"
+      style="max-width: 520px; border-color: rgba(244, 63, 94, 0.4) !important;"
     >
-      <v-avatar
-        color="rgba(244, 63, 94, 0.15)"
-        size="64"
-        class="mb-4"
-      >
+      <div class="status-icon-wrap mx-auto mb-4 d-flex align-center justify-center">
         <v-icon
-          icon="mdi-alert-circle-outline"
+          icon="mdi-alert-octagon-outline"
           color="error"
-          size="36"
+          size="32"
         />
-      </v-avatar>
+      </div>
 
       <h3 class="text-h6 font-weight-bold mb-2 text-high-emphasis">
-        {{ title || 'Telemetry Link Disrupted' }}
+        {{ title || 'Telemetry Link Offline' }}
       </h3>
 
       <p class="text-body-2 text-secondary mb-6">
-        {{ message || 'Failed to establish connection with the Launch Library 2 API. Please verify network access.' }}
+        {{ message || 'The Launch Library 2 telemetry pipeline could not be reached. Verify network connectivity or retry.' }}
       </p>
 
-      <div class="d-flex justify-center ga-3">
+      <div class="d-flex justify-center">
         <v-btn
           color="error"
           variant="flat"
@@ -41,48 +34,44 @@
           Retry Connection
         </v-btn>
       </div>
-    </v-card>
+    </div>
 
     <!-- Empty Search State -->
-    <v-card
+    <div
       v-else-if="type === 'empty'"
-      class="pa-8 text-center rounded-lg border mx-auto my-8"
-      max-width="540"
-      color="surface"
-      elevation="0"
-      style="border-color: rgba(255, 255, 255, 0.08) !important;"
+      class="cad-frame pa-8 text-center rounded-sm mx-auto my-8"
+      style="max-width: 520px;"
     >
-      <v-avatar
-        color="surface-variant"
-        size="64"
-        class="mb-4"
-      >
+      <div class="status-icon-wrap mx-auto mb-4 d-flex align-center justify-center">
         <v-icon
-          icon="mdi-magnify-remove-outline"
+          icon="mdi-database-search-outline"
           color="secondary"
-          size="36"
+          size="32"
         />
-      </v-avatar>
+      </div>
 
       <h3 class="text-h6 font-weight-bold mb-2 text-high-emphasis">
-        No Matching Launch Vehicles
+        No Launch Vehicles Found
       </h3>
 
       <p class="text-body-2 text-secondary mb-6">
-        No SpaceX rockets match your current query "{{ searchQuery }}". Try adjusting your search keywords or resetting filters.
+        No registered SpaceX configurations match the search filter <span
+          v-if="searchQuery"
+          class="font-mono text-primary"
+        >"{{ searchQuery }}"</span>. Reset filters to view all 13 SpaceX orbital configurations.
       </p>
 
       <v-btn
         color="primary"
         variant="tonal"
-        prepend-icon="mdi-filter-remove"
+        prepend-icon="mdi-filter-remove-outline"
         class="text-none font-weight-bold"
         rounded="sm"
         @click="$emit('reset')"
       >
         Clear Filters
       </v-btn>
-    </v-card>
+    </div>
   </div>
 </template>
 
@@ -99,3 +88,13 @@ defineEmits<{
   (e: 'reset'): void
 }>()
 </script>
+
+<style scoped>
+.status-icon-wrap {
+  width: 56px;
+  height: 56px;
+  background: var(--console-surface-elevated);
+  border: 1px solid var(--titanium-border);
+  border-radius: 4px;
+}
+</style>

@@ -53,6 +53,15 @@ export const useRocketStore = defineStore('rockets', {
         return state.rockets.find((r) => String(r.id) === String(id))
       }
     },
+
+    metrics(state) {
+      return {
+        total: state.rockets.length,
+        active: state.rockets.filter((r) => r.active).length,
+        reusable: state.rockets.filter((r) => r.reusable).length,
+        custom: state.rockets.filter((r) => r.is_custom).length,
+      }
+    },
   },
 
   actions: {

@@ -1,10 +1,75 @@
-/**
- * src/styles/settings.scss
- *
- * Configures SASS variables and Vuetify overwrites
- */
+:root {
+  --space-void: #080c14;
+  --console-surface: #0f1626;
+  --console-surface-elevated: #162035;
+  --titanium-border: rgba(148, 163, 184, 0.14);
+  --titanium-border-active: rgba(56, 189, 248, 0.45);
+  --lox-cyan: #38bdf8;
+  --burn-amber: #f59e0b;
+  --signal-emerald: #10b981;
+  --text-high: #f1f5f9;
+  --text-mid: #94a3b8;
+  --text-dim: #64748b;
+  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
 
-// https://vuetifyjs.com/features/sass-variables/`
-// @use 'vuetify/settings' with (
-//   $color-pack: false
-// );
+body {
+  font-family: var(--font-display);
+  background-color: var(--space-void) !important;
+  color: var(--text-high);
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-mono {
+  font-family: var(--font-mono) !important;
+  font-feature-settings: 'zero' 1, 'tnum' 1;
+}
+
+.font-display {
+  font-family: var(--font-display) !important;
+}
+
+/* CAD blueprint subtle grid */
+.blueprint-grid-bg {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Technical corner markers for precision cards */
+.cad-frame {
+  position: relative;
+  background: var(--console-surface);
+  border: 1px solid var(--titanium-border);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.cad-frame:hover {
+  border-color: var(--titanium-border-active);
+}
+
+.cad-frame::before,
+.cad-frame::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.cad-frame::before {
+  top: -1px;
+  left: -1px;
+  border-top: 2px solid var(--lox-cyan);
+  border-left: 2px solid var(--lox-cyan);
+}
+
+.cad-frame::after {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 2px solid var(--lox-cyan);
+  border-right: 2px solid var(--lox-cyan);
+}

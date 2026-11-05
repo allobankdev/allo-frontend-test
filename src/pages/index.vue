@@ -1,70 +1,65 @@
 <template>
-  <div>
-    <!-- Top Navbar -->
+  <div class="blueprint-grid-bg min-vh-100 pb-12">
+    <!-- Navigation Deck -->
     <AppNavbar @open-add-dialog="isAddModalOpen = true" />
 
     <v-container
       class="py-6 py-md-10"
       max-width="1280"
     >
-      <!-- Hero / Section Header -->
-      <div class="mb-6 mb-md-8">
-        <div class="d-flex flex-column flex-md-row align-md-center justify-space-between ga-4 mb-4">
+      <!-- Telemetry Dashboard Header -->
+      <section class="mb-8">
+        <div class="d-flex flex-column flex-md-row align-md-end justify-space-between ga-4 mb-6">
           <div>
-            <div class="d-flex align-center ga-2 mb-1">
-              <span class="pulse-indicator" />
-              <span
-                class="text-caption font-mono text-primary text-uppercase"
-                style="letter-spacing: 1.5px;"
-              >
-                LL2 API v2.2.0 Telemetry Feed
-              </span>
+            <div class="font-mono text-caption text-secondary text-uppercase mb-1 tracking-wider">
+              SpaceX Orbital Fleet // Flight Configuration Directory
             </div>
-            <h1
-              class="text-h4 text-md-h3 font-weight-black text-high-emphasis text-uppercase"
-              style="letter-spacing: 1px;"
-            >
-              Launch Vehicles
+            <h1 class="text-h4 text-md-h3 font-weight-bold tracking-tight text-high-emphasis">
+              Launch Vehicle Manifest
             </h1>
-            <p class="text-body-1 text-secondary mt-1">
-              SpaceX orbital and suborbital rocket configurations, historical variants, and experimental prototypes.
+            <p class="text-body-1 text-secondary mt-1 max-w-text">
+              Primary booster configurations, upper-stage vehicle variants, and orbital test articles documented via the Launch Library telemetry pipeline.
             </p>
           </div>
 
-          <div class="d-flex align-center ga-3">
-            <v-chip
-              color="surface-variant"
-              variant="flat"
-              class="font-mono text-caption px-3 py-1"
-              rounded="sm"
-            >
-              <v-icon
-                icon="mdi-database-check"
-                start
-                size="14"
-                color="primary"
-              />
-              {{ store.isLoading ? 'SYNCING...' : `${store.filteredRockets.length} VEHICLES` }}
-            </v-chip>
+          <!-- Quick Registration Action for Mobile -->
+          <v-btn
+            color="primary"
+            variant="flat"
+            prepend-icon="mdi-plus"
+            class="d-sm-none font-weight-bold"
+            rounded="sm"
+            @click="isAddModalOpen = true"
+          >
+            Register Vehicle
+          </v-btn>
+        </div>
 
-            <v-btn
-              color="primary"
-              variant="flat"
-              prepend-icon="mdi-plus"
-              class="text-none font-weight-bold d-sm-none"
-              rounded="sm"
-              @click="isAddModalOpen = true"
-            >
-              Add Rocket
-            </v-btn>
+        <!-- Telemetry KPI Strip -->
+        <div class="telemetry-strip d-grid mb-6">
+          <div class="kpi-cell">
+            <span class="kpi-label font-mono">Total Vehicles</span>
+            <span class="kpi-value font-mono">{{ store.isLoading ? '--' : store.metrics.total }}</span>
+          </div>
+          <div class="kpi-cell">
+            <span class="kpi-label font-mono">Active Fleet</span>
+            <span class="kpi-value font-mono text-success">{{ store.isLoading ? '--' : store.metrics.active }}</span>
+          </div>
+          <div class="kpi-cell">
+            <span class="kpi-label font-mono">Reusable Hardware</span>
+            <span class="kpi-value font-mono text-primary">{{ store.isLoading ? '--' : store.metrics.reusable }}</span>
+          </div>
+          <div class="kpi-cell">
+            <span class="kpi-label font-mono">User Registered</span>
+            <span class="kpi-value font-mono text-accent">{{ store.isLoading ? '--' : store.metrics.custom }}</span>
           </div>
         </div>
 
-        <!-- Filter & Search Toolbar -->
+        <!-- Filter & Search Console -->
         <RocketFilter />
-      </div>
+      </section>
 
-      <!-- State: Loading Skeleton Grid -->
+      <!-- State: Loading Skeletons -->
       <v-row
         v-if="store.isLoading"
         dense
@@ -82,16 +77,16 @@
         </v-col>
       </v-row>
 
-      <!-- State: Error with Retry -->
+      <!-- State: Error with Retry Action -->
       <StatusState
         v-else-if="store.error"
         type="error"
-        title="Failed to Retrieve Fleet Telemetry"
+        title="Telemetry Pipeline Interrupted"
         :message="store.error"
         @retry="store.fetchRockets(true)"
       />
 
-      <!-- State: Empty Search Result -->
+      <!-- State: Empty Filter Result with Reset -->
       <StatusState
         v-else-if="store.filteredRockets.length === 0"
         type="empty"
@@ -99,7 +94,7 @@
         @reset="store.clearFilters"
       />
 
-      <!-- State: Success Rocket Grid -->
+      <!-- State: Success Flight Grid -->
       <v-row
         v-else
         dense
@@ -118,24 +113,24 @@
       </v-row>
     </v-container>
 
-    <!-- Add Rocket Dialog Modal -->
+    <!-- Vehicle Registration Modal -->
     <AddRocketModal
       v-model="isAddModalOpen"
       @rocket-added="handleRocketAdded"
     />
 
-    <!-- Feedback Notification Snackbar -->
+    <!-- Feedback Notification -->
     <v-snackbar
       v-model="snackbar.show"
       color="surface"
       timeout="4000"
       location="bottom end"
       class="border"
-      style="border-color: rgba(56, 189, 248, 0.4) !important;"
+      style="border-color: var(--lox-cyan) !important;"
     >
       <div class="d-flex align-center">
         <v-icon
-          icon="mdi-check-circle"
+          icon="mdi-check-decagram"
           color="primary"
           class="me-2"
         />
@@ -148,7 +143,7 @@
           size="small"
           @click="snackbar.show = false"
         >
-          Close
+          Dismiss
         </v-btn>
       </template>
     </v-snackbar>
@@ -178,38 +173,56 @@ onMounted(() => {
 })
 
 function handleRocketAdded(name: string) {
-  snackbar.message = `Rocket "${name}" successfully registered to fleet.`
+  snackbar.message = `Vehicle "${name}" registered into manifest.`
   snackbar.show = true
 }
 </script>
 
 <style scoped>
-.pulse-indicator {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: #38bdf8;
-  box-shadow: 0 0 8px #38bdf8;
-  animation: pulse 2s infinite;
+.tracking-tight {
+  letter-spacing: -0.5px;
 }
 
-@keyframes pulse {
-  0% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7);
-  }
-  70% {
-    transform: scale(1);
-    box-shadow: 0 0 0 8px rgba(56, 189, 248, 0);
-  }
-  100% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(56, 189, 248, 0);
+.tracking-wider {
+  letter-spacing: 1px;
+}
+
+.max-w-text {
+  max-width: 68ch;
+}
+
+.telemetry-strip {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+@media (min-width: 768px) {
+  .telemetry-strip {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
-.font-mono {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+.kpi-cell {
+  background: var(--console-surface);
+  border: 1px solid var(--titanium-border);
+  padding: 12px 16px;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+}
+
+.kpi-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--text-mid);
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+
+.kpi-value {
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.2;
 }
 </style>

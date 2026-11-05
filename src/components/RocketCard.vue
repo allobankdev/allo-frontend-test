@@ -1,16 +1,16 @@
 <template>
-  <v-card
-    class="rocket-card h-100 d-flex flex-column rounded-lg overflow-hidden border transition-swing"
-    color="surface"
-    elevation="0"
-    :ripple="false"
+  <div
+    class="cad-frame rounded-sm h-100 d-flex flex-column cursor-pointer"
+    role="button"
+    tabindex="0"
     @click="navigateToDetail"
+    @keydown.enter="navigateToDetail"
   >
-    <!-- Media container with fixed 16:9 aspect ratio and fallback handling -->
+    <!-- Media container with consistent aspect ratio -->
     <div class="position-relative media-container bg-surface-variant overflow-hidden">
       <v-img
         :src="displayImage"
-        height="220"
+        height="200"
         cover
         class="align-end rocket-img"
         @error="onImageError"
@@ -20,114 +20,78 @@
             <v-progress-circular
               indeterminate
               color="primary"
-              size="28"
+              size="24"
             />
           </div>
         </template>
       </v-img>
 
-      <!-- Status overlay tags -->
+      <!-- Technical Status Indicators -->
       <div class="position-absolute top-0 start-0 pa-3 d-flex flex-wrap ga-2">
-        <v-chip
+        <span
           v-if="rocket.is_custom"
-          size="x-small"
-          color="accent"
-          variant="flat"
-          class="font-weight-bold text-uppercase"
+          class="tech-tag tech-tag-custom font-mono"
         >
-          <v-icon
-            icon="mdi-account-edit"
-            start
-            size="12"
-          />
-          User Added
-        </v-chip>
+          Custom
+        </span>
 
-        <v-chip
+        <span
           v-if="rocket.active !== null && rocket.active !== undefined"
-          size="x-small"
-          :color="rocket.active ? 'success' : 'secondary'"
-          variant="flat"
-          class="font-weight-bold text-uppercase"
+          :class="['tech-tag font-mono', rocket.active ? 'tech-tag-active' : 'tech-tag-retired']"
         >
-          <v-icon
-            :icon="rocket.active ? 'mdi-check-circle' : 'mdi-archive'"
-            start
-            size="12"
-          />
           {{ rocket.active ? 'Active' : 'Retired' }}
-        </v-chip>
+        </span>
 
-        <v-chip
+        <span
           v-if="rocket.reusable"
-          size="x-small"
-          color="info"
-          variant="flat"
-          class="font-weight-bold text-uppercase"
+          class="tech-tag tech-tag-reusable font-mono"
         >
-          <v-icon
-            icon="mdi-recycle"
-            start
-            size="12"
-          />
           Reusable
-        </v-chip>
+        </span>
       </div>
 
-      <!-- Country badge on top right -->
+      <!-- Country Tag -->
       <div
         v-if="countryCode"
         class="position-absolute top-0 end-0 pa-3"
       >
-        <v-chip
-          size="x-small"
-          variant="elevated"
-          color="surface"
-          class="font-weight-bold"
-        >
-          <v-icon
-            icon="mdi-flag"
-            start
-            size="12"
-            color="primary"
-          />
+        <span class="tech-tag tech-tag-country font-mono">
           {{ countryCode }}
-        </v-chip>
+        </span>
       </div>
     </div>
 
-    <!-- Content details -->
-    <v-card-text class="d-flex flex-column flex-grow-1 pa-4">
+    <!-- Content / Specifications Block -->
+    <div class="d-flex flex-column flex-grow-1 pa-4">
       <div
-        class="text-caption text-secondary font-weight-medium text-uppercase mb-1"
-        style="letter-spacing: 1px;"
+        class="font-mono text-caption text-secondary mb-1"
+        style="font-size: 0.72rem;"
       >
-        {{ rocket.family || 'SpaceX System' }}
+        {{ rocket.family || 'SpaceX Architecture' }}
       </div>
 
-      <h3 class="text-h6 font-weight-bold text-high-emphasis mb-2 line-clamp-1">
-        {{ rocket.full_name || rocket.name || 'Unnamed Vehicle' }}
-      </h3>
+      <h2 class="text-h6 font-weight-bold text-high-emphasis mb-2 line-clamp-1">
+        {{ rocket.full_name || rocket.name || 'Unnamed Configuration' }}
+      </h2>
 
       <p class="text-body-2 text-secondary mb-4 flex-grow-1 line-clamp-3">
-        {{ rocket.description || 'No detailed mission description available for this configuration.' }}
+        {{ rocket.description || 'No engineering summary documented for this launch vehicle.' }}
       </p>
 
-      <v-divider
-        class="mb-3"
-        style="border-color: rgba(255, 255, 255, 0.08);"
-      />
+      <div class="spec-matrix-divider mb-3" />
 
-      <!-- Action Footer -->
+      <!-- Footer Specs & Action -->
       <div class="d-flex align-center justify-space-between pt-1">
-        <div class="d-flex flex-column">
-          <span
-            class="text-caption text-secondary text-uppercase"
+        <div>
+          <div
+            class="font-mono text-caption text-dim"
             style="font-size: 0.68rem;"
-          >Launch Cost</span>
-          <span class="text-caption font-weight-bold font-mono text-primary">
+          >
+            Estimated Launch Cost
+          </div>
+          <div class="font-mono text-subtitle-2 font-weight-bold text-primary">
             {{ formattedCost }}
-          </span>
+          </div>
         </div>
 
         <v-btn
@@ -135,15 +99,14 @@
           color="primary"
           size="small"
           rounded="sm"
-          append-icon="mdi-arrow-right"
           class="text-none font-weight-medium"
           @click.stop="navigateToDetail"
         >
-          View Specs
+          Inspect Specs
         </v-btn>
       </div>
-    </v-card-text>
-  </v-card>
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -151,7 +114,7 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import type { Rocket } from '@/types/rocket'
 import { formatCurrency } from '@/utils/formatters'
-import placeholderSvg from '@/assets/rocket-placeholder.svg'
+import fallbackImage from '@/assets/rocket-placeholder.svg'
 
 const props = defineProps<{
   rocket: Rocket
@@ -162,7 +125,7 @@ const imageLoadFailed = ref(false)
 
 const displayImage = computed(() => {
   if (imageLoadFailed.value || !props.rocket.image_url) {
-    return placeholderSvg
+    return fallbackImage
   }
   return props.rocket.image_url
 })
@@ -185,28 +148,58 @@ function navigateToDetail() {
 </script>
 
 <style scoped>
-.rocket-card {
-  border-color: rgba(255, 255, 255, 0.08) !important;
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.rocket-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(56, 189, 248, 0.4) !important;
-  box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.5);
-}
-
 .media-container {
-  height: 220px;
+  height: 200px;
+  background-color: #111726;
+  border-bottom: 1px solid var(--titanium-border);
 }
 
 .rocket-img {
-  transition: transform 0.4s ease;
+  transition: transform 0.3s ease;
 }
 
-.rocket-card:hover .rocket-img {
+.cad-frame:hover .rocket-img {
   transform: scale(1.03);
+}
+
+.tech-tag {
+  display: inline-block;
+  padding: 2px 7px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  border-radius: 2px;
+  background: rgba(15, 22, 38, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-high);
+}
+
+.tech-tag-active {
+  color: var(--signal-emerald);
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+.tech-tag-retired {
+  color: var(--text-mid);
+  border-color: rgba(148, 163, 184, 0.3);
+}
+
+.tech-tag-reusable {
+  color: var(--lox-cyan);
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+.tech-tag-custom {
+  color: var(--burn-amber);
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.tech-tag-country {
+  color: var(--text-high);
+}
+
+.spec-matrix-divider {
+  height: 1px;
+  background: var(--titanium-border);
 }
 
 .line-clamp-1 {
@@ -224,7 +217,7 @@ function navigateToDetail() {
   line-height: 1.5;
 }
 
-.font-mono {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+.text-dim {
+  color: var(--text-dim);
 }
 </style>

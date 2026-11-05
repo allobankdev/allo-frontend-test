@@ -3,61 +3,50 @@
     flat
     density="comfortable"
     color="surface"
-    class="border-b px-2 px-md-4"
-    style="border-color: rgba(255, 255, 255, 0.08) !important;"
+    class="border-b px-2 px-md-6"
+    style="border-color: var(--titanium-border) !important;"
   >
     <div
-      class="d-flex align-center cursor-pointer"
+      class="d-flex align-center cursor-pointer select-none"
       @click="goToHome"
     >
-      <v-avatar
-        color="primary"
-        size="36"
-        class="me-3"
-        rounded="sm"
-      >
+      <div class="brand-symbol me-3 d-flex align-center justify-center">
         <v-icon
-          icon="mdi-rocket-launch"
-          color="#090d16"
-          size="22"
+          icon="mdi-navigation-variant"
+          color="primary"
+          size="20"
         />
-      </v-avatar>
+      </div>
       <div>
-        <div
-          class="text-subtitle-1 font-weight-bold text-high-emphasis text-uppercase"
-          style="letter-spacing: 1.5px;"
-        >
-          SPACEX <span class="text-primary">FLEET</span>
+        <div class="text-subtitle-1 font-weight-bold tracking-widest text-uppercase">
+          SpaceX Flight Manifest
         </div>
         <div
-          class="text-caption text-secondary"
-          style="font-size: 0.7rem !important; margin-top: -3px;"
+          class="text-caption text-secondary font-mono"
+          style="font-size: 0.68rem; margin-top: -2px;"
         >
-          FLIGHT CONFIGURATION DIRECTORY
+          CONFIGURATION & TELEMETRY SYSTEM
         </div>
       </div>
     </div>
 
     <v-spacer />
 
-    <!-- Allo Bank Assessment Badge -->
-    <v-chip
-      size="small"
-      variant="outlined"
-      color="secondary"
-      class="d-none d-sm-flex me-3"
-      style="letter-spacing: 0.5px; border-color: rgba(255, 255, 255, 0.15);"
+    <!-- Live System Telemetry Status -->
+    <div
+      class="d-none d-md-flex align-center ga-2 me-4 px-3 py-1 bg-surface-variant rounded-sm border"
+      style="border-color: var(--titanium-border);"
     >
-      <v-icon
-        icon="mdi-bank"
-        start
-        size="14"
-        color="primary"
-      />
-      ALLO BANK TEST
-    </v-chip>
+      <span class="telemetry-dot" />
+      <span
+        class="font-mono text-caption text-secondary"
+        style="font-size: 0.72rem;"
+      >
+        API v2.2.0 // NOMINAL
+      </span>
+    </div>
 
-    <!-- Quick Add Button -->
+    <!-- Active Voice Registration Button -->
     <v-btn
       color="primary"
       variant="flat"
@@ -66,7 +55,7 @@
       rounded="sm"
       @click="$emit('open-add-dialog')"
     >
-      Add Rocket
+      Register Vehicle
     </v-btn>
   </v-app-bar>
 </template>
@@ -84,3 +73,25 @@ function goToHome() {
   router.push('/')
 }
 </script>
+
+<style scoped>
+.brand-symbol {
+  width: 32px;
+  height: 32px;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 4px;
+}
+
+.tracking-widest {
+  letter-spacing: 1.25px;
+}
+
+.telemetry-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--signal-emerald);
+  box-shadow: 0 0 6px var(--signal-emerald);
+}
+</style>

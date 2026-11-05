@@ -1,13 +1,13 @@
 <template>
-  <div>
-    <!-- Top Navbar -->
+  <div class="blueprint-grid-bg min-vh-100 pb-12">
+    <!-- Top Navigation Deck -->
     <AppNavbar @open-add-dialog="isAddModalOpen = true" />
 
     <v-container
       class="py-6 py-md-10"
       max-width="1280"
     >
-      <!-- Back Navigation Bar -->
+      <!-- Navigation Return Action -->
       <div class="mb-6">
         <v-btn
           variant="text"
@@ -20,25 +20,31 @@
         </v-btn>
       </div>
 
-      <!-- State: Loading Skeleton -->
+      <!-- State: Loading Spec Skeleton -->
       <div v-if="store.isDetailLoading">
         <v-row>
           <v-col
             cols="12"
             md="5"
           >
-            <v-skeleton-loader
-              type="image"
-              height="420"
-              class="rounded-lg bg-surface-variant"
-            />
+            <div class="cad-frame rounded-sm pa-4">
+              <v-skeleton-loader
+                type="image"
+                height="380"
+                class="bg-surface-variant mb-4"
+              />
+              <v-skeleton-loader
+                type="text"
+                width="60%"
+              />
+            </div>
           </v-col>
           <v-col
             cols="12"
             md="7"
           >
             <v-skeleton-loader
-              type="chip"
+              type="text"
               width="120"
               class="mb-2"
             />
@@ -48,7 +54,7 @@
             />
             <v-skeleton-loader
               type="paragraph"
-              class="mb-4"
+              class="mb-6"
             />
             <v-row dense>
               <v-col
@@ -56,11 +62,17 @@
                 :key="n"
                 cols="6"
               >
-                <v-skeleton-loader
-                  type="card"
-                  height="90"
-                  class="rounded-lg"
-                />
+                <div class="cad-frame rounded-sm pa-4">
+                  <v-skeleton-loader
+                    type="text"
+                    width="80"
+                    class="mb-2"
+                  />
+                  <v-skeleton-loader
+                    type="text"
+                    width="140"
+                  />
+                </div>
               </v-col>
             </v-row>
           </v-col>
@@ -76,25 +88,20 @@
         @retry="loadData"
       />
 
-      <!-- State: Success Rocket Detail -->
+      <!-- State: Success Flight Dossier -->
       <div v-else-if="rocket">
         <v-row>
-          <!-- Left Column: Visual Media Showcase -->
+          <!-- Left Column: Visual Media Showcase & Pod Details -->
           <v-col
             cols="12"
             md="5"
             lg="5"
           >
-            <v-card
-              color="surface"
-              class="rounded-lg overflow-hidden border sticky-card"
-              elevation="0"
-              style="border-color: rgba(255, 255, 255, 0.08) !important;"
-            >
-              <div class="position-relative bg-surface-variant">
+            <div class="cad-frame rounded-sm overflow-hidden sticky-card">
+              <div class="position-relative bg-surface-variant overflow-hidden">
                 <v-img
                   :src="displayImage"
-                  height="400"
+                  height="380"
                   cover
                   class="align-end"
                   @error="onImageError"
@@ -110,66 +117,54 @@
                   </template>
                 </v-img>
 
-                <!-- Floating Status Badges -->
-                <div class="position-absolute top-0 start-0 pa-4 d-flex flex-wrap ga-2">
-                  <v-chip
+                <!-- Status Badges Overlay -->
+                <div class="position-absolute top-0 start-0 pa-3 d-flex flex-wrap ga-2">
+                  <span
                     v-if="rocket.is_custom"
-                    size="small"
-                    color="accent"
-                    variant="flat"
-                    class="font-weight-bold"
+                    class="detail-tag detail-tag-custom font-mono"
                   >
-                    <v-icon
-                      icon="mdi-account-edit"
-                      start
-                      size="14"
-                    />
-                    USER CREATED
-                  </v-chip>
+                    Custom Registration
+                  </span>
 
-                  <v-chip
+                  <span
                     v-if="rocket.active !== null && rocket.active !== undefined"
-                    size="small"
-                    :color="rocket.active ? 'success' : 'secondary'"
-                    variant="flat"
-                    class="font-weight-bold"
+                    :class="['detail-tag font-mono', rocket.active ? 'detail-tag-active' : 'detail-tag-retired']"
                   >
-                    <v-icon
-                      :icon="rocket.active ? 'mdi-check-circle' : 'mdi-archive'"
-                      start
-                      size="14"
-                    />
-                    {{ rocket.active ? 'ACTIVE VEHICLE' : 'RETIRED' }}
-                  </v-chip>
+                    {{ rocket.active ? 'Operational' : 'Retired Variant' }}
+                  </span>
 
-                  <v-chip
+                  <span
                     v-if="rocket.reusable"
-                    size="small"
-                    color="info"
-                    variant="flat"
-                    class="font-weight-bold"
+                    class="detail-tag detail-tag-reusable font-mono"
                   >
-                    <v-icon
-                      icon="mdi-recycle"
-                      start
-                      size="14"
-                    />
-                    REUSABLE
-                  </v-chip>
+                    Reusable Architecture
+                  </span>
                 </div>
               </div>
 
-              <!-- Quick Meta Footer -->
-              <v-card-text
+              <!-- Avionics Metadata Strip -->
+              <div
                 class="pa-4 bg-surface border-t"
-                style="border-color: rgba(255, 255, 255, 0.08) !important;"
+                style="border-color: var(--titanium-border);"
               >
-                <div class="d-flex justify-space-between align-center">
-                  <span class="text-caption text-secondary font-mono">SPECIFICATION SHEET</span>
-                  <span class="text-caption text-primary font-mono font-weight-bold">ID: #{{ rocket.id }}</span>
+                <div class="d-flex justify-space-between align-center mb-2">
+                  <span class="font-mono text-caption text-secondary">REGISTRY ID</span>
+                  <span class="font-mono text-caption text-primary font-weight-bold">#{{ rocket.id }}</span>
                 </div>
-              </v-card-text>
-            </v-card>
+                <div class="d-flex justify-space-between align-center mb-2">
+                  <span class="font-mono text-caption text-secondary">MANUFACTURER</span>
+                  <span class="font-mono text-caption text-high-emphasis font-weight-medium">
+                    {{ rocket.manufacturer?.name || 'SpaceX' }}
+                  </span>
+                </div>
+                <div class="d-flex justify-space-between align-center">
+                  <span class="font-mono text-caption text-secondary">ORIGIN JURISDICTION</span>
+                  <span class="font-mono text-caption text-high-emphasis font-weight-medium">
+                    {{ countryName }}
+                  </span>
+                </div>
+              </div>
+            </div>
           </v-col>
 
           <!-- Right Column: Aerospace Technical Spec Sheet -->
@@ -179,33 +174,28 @@
             lg="7"
           >
             <div class="ps-md-4">
-              <!-- Subtitle & Family -->
+              <!-- Family & Variant Identifier -->
               <div class="d-flex align-center ga-2 mb-2">
-                <v-chip
-                  size="x-small"
-                  color="primary"
-                  variant="tonal"
-                  class="font-weight-bold text-uppercase"
+                <span
+                  class="font-mono text-caption text-primary font-weight-bold px-2 py-1 bg-surface-variant rounded-sm border"
+                  style="border-color: var(--titanium-border);"
                 >
-                  {{ rocket.family || 'SpaceX System' }}
-                </v-chip>
-                <span class="text-caption text-secondary font-mono">
-                  MANUFACTURER: {{ rocket.manufacturer?.name || 'SpaceX' }}
+                  {{ rocket.family || 'SpaceX Architecture' }}
+                </span>
+                <span class="font-mono text-caption text-secondary">
+                  LL2 CONFIG v2.2.0
                 </span>
               </div>
 
-              <!-- Rocket Name -->
-              <h1 class="text-h4 text-lg-h3 font-weight-black text-high-emphasis text-uppercase mb-4">
-                {{ rocket.full_name || rocket.name || 'Unnamed Launch Vehicle' }}
+              <!-- Vehicle Name -->
+              <h1 class="text-h4 text-lg-h3 font-weight-bold text-high-emphasis tracking-tight mb-4">
+                {{ rocket.full_name || rocket.name || 'Unnamed Configuration' }}
               </h1>
 
-              <!-- Core Technical Spec Grid (6 Key Metrics Required by Allo Bank) -->
+              <!-- 4-Quadrant Technical Spec Matrix -->
               <div class="mb-6">
-                <div
-                  class="text-caption font-mono text-secondary text-uppercase mb-3"
-                  style="letter-spacing: 1px;"
-                >
-                  PRIMARY MISSION TELEMETRY
+                <div class="font-mono text-caption text-secondary text-uppercase mb-3 tracking-wider">
+                  Avionics &amp; Commercial Specifications
                 </div>
 
                 <v-row
@@ -217,37 +207,14 @@
                     cols="12"
                     sm="6"
                   >
-                    <v-card
-                      color="surface"
-                      class="pa-4 rounded-lg border h-100"
-                      elevation="0"
-                      style="border-color: rgba(255, 255, 255, 0.08) !important;"
-                    >
-                      <div class="d-flex align-center ga-3">
-                        <v-avatar
-                          color="rgba(56, 189, 248, 0.12)"
-                          size="40"
-                          rounded="sm"
-                        >
-                          <v-icon
-                            icon="mdi-currency-usd"
-                            color="primary"
-                            size="22"
-                          />
-                        </v-avatar>
-                        <div>
-                          <div
-                            class="text-caption text-secondary text-uppercase font-weight-medium"
-                            style="font-size: 0.72rem;"
-                          >
-                            Cost Per Launch
-                          </div>
-                          <div class="text-h6 font-weight-bold font-mono text-primary">
-                            {{ formattedCost }}
-                          </div>
-                        </div>
+                    <div class="cad-frame pa-4 rounded-sm h-100">
+                      <div class="font-mono text-caption text-secondary mb-1">
+                        Cost Per Launch
                       </div>
-                    </v-card>
+                      <div class="font-mono text-h6 font-weight-bold text-primary">
+                        {{ formattedCost }}
+                      </div>
+                    </div>
                   </v-col>
 
                   <!-- Metric 2: Maiden Flight -->
@@ -255,151 +222,68 @@
                     cols="12"
                     sm="6"
                   >
-                    <v-card
-                      color="surface"
-                      class="pa-4 rounded-lg border h-100"
-                      elevation="0"
-                      style="border-color: rgba(255, 255, 255, 0.08) !important;"
-                    >
-                      <div class="d-flex align-center ga-3">
-                        <v-avatar
-                          color="rgba(245, 158, 11, 0.12)"
-                          size="40"
-                          rounded="sm"
-                        >
-                          <v-icon
-                            icon="mdi-calendar-start"
-                            color="warning"
-                            size="22"
-                          />
-                        </v-avatar>
-                        <div>
-                          <div
-                            class="text-caption text-secondary text-uppercase font-weight-medium"
-                            style="font-size: 0.72rem;"
-                          >
-                            First Flight (Maiden)
-                          </div>
-                          <div class="text-h6 font-weight-bold font-mono text-high-emphasis">
-                            {{ formattedMaidenFlight }}
-                          </div>
-                        </div>
+                    <div class="cad-frame pa-4 rounded-sm h-100">
+                      <div class="font-mono text-caption text-secondary mb-1">
+                        First Flight (Maiden)
                       </div>
-                    </v-card>
+                      <div class="font-mono text-h6 font-weight-bold text-high-emphasis">
+                        {{ formattedMaidenFlight }}
+                      </div>
+                    </div>
                   </v-col>
 
-                  <!-- Metric 3: Country -->
+                  <!-- Metric 3: Country of Origin -->
                   <v-col
                     cols="12"
                     sm="6"
                   >
-                    <v-card
-                      color="surface"
-                      class="pa-4 rounded-lg border h-100"
-                      elevation="0"
-                      style="border-color: rgba(255, 255, 255, 0.08) !important;"
-                    >
-                      <div class="d-flex align-center ga-3">
-                        <v-avatar
-                          color="rgba(16, 185, 129, 0.12)"
-                          size="40"
-                          rounded="sm"
-                        >
-                          <v-icon
-                            icon="mdi-earth"
-                            color="success"
-                            size="22"
-                          />
-                        </v-avatar>
-                        <div>
-                          <div
-                            class="text-caption text-secondary text-uppercase font-weight-medium"
-                            style="font-size: 0.72rem;"
-                          >
-                            Country of Origin
-                          </div>
-                          <div class="text-h6 font-weight-bold font-mono text-high-emphasis">
-                            {{ countryName }}
-                          </div>
-                        </div>
+                    <div class="cad-frame pa-4 rounded-sm h-100">
+                      <div class="font-mono text-caption text-secondary mb-1">
+                        Origin Country
                       </div>
-                    </v-card>
+                      <div class="font-mono text-h6 font-weight-bold text-high-emphasis">
+                        {{ countryName }}
+                      </div>
+                    </div>
                   </v-col>
 
-                  <!-- Metric 4: Reusability Status -->
+                  <!-- Metric 4: Stage Reusability -->
                   <v-col
                     cols="12"
                     sm="6"
                   >
-                    <v-card
-                      color="surface"
-                      class="pa-4 rounded-lg border h-100"
-                      elevation="0"
-                      style="border-color: rgba(255, 255, 255, 0.08) !important;"
-                    >
-                      <div class="d-flex align-center ga-3">
-                        <v-avatar
-                          color="rgba(14, 165, 233, 0.12)"
-                          size="40"
-                          rounded="sm"
-                        >
-                          <v-icon
-                            icon="mdi-autorenew"
-                            color="info"
-                            size="22"
-                          />
-                        </v-avatar>
-                        <div>
-                          <div
-                            class="text-caption text-secondary text-uppercase font-weight-medium"
-                            style="font-size: 0.72rem;"
-                          >
-                            Stage Reusability
-                          </div>
-                          <div class="text-h6 font-weight-bold font-mono text-high-emphasis">
-                            {{ rocket.reusable ? 'REUSABLE' : 'EXPENDABLE' }}
-                          </div>
-                        </div>
+                    <div class="cad-frame pa-4 rounded-sm h-100">
+                      <div class="font-mono text-caption text-secondary mb-1">
+                        Reusability Class
                       </div>
-                    </v-card>
+                      <div
+                        class="font-mono text-h6 font-weight-bold"
+                        :class="rocket.reusable ? 'text-primary' : 'text-secondary'"
+                      >
+                        {{ rocket.reusable ? 'Reusable First Stage' : 'Expendable Architecture' }}
+                      </div>
+                    </div>
                   </v-col>
                 </v-row>
               </div>
 
-              <!-- Description Section -->
-              <v-card
-                color="surface"
-                class="pa-5 rounded-lg border mb-6"
-                elevation="0"
-                style="border-color: rgba(255, 255, 255, 0.08) !important;"
-              >
-                <div
-                  class="text-caption font-mono text-secondary text-uppercase mb-2"
-                  style="letter-spacing: 1px;"
-                >
-                  VEHICLE OVERVIEW &amp; MISSION PROFILE
+              <!-- Technical Mission Dossier Description -->
+              <div class="cad-frame pa-5 rounded-sm mb-6">
+                <div class="font-mono text-caption text-secondary text-uppercase mb-2 tracking-wider">
+                  Engineering Overview &amp; Mission Profile
                 </div>
-                <p
-                  class="text-body-1 text-high-emphasis"
-                  style="line-height: 1.7;"
-                >
+                <p class="text-body-1 text-high-emphasis dossier-text">
                   {{ rocket.description || 'No detailed mission description has been filed for this launch vehicle.' }}
                 </p>
-              </v-card>
+              </div>
 
-              <!-- Extended Specifications (When Available) -->
-              <v-card
+              <!-- Extended Orbital Telemetry (if available) -->
+              <div
                 v-if="hasExtendedSpecs"
-                color="surface"
-                class="pa-5 rounded-lg border"
-                elevation="0"
-                style="border-color: rgba(255, 255, 255, 0.08) !important;"
+                class="cad-frame pa-5 rounded-sm"
               >
-                <div
-                  class="text-caption font-mono text-secondary text-uppercase mb-3"
-                  style="letter-spacing: 1px;"
-                >
-                  EXTENDED ORBITAL SPECIFICATIONS
+                <div class="font-mono text-caption text-secondary text-uppercase mb-3 tracking-wider">
+                  Extended Orbital Payload Specs
                 </div>
                 <v-row dense>
                   <v-col
@@ -407,74 +291,58 @@
                     cols="6"
                     sm="4"
                   >
-                    <div class="text-caption text-secondary">
-                      LEO Payload
+                    <div class="font-mono text-caption text-secondary">
+                      LEO Capacity
                     </div>
-                    <div class="text-subtitle-2 font-mono font-weight-bold text-high-emphasis">
+                    <div class="font-mono text-subtitle-2 font-weight-bold text-high-emphasis">
                       {{ rocket.leo_capacity.toLocaleString() }} kg
                     </div>
                   </v-col>
-
                   <v-col
                     v-if="rocket.gto_capacity"
                     cols="6"
                     sm="4"
                   >
-                    <div class="text-caption text-secondary">
-                      GTO Payload
+                    <div class="font-mono text-caption text-secondary">
+                      GTO Capacity
                     </div>
-                    <div class="text-subtitle-2 font-mono font-weight-bold text-high-emphasis">
+                    <div class="font-mono text-subtitle-2 font-weight-bold text-high-emphasis">
                       {{ rocket.gto_capacity.toLocaleString() }} kg
                     </div>
                   </v-col>
-
                   <v-col
                     v-if="rocket.total_launch_count"
                     cols="6"
                     sm="4"
                   >
-                    <div class="text-caption text-secondary">
+                    <div class="font-mono text-caption text-secondary">
                       Total Launches
                     </div>
-                    <div class="text-subtitle-2 font-mono font-weight-bold text-high-emphasis">
+                    <div class="font-mono text-subtitle-2 font-weight-bold text-high-emphasis">
                       {{ rocket.total_launch_count }}
                     </div>
                   </v-col>
-
                   <v-col
                     v-if="rocket.successful_launches"
                     cols="6"
                     sm="4"
                   >
-                    <div class="text-caption text-secondary">
-                      Successful Missions
+                    <div class="font-mono text-caption text-secondary">
+                      Successful Flights
                     </div>
-                    <div class="text-subtitle-2 font-mono font-weight-bold text-success">
+                    <div class="font-mono text-subtitle-2 font-weight-bold text-success">
                       {{ rocket.successful_launches }}
                     </div>
                   </v-col>
-
-                  <v-col
-                    v-if="rocket.successful_landings"
-                    cols="6"
-                    sm="4"
-                  >
-                    <div class="text-caption text-secondary">
-                      Successful Landings
-                    </div>
-                    <div class="text-subtitle-2 font-mono font-weight-bold text-info">
-                      {{ rocket.successful_landings }}
-                    </div>
-                  </v-col>
                 </v-row>
-              </v-card>
+              </div>
             </div>
           </v-col>
         </v-row>
       </div>
     </v-container>
 
-    <!-- Add Rocket Dialog Modal (also available on detail page via navbar) -->
+    <!-- Add Rocket Dialog Modal -->
     <AddRocketModal
       v-model="isAddModalOpen"
       @rocket-added="handleRocketAdded"
@@ -486,11 +354,11 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useRocketStore } from '@/stores/rocketStore'
-import { formatCurrency, formatDate, formatFallback } from '@/utils/formatters'
 import AppNavbar from '@/components/AppNavbar.vue'
 import StatusState from '@/components/StatusState.vue'
 import AddRocketModal from '@/components/AddRocketModal.vue'
-import placeholderSvg from '@/assets/rocket-placeholder.svg'
+import { formatCurrency, formatDate } from '@/utils/formatters'
+import fallbackImage from '@/assets/rocket-placeholder.svg'
 
 const route = useRoute()
 const router = useRouter()
@@ -500,8 +368,9 @@ const isAddModalOpen = ref(false)
 const imageLoadFailed = ref(false)
 
 const rocketId = computed(() => {
-  const params = route.params as Record<string, string | string[]>
-  return Array.isArray(params.id) ? params.id[0] : params.id
+  const params = route.params as { id?: string | string[] }
+  const param = params.id
+  return Array.isArray(param) ? param[0] : param
 })
 
 const rocket = computed(() => {
@@ -510,7 +379,7 @@ const rocket = computed(() => {
 
 const displayImage = computed(() => {
   if (imageLoadFailed.value || !rocket.value?.image_url) {
-    return placeholderSvg
+    return fallbackImage
   }
   return rocket.value.image_url
 })
@@ -524,19 +393,31 @@ const formattedMaidenFlight = computed(() => {
 })
 
 const countryName = computed(() => {
-  return formatFallback(rocket.value?.manufacturer?.country_code, 'USA')
+  const code = rocket.value?.manufacturer?.country_code
+  if (!code) return 'N/A'
+  if (code === 'USA') return 'United States (USA)'
+  return code
 })
 
 const hasExtendedSpecs = computed(() => {
   if (!rocket.value) return false
-  return !!(
+  return Boolean(
     rocket.value.leo_capacity ||
-    rocket.value.gto_capacity ||
-    rocket.value.total_launch_count ||
-    rocket.value.successful_launches ||
-    rocket.value.successful_landings
+      rocket.value.gto_capacity ||
+      rocket.value.total_launch_count ||
+      rocket.value.successful_launches
   )
 })
+
+onMounted(() => {
+  loadData()
+})
+
+function loadData() {
+  if (rocketId.value) {
+    store.fetchRocketDetail(rocketId.value)
+  }
+}
 
 function onImageError() {
   imageLoadFailed.value = true
@@ -546,29 +427,58 @@ function goBack() {
   router.push('/')
 }
 
-function loadData() {
-  if (rocketId.value) {
-    imageLoadFailed.value = false
-    store.fetchRocketDetail(rocketId.value)
-  }
-}
-
 function handleRocketAdded() {
   router.push('/')
 }
-
-onMounted(() => {
-  loadData()
-})
 </script>
 
 <style scoped>
+.tracking-tight {
+  letter-spacing: -0.5px;
+}
+
+.tracking-wider {
+  letter-spacing: 1px;
+}
+
 .sticky-card {
   position: sticky;
   top: 80px;
 }
 
-.font-mono {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+.detail-tag {
+  display: inline-block;
+  padding: 3px 8px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  border-radius: 2px;
+  background: rgba(15, 22, 38, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text-high);
+}
+
+.detail-tag-active {
+  color: var(--signal-emerald);
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+.detail-tag-retired {
+  color: var(--text-mid);
+  border-color: rgba(148, 163, 184, 0.3);
+}
+
+.detail-tag-reusable {
+  color: var(--lox-cyan);
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+.detail-tag-custom {
+  color: var(--burn-amber);
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.dossier-text {
+  line-height: 1.8;
+  max-width: 72ch;
 }
 </style>
