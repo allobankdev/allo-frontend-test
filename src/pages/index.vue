@@ -98,22 +98,26 @@
       />
 
       <!-- State: Success Flight Grid -->
-      <v-row
-        v-else
-        dense
-        class="ga-y-4"
-      >
-        <v-col
-          v-for="rocket in store.filteredRockets"
-          :key="rocket.id"
-          cols="12"
-          sm="6"
-          lg="4"
-          class="d-flex"
+      <div v-else>
+        <v-row
+          dense
+          class="ga-y-4"
         >
-          <RocketCard :rocket="rocket" />
-        </v-col>
-      </v-row>
+          <v-col
+            v-for="rocket in store.paginatedRockets"
+            :key="rocket.id"
+            cols="12"
+            sm="6"
+            lg="4"
+            class="d-flex"
+          >
+            <RocketCard :rocket="rocket" />
+          </v-col>
+        </v-row>
+
+        <!-- Pagination Bar -->
+        <RocketPagination />
+      </div>
     </v-container>
 
     <!-- Vehicle Registration Modal -->
@@ -160,6 +164,7 @@ import AppNavbar from '@/components/AppNavbar.vue'
 import RocketCard from '@/components/RocketCard.vue'
 import RocketCardSkeleton from '@/components/RocketCardSkeleton.vue'
 import RocketFilter from '@/components/RocketFilter.vue'
+import RocketPagination from '@/components/RocketPagination.vue'
 import StatusState from '@/components/StatusState.vue'
 import AddRocketModal from '@/components/AddRocketModal.vue'
 

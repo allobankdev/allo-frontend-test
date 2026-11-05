@@ -7,14 +7,14 @@
       align="center"
       dense
     >
-      <!-- Search input with High-Contrast Accessibility -->
+      <!-- Search input with 300ms Debounce -->
       <v-col
         cols="12"
         md="5"
         lg="5"
       >
         <v-text-field
-          v-model="store.searchQuery"
+          v-model="localSearch"
           density="comfortable"
           variant="outlined"
           color="primary"
@@ -23,7 +23,21 @@
           clearable
           hide-details
           class="search-input font-mono"
-        />
+          @update:model-value="onSearchInput"
+          @click:clear="onClearSearch"
+        >
+          <template
+            v-if="isDebouncing"
+            #append-inner
+          >
+            <v-progress-circular
+              indeterminate
+              color="primary"
+              size="16"
+              width="2"
+            />
+          </template>
+        </v-text-field>
       </v-col>
 
       <!-- Family Filter Badges -->
@@ -40,9 +54,10 @@
           Family:
         </span>
         <v-chip-group
-          v-model="store.selectedFamily"
+          :model-value="store.selectedFamily"
           selected-class="chip-active font-weight-bold"
           mandatory
+          @update:model-value="onFamilyChange"
         >
           <v-chip
             value="all"
@@ -76,7 +91,7 @@
           size="small"
           prepend-icon="mdi-filter-remove-outline"
           class="text-none font-weight-bold"
-          @click="store.clearFilters"
+          @click="resetAllFilters"
         >
           Reset Filters
         </v-btn>
@@ -86,13 +101,57 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRocketStore } from '@/stores/rocketStore'
+import { debounce } from '@/utils/debounce'
 
 const store = useRocketStore()
+const localSearch = ref(store.searchQuery)
+const isDebouncing = ref(false)
+
+// 300ms Debounced search dispatcher
+const debouncedSearch = debounce((query: string) => {
+  store.setSearchQuery(query)
+  isDebouncing.value = false
+}, 300)
+
+function onSearchInput(val: string) {
+  isDebouncing.value = true
+  debouncedSearch(val || '')
+}
+
+function onClearSearch() {
+  debouncedSearch.cancel()
+  isDebouncing.value = false
+  localSearch.value = ''
+  store.setSearchQuery('')
+}
+
+function onFamilyChange(family: string) {
+  if (family) {
+    store.setSelectedFamily(family)
+  }
+}
+
+function resetAllFilters() {
+  debouncedSearch.cancel()
+  isDebouncing.value = false
+  localSearch.value = ''
+  store.clearFilters()
+}
+
+// Synchronize external store resets with local state
+watch(
+  () => store.searchQuery,
+  (newVal) => {
+    if (newVal !== localSearch.value) {
+      localSearch.value = newVal
+    }
+  }
+)
 
 const isFiltered = computed(() => {
-  return store.searchQuery.trim().length > 0 || store.selectedFamily !== 'all'
+  return localSearch.value.trim().length > 0 || store.selectedFamily !== 'all'
 })
 </script>
 

@@ -14,6 +14,8 @@ export const useRocketStore = defineStore('rockets', {
     detailError: null as string | null,
     searchQuery: '',
     selectedFamily: 'all',
+    currentPage: 1,
+    itemsPerPage: 6,
   }),
 
   getters: {
@@ -38,6 +40,24 @@ export const useRocketStore = defineStore('rockets', {
       }
 
       return result
+    },
+
+    paginatedRockets(): Rocket[] {
+      const filtered = this.filteredRockets
+      const start = (this.currentPage - 1) * this.itemsPerPage
+      return filtered.slice(start, start + this.itemsPerPage)
+    },
+
+    totalPages(): number {
+      return Math.ceil(this.filteredRockets.length / this.itemsPerPage) || 1
+    },
+
+    paginationMeta(): { from: number; to: number; total: number } {
+      const total = this.filteredRockets.length
+      if (total === 0) return { from: 0, to: 0, total: 0 }
+      const from = (this.currentPage - 1) * this.itemsPerPage + 1
+      const to = Math.min(this.currentPage * this.itemsPerPage, total)
+      return { from, to, total }
     },
 
     rocketFamilies(state): string[] {
@@ -65,6 +85,27 @@ export const useRocketStore = defineStore('rockets', {
   },
 
   actions: {
+    setPage(page: number) {
+      if (page >= 1 && page <= this.totalPages) {
+        this.currentPage = page
+      }
+    },
+
+    setItemsPerPage(limit: number) {
+      this.itemsPerPage = limit
+      this.currentPage = 1
+    },
+
+    setSearchQuery(query: string) {
+      this.searchQuery = query
+      this.currentPage = 1
+    },
+
+    setSelectedFamily(family: string) {
+      this.selectedFamily = family
+      this.currentPage = 1
+    },
+
     async fetchRockets(force = false) {
       // Don't refetch if already loaded unless explicitly forced
       if (this.rockets.length > 0 && !force) {
@@ -155,14 +196,16 @@ export const useRocketStore = defineStore('rockets', {
         is_custom: true,
       }
 
-      // Prepend to top so user sees the newly added rocket immediately
+      // Prepend to top and return to page 1 so user immediately sees the added vehicle
       this.rockets.unshift(newRocket)
+      this.currentPage = 1
       return newRocket
     },
 
     clearFilters() {
       this.searchQuery = ''
       this.selectedFamily = 'all'
+      this.currentPage = 1
     },
   },
 })

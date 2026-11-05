@@ -12,6 +12,7 @@ declare module 'vue' {
     RocketCard: typeof import('./src/components/RocketCard.vue')['default']
     RocketCardSkeleton: typeof import('./src/components/RocketCardSkeleton.vue')['default']
     RocketFilter: typeof import('./src/components/RocketFilter.vue')['default']
+    RocketPagination: typeof import('./src/components/RocketPagination.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     StatusState: typeof import('./src/components/StatusState.vue')['default']
