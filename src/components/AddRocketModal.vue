@@ -44,7 +44,7 @@
         />
       </div>
 
-      <!-- Form Body -->
+      <!-- Form Body with Full Validation Feedback -->
       <div
         class="pa-4 pa-sm-5"
         style="max-height: 70vh; overflow-y: auto;"
@@ -52,17 +52,18 @@
         <v-form
           ref="formRef"
           v-model="isFormValid"
+          validate-on="blur"
           @submit.prevent="handleSubmit"
         >
           <v-row dense>
             <!-- Full Name -->
             <v-col cols="12">
-              <label class="font-mono text-caption text-secondary mb-1 d-block">
-                Vehicle Full Name *
+              <label class="font-mono text-caption mb-1 d-block">
+                Vehicle Full Name <span class="text-error">*</span>
               </label>
               <v-text-field
                 v-model="form.full_name"
-                :rules="[rules.required]"
+                :rules="[rules.requiredFullName]"
                 placeholder="e.g. Starship Super Heavy Block 2"
                 variant="outlined"
                 density="comfortable"
@@ -76,7 +77,7 @@
               cols="12"
               sm="6"
             >
-              <label class="font-mono text-caption text-secondary mb-1 d-block">
+              <label class="font-mono text-caption mb-1 d-block">
                 Model Identifier
               </label>
               <v-text-field
@@ -94,11 +95,12 @@
               cols="12"
               sm="6"
             >
-              <label class="font-mono text-caption text-secondary mb-1 d-block">
+              <label class="font-mono text-caption mb-1 d-block">
                 Country Code
               </label>
               <v-text-field
                 v-model="form.country_code"
+                :rules="[rules.optionalCountry]"
                 placeholder="USA"
                 variant="outlined"
                 density="comfortable"
@@ -112,12 +114,14 @@
               cols="12"
               sm="6"
             >
-              <label class="font-mono text-caption text-secondary mb-1 d-block">
+              <label class="font-mono text-caption mb-1 d-block">
                 Cost Per Launch (USD)
               </label>
               <v-text-field
                 v-model="form.launch_cost"
+                :rules="[rules.optionalCost]"
                 type="number"
+                min="0"
                 placeholder="e.g. 50000000"
                 prefix="$"
                 variant="outlined"
@@ -131,7 +135,7 @@
               cols="12"
               sm="6"
             >
-              <label class="font-mono text-caption text-secondary mb-1 d-block">
+              <label class="font-mono text-caption mb-1 d-block">
                 First Flight (Maiden Date)
               </label>
               <v-text-field
@@ -146,11 +150,12 @@
 
             <!-- Image URL -->
             <v-col cols="12">
-              <label class="font-mono text-caption text-secondary mb-1 d-block">
+              <label class="font-mono text-caption mb-1 d-block">
                 Image URL (Optional)
               </label>
               <v-text-field
                 v-model="form.image_url"
+                :rules="[rules.optionalUrl]"
                 placeholder="https://example.com/booster.jpg"
                 prepend-inner-icon="mdi-image-outline"
                 variant="outlined"
@@ -168,12 +173,12 @@
 
             <!-- Description -->
             <v-col cols="12">
-              <label class="font-mono text-caption text-secondary mb-1 d-block">
-                Engineering Summary &amp; Mission Profile *
+              <label class="font-mono text-caption mb-1 d-block">
+                Engineering Summary &amp; Mission Profile <span class="text-error">*</span>
               </label>
               <v-textarea
                 v-model="form.description"
-                :rules="[rules.required]"
+                :rules="[rules.requiredDescription]"
                 placeholder="Detail the propulsion stages, payload to orbit capabilities, and mission parameters..."
                 rows="3"
                 variant="outlined"
@@ -232,7 +237,7 @@
           prepend-icon="mdi-check"
           class="text-none font-weight-bold px-5"
           rounded="sm"
-          :disabled="!isFormValid"
+          :loading="isSubmitting"
           @click="handleSubmit"
         >
           Register Vehicle
@@ -259,10 +264,41 @@ const emit = defineEmits<{
 const store = useRocketStore()
 const isOpen = ref(props.modelValue)
 const isFormValid = ref(false)
+const isSubmitting = ref(false)
 const formRef = ref()
 
 const rules = {
-  required: (v: string) => (!!v && v.trim().length > 0) || 'This specification field is required.',
+  requiredFullName: (v: string) => {
+    if (!v || !v.trim()) return 'Vehicle full name is required.'
+    if (v.trim().length < 3) return 'Name must be at least 3 characters long.'
+    return true
+  },
+  requiredDescription: (v: string) => {
+    if (!v || !v.trim()) return 'Engineering description is required.'
+    if (v.trim().length < 10) return 'Description must be at least 10 characters long.'
+    return true
+  },
+  optionalCost: (v: string | number) => {
+    if (v === '' || v === null || v === undefined) return true
+    const num = Number(v)
+    if (isNaN(num)) return 'Cost must be a valid number.'
+    if (num < 0) return 'Launch cost cannot be negative.'
+    return true
+  },
+  optionalUrl: (v: string) => {
+    if (!v || !v.trim()) return true
+    try {
+      const url = new URL(v.trim())
+      return (url.protocol === 'http:' || url.protocol === 'https:') || 'Must be an HTTP or HTTPS URL.'
+    } catch {
+      return 'Please enter a valid URL (e.g. https://example.com/booster.jpg).'
+    }
+  },
+  optionalCountry: (v: string) => {
+    if (!v || !v.trim()) return true
+    if (v.trim().length > 4) return 'Country code must be 2–4 characters (e.g. USA).'
+    return true
+  },
 }
 
 const form = reactive<NewRocketPayload>({
@@ -311,18 +347,26 @@ function closeModal() {
   isOpen.value = false
 }
 
-function handleSubmit() {
-  if (!form.full_name.trim() || !form.description.trim()) {
-    return
+async function handleSubmit() {
+  if (!formRef.value) return
+
+  isSubmitting.value = true
+  try {
+    const { valid } = await formRef.value.validate()
+    if (!valid) {
+      return
+    }
+
+    const registeredRocket = store.addRocket({
+      ...form,
+      name: form.name.trim() || form.full_name.trim(),
+    })
+
+    emit('rocket-added', registeredRocket.full_name)
+    closeModal()
+  } finally {
+    isSubmitting.value = false
   }
-
-  const registeredRocket = store.addRocket({
-    ...form,
-    name: form.name.trim() || form.full_name.trim(),
-  })
-
-  emit('rocket-added', registeredRocket.full_name)
-  closeModal()
 }
 </script>
 
@@ -349,6 +393,10 @@ function handleSubmit() {
   color: #38bdf8 !important;
 }
 
+:deep(.v-field--error .v-field__outline) {
+  color: #f43f5e !important;
+}
+
 :deep(input),
 :deep(textarea) {
   color: #f8fafc !important;
@@ -358,6 +406,13 @@ function handleSubmit() {
 :deep(textarea::placeholder) {
   color: #94a3b8 !important;
   opacity: 1 !important;
+}
+
+:deep(.v-messages__message) {
+  color: #f43f5e !important;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  margin-top: 2px;
 }
 
 label {
