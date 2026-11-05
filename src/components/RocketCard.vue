@@ -230,9 +230,10 @@ function navigateToDetail() {
   height: 4.5rem;
   line-height: 1.5;
   margin-bottom: 1rem;
+  color: #cbd5e1 !important;
 }
 
 .text-dim {
-  color: var(--text-dim);
+  color: #94a3b8 !important;
 }
 </style>

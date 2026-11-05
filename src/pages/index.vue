@@ -17,7 +17,10 @@
             <h1 class="text-h4 text-md-h3 font-weight-bold tracking-tight text-high-emphasis">
               Launch Vehicle Manifest
             </h1>
-            <p class="text-body-1 text-secondary mt-1 max-w-text">
+            <p
+              class="text-body-1 mt-1 max-w-text"
+              style="color: #cbd5e1;"
+            >
               Primary booster configurations, upper-stage vehicle variants, and orbital test articles documented via the Launch Library telemetry pipeline.
             </p>
           </div>

@@ -7,14 +7,14 @@
   --space-void: #080c14;
   --console-surface: #0f1626;
   --console-surface-elevated: #162035;
-  --titanium-border: rgba(148, 163, 184, 0.14);
-  --titanium-border-active: rgba(56, 189, 248, 0.45);
+  --titanium-border: rgba(148, 163, 184, 0.16);
+  --titanium-border-active: rgba(56, 189, 248, 0.55);
   --lox-cyan: #38bdf8;
   --burn-amber: #f59e0b;
   --signal-emerald: #10b981;
-  --text-high: #f1f5f9;
-  --text-mid: #94a3b8;
-  --text-dim: #64748b;
+  --text-high: #f8fafc;
+  --text-mid: #cbd5e1;
+  --text-dim: #94a3b8;
   --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
@@ -85,3 +85,17 @@ body {
   border-right: 2px solid var(--lox-cyan);
 }
 
+/* Global High-Contrast Inputs & Text Areas */
+input,
+textarea,
+.v-field__input {
+  color: var(--text-high) !important;
+}
+
+input::placeholder,
+textarea::placeholder,
+.v-field__input::placeholder {
+  color: #94a3b8 !important;
+  opacity: 1 !important;
+  -webkit-text-fill-color: #94a3b8 !important;
+}

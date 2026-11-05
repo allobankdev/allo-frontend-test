@@ -335,7 +335,33 @@ function handleSubmit() {
   border-radius: 4px;
 }
 
+:deep(.v-field) {
+  background-color: #0b111e !important;
+}
+
 :deep(.v-field__outline) {
-  --v-field-border-opacity: 0.15;
+  --v-field-border-opacity: 0.4 !important;
+  color: #475569 !important;
+}
+
+:deep(.v-field--focused .v-field__outline) {
+  --v-field-border-opacity: 1 !important;
+  color: #38bdf8 !important;
+}
+
+:deep(input),
+:deep(textarea) {
+  color: #f8fafc !important;
+}
+
+:deep(input::placeholder),
+:deep(textarea::placeholder) {
+  color: #94a3b8 !important;
+  opacity: 1 !important;
+}
+
+label {
+  color: #cbd5e1 !important;
+  font-weight: 500;
 }
 </style>

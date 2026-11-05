@@ -480,5 +480,6 @@ function handleRocketAdded() {
 .dossier-text {
   line-height: 1.8;
   max-width: 72ch;
+  color: #cbd5e1 !important;
 }
 </style>
