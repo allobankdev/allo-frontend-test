@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a101d"/>
+      <stop offset="100%" stop-color="#141c2e"/>
+    </linearGradient>
+    <linearGradient id="rocketBody" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.8"/>
+      <stop offset="50%" stop-color="#e2e8f0" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0.8"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#38bdf8" stroke-width="0.5" stroke-opacity="0.08"/>
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#bgGrad)"/>
+  <rect width="100%" height="100%" fill="url(#grid)"/>
+
+  <!-- Orbital Rings / Tech circles -->
+  <circle cx="400" cy="300" r="180" fill="none" stroke="#38bdf8" stroke-width="1" stroke-dasharray="6,8" stroke-opacity="0.25"/>
+  <circle cx="400" cy="300" r="230" fill="none" stroke="#94a3b8" stroke-width="0.8" stroke-opacity="0.15"/>
+
+  <!-- Rocket Icon / Blueprint -->
+  <g transform="translate(400, 290) rotate(-45) scale(1.6)">
+    <!-- Exhaust flame glow -->
+    <path d="M -15 35 Q 0 70 0 70 Q 0 70 15 35 Z" fill="#f59e0b" opacity="0.6"/>
+    <path d="M -8 35 Q 0 55 0 55 Q 0 55 8 35 Z" fill="#fbbf24" opacity="0.9"/>
+    
+    <!-- Left Fin -->
+    <path d="M -18 10 L -38 35 L -18 35 Z" fill="#0284c7" opacity="0.9"/>
+    <!-- Right Fin -->
+    <path d="M 18 10 L 38 35 L 18 35 Z" fill="#0284c7" opacity="0.9"/>
+
+    <!-- Rocket Body -->
+    <path d="M 0 -60 Q -24 -20 -18 35 L 18 35 Q 24 -20 0 -60 Z" fill="url(#rocketBody)"/>
+
+    <!-- Cockpit / Window -->
+    <circle cx="0" cy="-15" r="8" fill="#0b1329" stroke="#38bdf8" stroke-width="2"/>
+    <circle cx="0" cy="8" r="6" fill="#0b1329" stroke="#38bdf8" stroke-width="1.5"/>
+
+    <!-- Center Line -->
+    <line x1="0" y1="-50" x2="0" y2="35" stroke="#0284c7" stroke-width="1" stroke-opacity="0.4"/>
+  </g>
+
+  <!-- Technical Spec Blueprint Labels -->
+  <text x="400" y="490" text-anchor="middle" fill="#94a3b8" font-family="monospace" font-size="14" letter-spacing="3">AEROSPACE LAUNCH SYSTEM</text>
+  <text x="400" y="515" text-anchor="middle" fill="#38bdf8" font-family="monospace" font-size="12" letter-spacing="2">TELEMETRY &amp; VISUAL DATA PENDING</text>
+</svg>
+
