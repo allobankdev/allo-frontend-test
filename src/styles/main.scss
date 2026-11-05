@@ -67,7 +67,8 @@ body {
   width: 6px;
   height: 6px;
   pointer-events: none;
-  opacity: 0.6;
+  opacity: 0.8;
+  z-index: 5;
 }
 
 .cad-frame::before {
@@ -83,3 +84,4 @@ body {
   border-bottom: 2px solid var(--lox-cyan);
   border-right: 2px solid var(--lox-cyan);
 }
+
