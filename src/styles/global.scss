@@ -1,0 +1,43 @@
+/**
+ * Global styles that Vuetify utility classes do not cover.
+ */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: rgb(var(--v-theme-background));
+}
+
+/* Multi-line truncation, e.g. `class="line-clamp" style="--lines: 3"` */
+.line-clamp {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--lines, 3);
+  line-clamp: var(--lines, 3);
+  overflow: hidden;
+}
+
+/* Visible keyboard focus for every interactive element. */
+:focus-visible {
+  outline: 2px solid rgb(var(--v-theme-primary));
+  outline-offset: 2px;
+}
+
+.page-container {
+  max-width: 1280px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
