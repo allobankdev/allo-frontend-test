@@ -69,11 +69,16 @@ onMounted(() => {
       >
         <v-card :to="`/${rocket.id}`" height="100%">
           <v-img
+            v-if="rocket.image_url"
             :aspect-ratio="4 / 5"
             class="bg-surface elevation-3 fill-width"
             :src="rocket.image_url"
             cover
           ></v-img>
+          <div v-else class="rocket-image-fallback bg-surface elevation-3">
+            <v-icon size="56" color="medium-emphasis">mdi-rocket</v-icon>
+            <span>No image available</span>
+          </div>
           <v-card-item>
             <v-card-title>{{ rocket.full_name }}</v-card-title>
           </v-card-item>
@@ -88,5 +93,15 @@ onMounted(() => {
 .skeleton-rocket-card :deep(.v-skeleton-loader__image) {
   aspect-ratio: 4/5;
   min-height: 250px !important;
+}
+
+.rocket-image-fallback {
+  aspect-ratio: 4 / 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex: 1;
 }
 </style>

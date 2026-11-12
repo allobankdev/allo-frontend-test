@@ -23,6 +23,12 @@ const selectedDate = ref<Date | null>(null);
 const rocketStore = useRocket();
 const router = useRouter();
 
+const formatDateForApi = (date: Date | null) =>
+  date ? date.toISOString().slice(0, 10) : "";
+
+const formatDateForInput = (date: unknown) =>
+  date instanceof Date ? date.toISOString().slice(0, 10) : "";
+
 const handleImageChange = (files: File[]) => {
   if (imagePreviewUrl.value) URL.revokeObjectURL(imagePreviewUrl.value);
 
@@ -35,7 +41,7 @@ const submit = async () => {
     ...form,
     id: `local-${crypto.randomUUID()}`,
     image_url: imagePreviewUrl.value,
-    maiden_flight: selectedDate.value?.toISOString() ?? "",
+    maiden_flight: formatDateForApi(selectedDate.value),
     manufacturer: { ...form.manufacturer },
   };
 
@@ -97,14 +103,19 @@ const submit = async () => {
                   <v-col cols="12" sm="6">
                     <VDateInput
                       v-model="selectedDate"
+                      :display-format="formatDateForInput"
                       prepend-icon=""
                       label="Select a date"
+                      placeholder="YYYY-MM-DD"
                     />
                   </v-col>
                 </v-row>
                 <v-text-field
                   v-model="form.launch_cost"
                   label="Cost per Launch"
+                  type="number"
+                  min="0"
+                  step="1"
                   required
                 ></v-text-field>
               </v-col>
