@@ -22,6 +22,34 @@ describe('rocketFormRules', () => {
     expect(validate('name', 'Falcon X')).toBe(true)
   })
 
+  it('menerima nama tepat 100 karakter dan menghitung panjang setelah trim', () => {
+    expect(validate('name', 'a'.repeat(100))).toBe(true)
+    expect(validate('name', `  ${'a'.repeat(100)}  `)).toBe(true)
+    expect(validate('name', 'a')).toBe(true)
+  })
+
+  it('menolak URL dengan skema berbahaya atau tanpa host', () => {
+    expect(validate('imageUrl', 'javascript:alert(1)')).not.toBe(true)
+    expect(validate('imageUrl', 'http://')).not.toBe(true)
+    expect(validate('imageUrl', ' http://example.com/a.png ')).toBe(true)
+  })
+
+  it('menolak biaya tak hingga dan menerima angka sangat besar yang masih terbatas', () => {
+    expect(validate('launchCost', '1e400')).not.toBe(true)
+    expect(validate('launchCost', 'Infinity')).not.toBe(true)
+    expect(validate('launchCost', '1e20')).toBe(true)
+  })
+
+  it('menolak kode negara 1 huruf', () => {
+    expect(validate('countryCode', 'U')).not.toBe(true)
+    expect(validate('countryCode', '  id  ')).toBe(true)
+  })
+
+  it('menolak bulan di luar 01–12', () => {
+    expect(validate('maidenFlight', '2024-13-01')).not.toBe(true)
+    expect(validate('maidenFlight', '2024-00-10')).not.toBe(true)
+  })
+
   it('membolehkan field opsional dikosongkan', () => {
     for (const field of ['description', 'imageUrl', 'launchCost', 'countryCode', 'maidenFlight'] as const) {
       expect(validate(field, '')).toBe(true)

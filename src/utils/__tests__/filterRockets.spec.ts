@@ -34,6 +34,17 @@ describe('filterRockets', () => {
     expect(filterRockets(rockets, 'super berat').map(r => r.id)).toEqual(['3'])
   })
 
+  it('mengabaikan spasi di awal dan akhir kata kunci', () => {
+    expect(filterRockets(rockets, '  starship  ').map(r => r.id)).toEqual(['3'])
+  })
+
+  it('memperlakukan karakter khusus sebagai teks biasa, bukan regex', () => {
+    for (const query of ['.*', '%', '"', '<script>', '\\', '(']) {
+      expect(filterRockets(rockets, query)).toEqual([])
+    }
+    expect(filterRockets([makeRocket('4', 'Rocket "Q" <50%>', null)], '"q" <50%').map(r => r.id)).toEqual(['4'])
+  })
+
   it('mengembalikan array kosong jika tidak ada yang cocok', () => {
     expect(filterRockets(rockets, 'saturn')).toEqual([])
   })
