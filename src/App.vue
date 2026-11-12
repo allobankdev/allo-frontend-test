@@ -1,11 +1,8 @@
 <template>
-  <v-app>
-    <v-main>
-      <router-view />
-    </v-main>
-  </v-app>
+  <header class="site-header">
+    <RouterLink to="/" class="brand">Rocket Explorer</RouterLink>
+  </header>
+  <main class="container">
+    <RouterView />
+  </main>
 </template>
-
-<script lang="ts" setup>
-  //
-</script>
