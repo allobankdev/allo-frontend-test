@@ -2,22 +2,10 @@
 import RocketCreateDialog from "@/components/RocketCreateDialog.vue";
 import RocketList from "@/components/RocketList.vue";
 import { useRocket } from "@/stores/rocket";
-import { ref, watch } from "vue";
+import { ref } from "vue";
 
 const selectedDate = ref(new Date());
-const searchInput = ref("");
 const rocketStore = useRocket();
-
-let searchTimeout = 0;
-
-watch(searchInput, (search) => {
-  if (searchTimeout) clearTimeout(searchTimeout);
-
-  searchTimeout = window.setTimeout(() => {
-    rocketStore.filter.search = search;
-    rocketStore.fetchRockets();
-  }, 300);
-});
 </script>
 
 <template>
@@ -39,7 +27,7 @@ watch(searchInput, (search) => {
         type="chip"
       >
         <v-text-field
-          v-model="searchInput"
+          v-model="rocketStore.filter.search"
           v-if="!rocketStore.isFetchRocketFailed"
           placeholder="Search rockets by name..."
           prepend-inner-icon="mdi-magnify"

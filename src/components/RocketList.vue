@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRocket } from "@/stores/rocket";
-import { onMounted } from "vue";
+import { onMounted, toRaw } from "vue";
 import { VCol } from "vuetify/components";
 
 const rocketStore = useRocket();
@@ -43,16 +43,12 @@ onMounted(() => {
       </v-card>
     </v-col>
     <v-col
-      v-else-if="!rocketStore.rockets.length && rocketStore.filter.search"
+      v-else-if="!rocketStore.rockets.length && rocketStore.committedSearch"
       cols="12"
     >
-      <v-card
-        v-memo="[rocketStore.filter.search]"
-        class="error-state mx-auto pa-8 text-center"
-        variant="text"
-      >
+      <v-card class="error-state mx-auto pa-8 text-center" variant="text">
         <v-card-text class="px-0">
-          No search results found for "{{ rocketStore.filter.search }}"
+          No search results found for "{{ toRaw(rocketStore.filter).search }}"
         </v-card-text>
       </v-card>
     </v-col>

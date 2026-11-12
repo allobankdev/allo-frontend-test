@@ -1,6 +1,6 @@
 import axios from "axios";
 import { defineStore } from "pinia";
-import { computed, nextTick, reactive, ref } from "vue";
+import { computed, nextTick, reactive, ref, watch } from "vue";
 
 export interface Rocket {
   id: number | string;
@@ -37,10 +37,11 @@ export const useRocket = defineStore("rocket", () => {
 
   const isLoadingRockets = ref(false);
   const isFetchRocketFailed = ref(false);
+  let filterTimeout: ReturnType<typeof setTimeout> | undefined;
 
   const addNewRocket = async (rocket: Rocket) => {
+    filter.search = "";
     localRockets.value = [{ ...rocket }, ...localRockets.value];
-
     await nextTick();
   };
 
@@ -66,10 +67,20 @@ export const useRocket = defineStore("rocket", () => {
     }
   };
 
+  watch(
+    filter,
+    () => {
+      if (filterTimeout) clearTimeout(filterTimeout);
+
+      filterTimeout = setTimeout(() => {
+        fetchRockets();
+      }, 300);
+    },
+    { deep: true },
+  );
+
   const findRocketById = (id: string) => {
-    return [...localRockets.value, ...apiRockets.value].find(
-      (rocket) => String(rocket.id) === id,
-    );
+    return [...localRockets.value].find((rocket) => String(rocket.id) === id);
   };
 
   const fetchRocketById = async (id: string) => {
