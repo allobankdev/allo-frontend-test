@@ -23,9 +23,9 @@
           >
             <RocketImage
               :alt="rocket.name"
-              height="100%"
-              :src="rocket.imageUrl"
               class="rocket-detail__image"
+              :height="mdAndUp ? '100%' : 300"
+              :src="rocket.imageUrl"
             />
           </v-col>
 
@@ -77,11 +77,14 @@
    */
   import { computed } from 'vue'
   import { useRoute } from 'vue-router/auto'
+  import { useDisplay } from 'vuetify'
   import { useRocketDetail } from '@/composables/useRocketDetail'
   import { formatCountry, formatLaunchCost, formatMaidenFlight } from '@/utils/format'
 
   const route = useRoute('/rockets/[id]')
   const { rocket, status, error, retry } = useRocketDetail(() => route.params.id)
+  // Di layar kecil gambar ditumpuk di atas info, jadi tingginya dibatasi agar tidak memanjang.
+  const { mdAndUp } = useDisplay()
 
   const specs = computed(() => {
     if (!rocket.value) return []
@@ -111,7 +114,7 @@
 </script>
 
 <style scoped>
-  /* Gambar mengisi tinggi kolom di desktop, dengan tinggi minimum di layar kecil. */
+  /* Di desktop gambar mengisi tinggi kolom; tinggi minimum menjaga gambar tetap terlihat. */
   .rocket-detail__image {
     min-height: 280px;
   }
