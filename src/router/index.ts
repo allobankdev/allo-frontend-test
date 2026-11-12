@@ -32,4 +32,5 @@ router.isReady().then(() => {
   localStorage.removeItem('vuetify:dynamic-reload')
 })
 
+/** Router aplikasi; rute dibuat otomatis dari file di `src/pages`. */
 export default router

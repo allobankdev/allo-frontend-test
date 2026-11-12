@@ -1,3 +1,4 @@
+<!-- Layout utama aplikasi: app bar dengan tautan ke daftar rocket, lalu halaman aktif dari router. -->
 <template>
   <v-app>
     <v-app-bar
