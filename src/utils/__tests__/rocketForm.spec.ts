@@ -50,6 +50,13 @@ describe('rocketFormRules', () => {
     expect(validate('maidenFlight', '2024-00-10')).not.toBe(true)
   })
 
+  it('menolak tanggal yang tidak ada di kalender', () => {
+    expect(validate('maidenFlight', '2023-02-29')).not.toBe(true)
+    expect(validate('maidenFlight', '2023-02-30')).not.toBe(true)
+    expect(validate('maidenFlight', '2023-04-31')).not.toBe(true)
+    expect(validate('maidenFlight', '2023-12-31')).toBe(true)
+  })
+
   it('membolehkan field opsional dikosongkan', () => {
     for (const field of ['description', 'imageUrl', 'launchCost', 'countryCode', 'maidenFlight'] as const) {
       expect(validate(field, '')).toBe(true)
