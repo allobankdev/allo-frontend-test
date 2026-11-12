@@ -25,6 +25,20 @@ onMounted(() => {
         height="100%"
       ></v-skeleton-loader>
     </v-col>
+    <v-col
+      v-else-if="!rocketStore.rockets.length && rocketStore.filter.search"
+      cols="12"
+    >
+      <v-card
+        v-memo="[rocketStore.filter.search]"
+        class="error-state mx-auto pa-8 text-center"
+        variant="text"
+      >
+        <v-card-text class="px-0">
+          No search results found for "{{ rocketStore.filter.search }}"
+        </v-card-text>
+      </v-card>
+    </v-col>
     <v-col v-else-if="rocketStore.isFetchRocketFailed" cols="12">
       <v-card class="error-state mx-auto pa-8 text-center" variant="text">
         <v-icon size="56" color="error" class="mb-4">mdi-alert-circle</v-icon>

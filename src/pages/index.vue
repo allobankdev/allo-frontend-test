@@ -1,12 +1,24 @@
 <script lang="ts" setup>
 import RocketList from "@/components/RocketList.vue";
 import { useRocket } from "@/stores/rocket";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { VDateInput } from "vuetify/labs/VDateInput";
 import { VFileUpload } from "vuetify/labs/VFileUpload";
-const selectedDate = ref(new Date());
 
+const selectedDate = ref(new Date());
+const searchInput = ref("");
 const rocketStore = useRocket();
+
+let searchTimeout = 0;
+
+watch(searchInput, (search) => {
+  if (searchTimeout) clearTimeout(searchTimeout);
+
+  searchTimeout = window.setTimeout(() => {
+    rocketStore.filter.search = search;
+    rocketStore.fetchRockets();
+  }, 300);
+});
 </script>
 
 <template>
@@ -95,11 +107,12 @@ const rocketStore = useRocket();
 
     <div class="py-6">
       <v-skeleton-loader
-        :loading="rocketStore.isLoadingRockets"
+        :loading="rocketStore.isLoadingRockets && !rocketStore.filter.search"
         class="bg-transparent skeleton-search"
         type="chip"
       >
         <v-text-field
+          v-model="searchInput"
           v-if="!rocketStore.isFetchRocketFailed"
           placeholder="Search rockets by name..."
           prepend-inner-icon="mdi-magnify"

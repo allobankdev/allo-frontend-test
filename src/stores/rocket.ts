@@ -1,6 +1,6 @@
 import axios from "axios";
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 
 interface Filter {
   search: string;
@@ -22,15 +22,14 @@ export const useRocket = defineStore("rocket", () => {
     }[]
   >([]);
 
+  const filter: Filter = reactive({
+    limit: 20,
+    search: "",
+  });
   const isLoadingRockets = ref(false);
   const isFetchRocketFailed = ref(false);
 
-  const fetchRockets = async (
-    filter: Filter = {
-      limit: 20,
-      search: "",
-    },
-  ) => {
+  const fetchRockets = async () => {
     if (isLoadingRockets.value) return;
 
     isFetchRocketFailed.value = false;
@@ -57,5 +56,6 @@ export const useRocket = defineStore("rocket", () => {
     fetchRockets,
     isLoadingRockets,
     isFetchRocketFailed,
+    filter,
   };
 });
