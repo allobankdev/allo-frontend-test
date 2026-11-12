@@ -12,6 +12,7 @@ import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
+/** Instance Vuetify aplikasi dengan tema gelap sebagai bawaan. */
 export default createVuetify({
   theme: {
     defaultTheme: 'dark',
