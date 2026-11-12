@@ -1,6 +1,6 @@
 {
   "extends": "./tsconfig.app.json",
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "src/**/__tests__/*"],
+  "include": ["env.d.ts", "typed-router.d.ts", "components.d.ts", "src/**/*", "src/**/*.vue", "src/**/__tests__/*"],
   "exclude": [],
   "compilerOptions": {
     "composite": true,
