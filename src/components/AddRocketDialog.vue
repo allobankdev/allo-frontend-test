@@ -29,12 +29,15 @@
             :rules="rocketFormRules.imageUrl"
             type="url"
           />
+          <!--
+            Sengaja type="text": input number di browser mengosongkan nilai yang tidak valid
+            (misalnya 1e400 atau 5e) sehingga lolos validasi sebagai field kosong.
+          -->
           <v-text-field
             v-model="form.launchCost"
+            inputmode="decimal"
             label="Biaya per peluncuran (USD)"
-            min="0"
             :rules="rocketFormRules.launchCost"
-            type="number"
           />
           <v-row dense>
             <v-col
