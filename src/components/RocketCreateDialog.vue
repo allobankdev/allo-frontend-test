@@ -2,7 +2,6 @@
 import type { Rocket } from "@/stores/rocket";
 import { useRocket } from "@/stores/rocket";
 import { reactive, ref } from "vue";
-import { useRouter } from "vue-router";
 import { VDateInput } from "vuetify/labs/VDateInput";
 import { VFileUpload } from "vuetify/labs/VFileUpload";
 
@@ -21,13 +20,32 @@ const imageFiles = ref<File[]>([]);
 const imagePreviewUrl = ref("");
 const selectedDate = ref<Date | null>(null);
 const rocketStore = useRocket();
-const router = useRouter();
+const formRef = ref();
+
+const requiredRule = (value: string) =>
+  value.trim().length > 0 || "This field is required";
 
 const formatDateForApi = (date: Date | null) =>
   date ? date.toISOString().slice(0, 10) : "";
 
 const formatDateForInput = (date: unknown) =>
   date instanceof Date ? date.toISOString().slice(0, 10) : "";
+
+const resetForm = () => {
+  form.id = "";
+  form.full_name = "";
+  form.description = "";
+  form.image_url = "";
+  form.launch_cost = "";
+  form.maiden_flight = "";
+  form.manufacturer.country_code = "";
+  selectedDate.value = null;
+  imageFiles.value = [];
+
+  if (imagePreviewUrl.value) URL.revokeObjectURL(imagePreviewUrl.value);
+  imagePreviewUrl.value = "";
+  formRef.value?.resetValidation();
+};
 
 const handleImageChange = (files: File[]) => {
   if (imagePreviewUrl.value) URL.revokeObjectURL(imagePreviewUrl.value);
@@ -37,6 +55,9 @@ const handleImageChange = (files: File[]) => {
 };
 
 const submit = async () => {
+  const { valid } = await formRef.value.validate();
+  if (!valid) return false;
+
   const rocket = {
     ...form,
     id: `local-${crypto.randomUUID()}`,
@@ -46,6 +67,11 @@ const submit = async () => {
   };
 
   await rocketStore.addNewRocket(rocket);
+  return true;
+};
+
+const handleSubmit = async (isActive: { value: boolean }) => {
+  if (await submit()) isActive.value = false;
 };
 
 </script>
@@ -53,20 +79,18 @@ const submit = async () => {
 <template>
   <v-dialog scrollable transition="dialog-bottom-transition" max-width="800">
     <template v-slot:activator="{ props: activatorProps }">
-      <v-btn v-bind="activatorProps" color="primary" prepend-icon="mdi-plus">
+      <v-btn
+        v-bind="activatorProps"
+        color="primary"
+        prepend-icon="mdi-plus"
+        @click="resetForm"
+      >
         Add Rocket
       </v-btn>
     </template>
 
     <template v-slot:default="{ isActive }">
-      <v-form
-        @submit.prevent="
-          async () => {
-            await submit();
-            isActive.value = false;
-          }
-        "
-      >
+      <v-form ref="formRef" @submit.prevent="handleSubmit(isActive)">
         <v-card title="Add new rocket">
           <v-divider class="mt-3"></v-divider>
 
@@ -85,19 +109,18 @@ const submit = async () => {
                 <v-text-field
                   v-model="form.full_name"
                   label="Rocket Name"
-                  required
+                  :rules="[requiredRule]"
                 ></v-text-field>
                 <v-textarea
                   v-model="form.description"
                   label="Description"
-                  required
+                  :rules="[requiredRule]"
                 ></v-textarea>
                 <v-row>
                   <v-col cols="12" sm="6">
                     <v-text-field
                       v-model="form.manufacturer.country_code"
                       label="Country"
-                      required
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6">
@@ -116,7 +139,6 @@ const submit = async () => {
                   type="number"
                   min="0"
                   step="1"
-                  required
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
