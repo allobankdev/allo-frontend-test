@@ -12,6 +12,10 @@ describe('getErrorMessage', () => {
     expect(getErrorMessage(new ApiError(500))).toContain('HTTP 500')
   })
 
+  it('memberi pesan data tidak valid jika respons bukan JSON', () => {
+    expect(getErrorMessage(new SyntaxError('Unexpected token <'))).toContain('Data dari server tidak valid')
+  })
+
   it('menganggap error non-API sebagai masalah koneksi', () => {
     expect(getErrorMessage(new TypeError('Failed to fetch'))).toContain('koneksi')
   })

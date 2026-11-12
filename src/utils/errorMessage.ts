@@ -12,5 +12,7 @@ export function getErrorMessage (error: unknown): string {
     if (error.status === 429) return 'Batas request API tercapai. Coba lagi beberapa saat lagi.'
     return `Server sedang bermasalah (HTTP ${error.status}).`
   }
+  // `response.json()` melempar SyntaxError jika server membalas data yang bukan JSON.
+  if (error instanceof SyntaxError) return 'Data dari server tidak valid. Coba lagi beberapa saat lagi.'
   return 'Gagal terhubung ke server. Periksa koneksi internet kamu.'
 }
