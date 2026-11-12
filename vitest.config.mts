@@ -7,6 +7,9 @@ export default mergeConfig(
   defineConfig({
     test: {
       environment: 'jsdom',
+      // Vuetify mengimpor file CSS, jadi harus diproses Vite, bukan di-load langsung oleh Node.
+      server: { deps: { inline: ['vuetify'] } },
+      setupFiles: ['./src/test/setup.ts'],
       exclude: [...configDefaults.exclude, 'e2e/**'],
       root: fileURLToPath(new URL('./', import.meta.url)),
     },
