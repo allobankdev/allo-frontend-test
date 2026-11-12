@@ -62,7 +62,7 @@ onMounted(async () => {
 
   <v-card
     v-else-if="hasError || !rocket"
-    class="mx-auto my-16 pa-8 text-center"
+    class="mx-auto my-16 pa-8 text-center bg-transparent"
     max-width="560"
   >
     <v-icon size="56" color="error" class="mb-4">mdi-alert-circle</v-icon>
@@ -124,7 +124,7 @@ onMounted(async () => {
 <style scoped>
 .detail-image-skeleton :deep(.v-skeleton-loader__image) {
   aspect-ratio: 4 / 5;
-  min-height: 500px;
+  min-height: 600px;
 }
 
 .rocket-image-fallback {

@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar>
-      <v-container>
+      <v-container class="container">
         <v-app-bar-title>
           <div class="app-name">
             <v-icon class="text-primary">mdi-rocket</v-icon>
@@ -11,7 +11,7 @@
       </v-container>
     </v-app-bar>
     <v-main>
-      <v-container>
+      <v-container class="container">
         <router-view />
       </v-container>
     </v-main>
@@ -32,5 +32,9 @@
 
 .app-name .mdi-rocket {
   transform: rotate(45deg);
+}
+
+.container {
+  max-width: 1200px !important;
 }
 </style>
