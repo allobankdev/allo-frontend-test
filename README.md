@@ -1,79 +1,112 @@
-# Allo Bank Frontend Technical Assignment
+# SpaceX Rockets: Allo Bank Frontend Technical Assignment
 
-In this assignment, you’re assigned to create a website that displays rockets. This website only has two screens: rocket list screen and rocket detail screen. Here are the requirements:
+A small web app that lists SpaceX rockets from the [Launch Library 2 API](https://thespacedevs.com/llapi) and shows the details of each rocket. It has two screens: a **rocket list** and a **rocket detail**.
 
-### Functional Requirements
-- As a user, I want to see a list of rockets in the rocket list screen (Show each rocket image, rocket name, and rocket description)
-- As a user, I want to be able to filter the rockets in the rocket list screen
-- As a user, I want to be able to add the new rocket in the rocket list screen (the API is read-only, so the new rocket only needs to appear in the running app)
-- As a user, I want to be able to see the rocket detail by clicking a rocket in the rocket list screen (Show rocket image, rocket name, rocket description, cost per launch, country, first flight)
-- As a user, I want both screens to still display correctly when some rocket data is missing
+## Tech Stack
 
-### API
+| Area | Choice |
+| --- | --- |
+| Framework | Vue 3 (Composition API, `<script setup>`) |
+| Language | TypeScript |
+| UI library | Vuetify 3 |
+| Routing | Vue Router, file-based routing via `unplugin-vue-router` |
+| State management | Pinia |
+| Build tool | Vite |
+| Lint | ESLint (`eslint-plugin-vue`, `typescript-eslint`) |
 
-Use the Launch Library 2 API by The Space Devs for rocket data.
-Docs: https://thespacedevs.com/llapi
+## Getting Started
 
-Rocket list (returns all 13 SpaceX rockets in a single request):
+Requirements: Node.js 20 or newer.
 
-    GET https://lldev.thespacedevs.com/2.2.0/config/launcher/?manufacturer__name=SpaceX&mode=detailed&limit=20
+```bash
+npm install
+npm run dev
+```
 
-Single rocket:
+The app runs at <http://localhost:3000>.
 
-    GET https://lldev.thespacedevs.com/2.2.0/config/launcher/:id/
+| Script | Description |
+| --- | --- |
+| `npm run dev` | Start the dev server |
+| `npm run build` | Type-check and build for production |
+| `npm run preview` | Preview the production build |
+| `npm run type-check` | Run `vue-tsc` |
+| `npm run lint` | Run ESLint with auto-fix |
 
-`mode=detailed` is required — without it the response omits `description`
-and the other detail fields. `limit=20` is required too — the default page size
-is 10, so without it you get 10 rockets and a `next` page instead of all 13.
+### Configuration (optional)
 
-**API version:** use `2.2.0` as shown above. The docs site now showcases
-`2.3.0`, but `2.2.0` is still live with no announced end-of-life, and the field
-names in the table below are the `2.2.0` ones. Don't migrate: `2.3.0` renames
-the endpoint to `/2.3.0/launcher_configurations/` and moves several of these
-fields (`image_url` becomes `image.image_url`, `manufacturer.country_code`
-becomes a `manufacturer.country` array). Both versions return the same 13
-rockets.
+The API base URL defaults to the development host `https://lldev.thespacedevs.com/2.2.0`, so no setup is needed. To override it, create a `.env` file:
 
-| Requirement      | Field                              |
-| ---------------- | ---------------------------------- |
-| rocket image     | `image_url`                        |
-| rocket name      | `full_name`                        |
-| description      | `description`                      |
-| cost per launch  | `launch_cost`                      |
-| country          | `manufacturer.country_code`        |
-| first flight     | `maiden_flight`                    |
+```
+VITE_API_BASE_URL=https://lldev.thespacedevs.com/2.2.0
+```
 
-**Rate limit:** the API allows 15 requests/hour for anonymous users. Use the
-`lldev.thespacedevs.com` host shown above during development — it serves the
-same data with a far more generous limit. The production host,
-`ll.thespacedevs.com`, will throttle you quickly.
+## Features
 
-Note that some rockets have missing values for `launch_cost`, `maiden_flight`,
-and `image_url`.
+| Requirement | Implementation |
+| --- | --- |
+| Rocket list (image, name, description) | `pages/index.vue` renders a responsive grid of `RocketCard` |
+| Filter rockets | Search by name or description (client-side) |
+| Add a new rocket | `AddRocketDialog` with validation; stored in memory only (lost on refresh) |
+| Rocket detail | `pages/rockets/[id].vue` shows image, name, description, cost per launch, country, and first flight |
+| Missing data | Every field has a fallback (see below) |
+| Routing | `/` (list) and `/rockets/:id` (detail), generated from `src/pages` |
+| State management | Pinia store (`stores/rocketStore.ts`) |
+| Lifecycles | Data is fetched in `onMounted`; the detail request is aborted in `onBeforeUnmount` |
+| UI states | Loading (skeleton), Fail with a Retry button, Success. Used on both screens |
+| Responsive design | Vuetify grid (1 to 4 columns depending on screen width) |
 
-### Non-Functional Requirements
-- Use the Launch Library 2 API (see the API section above) for getting the rocket data
-- Implement routers
-- Implement state management
-- Implement lifecycles
-- Create components based will be + points
-- UI states (Loading, Fail/Retry, and Success)
-- Show loading when waiting response from API
-- If an error occurred, user can retry by pressing retry button
-- Show result when get response from API
+## Project Structure
 
-### Nice to have characteristics
-Responsive design
-You don’t need to worry about the detailed design, we’re not interested in your artistic prowess (for now), put your efforts on creating a readable/clean/maintainable source code.
+```
+src/
+├── api/
+│   └── rocketApi.ts            # fetchRockets, fetchRocketById
+├── components/
+│   ├── AddRocketDialog.vue     # form + validation to add a rocket
+│   ├── ErrorState.vue          # error message + Retry button (reused on both screens)
+│   ├── InfoRow.vue             # label/value row for the detail screen
+│   ├── RocketCard.vue          # list item
+│   ├── RocketCardSkeleton.vue  # loading placeholder for the list
+│   ├── RocketFilter.vue        # search input (v-model)
+│   └── RocketImage.vue         # image with placeholder fallback
+├── pages/
+│   ├── index.vue               # rocket list screen
+│   └── rockets/[id].vue        # rocket detail screen
+├── plugins/                    # Vuetify, router, Pinia registration
+├── router/                     # router setup (routes generated from pages/)
+├── stores/
+│   └── rocketStore.ts          # rockets, status, error, add/load actions
+├── types/
+│   └── rocket.ts               # Rocket and NewRocket types
+└── utils/
+    └── formatters.ts           # fallback and formatting helpers
+```
 
-### Submission
+## Technical Decisions
 
-1.  **Fork** this repository.
+- **Filtering is client-side.** The list endpoint returns all 13 rockets in one request (`mode=detailed&limit=20`), so filtering the data already in the store avoids extra requests and keeps the app far from the API rate limit.
+- **New rockets live in memory.** The API is read-only and the assignment only requires new rockets to appear in the running app, so they are kept in the Pinia store with a `local-` id and disappear on refresh. The detail screen reads them from the store instead of calling the API.
+- **The list is fetched once.** The list page only calls the API when the store is `idle`, so coming back from the detail screen does not trigger a new request.
+- **The detail screen fetches the single-rocket endpoint** (`/config/launcher/:id/?mode=detailed`) with its own loading, error, and retry states, and cancels the request with `AbortController` when the user leaves the page.
+- **API version 2.2.0 and the `lldev` host** are used as specified in the assignment, to avoid the 2.3.0 field changes and the production rate limit.
+- **Reusable components.** `ErrorState`, `RocketImage`, and `InfoRow` are shared by both screens, so UI states and fallbacks behave the same everywhere.
 
-2.  Implement your solution on a dedicated feature branch (e.g., `feat/allo-spacex`).
+## Handling Missing Data
 
-3.  When complete, submit your solution via a **Pull Request (PR)** back to the main repository.
-   
-4.  Please complete the form to submit your technical test: [Click Here](https://forms.gle/YAbAQxPuJAdDYmRW7)
+At the time of writing, the API returns `null` for `launch_cost` on 6 rockets, `maiden_flight` on 2 rockets, and `image_url` on 1 rocket (Starship V3). Missing data is handled in one place so both screens stay consistent:
 
-Good luck with your assignment! Don't hesitate to contact us if you have any questions about the assignment process.
+- `utils/formatters.ts`: `formatText`, `formatCost`, and `formatDate` return `N/A` for empty or invalid values. `launch_cost` arrives as a string (e.g. `"7000000"`) and is formatted as USD; dates are formatted in UTC to avoid off-by-one-day errors.
+- `RocketImage.vue`: shows a placeholder icon with a fixed aspect ratio when `image_url` is empty or the image fails to load, so the layout does not shift.
+- Rockets added by the user may leave every field except the name empty; they go through the same fallbacks.
+
+## Dependency Notes
+
+- `vue-router` is pinned to `4.4.5`. Newer versions break the `vue-router/auto` types provided by `unplugin-vue-router` 0.10.x used by this project.
+- `typescript` is `~5.8`, because the installed `@tsconfig/node22` uses the `es2024` lib, which TypeScript 5.6 does not support.
+
+## Possible Improvements
+
+- Unit tests for the formatters and the store, and component tests for the UI states.
+- Persist added rockets (e.g. `localStorage`) if the requirement changes.
+- Extra filters (country, active/inactive) and sorting.
