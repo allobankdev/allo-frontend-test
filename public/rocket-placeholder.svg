@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 640" fill="none">
+  <defs>
+    <linearGradient id="sky" x1="70" y1="40" x2="850" y2="600" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#292B27"/><stop offset="1" stop-color="#45483D"/>
+    </linearGradient>
+    <linearGradient id="body" x1="451" y1="168" x2="506" y2="477" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8F8EF"/><stop offset="1" stop-color="#CFD0C3"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#sky)" d="M0 0h960v640H0z"/>
+  <circle cx="736" cy="150" r="104" fill="#C9F36C" fill-opacity=".12"/>
+  <circle cx="736" cy="150" r="72" fill="#C9F36C" fill-opacity=".12"/>
+  <g fill="#F4F4E9" fill-opacity=".7">
+    <circle cx="197" cy="129" r="2"/><circle cx="284" cy="225" r="2"/><circle cx="660" cy="337" r="2"/>
+    <circle cx="797" cy="390" r="2"/><circle cx="343" cy="493" r="2"/><circle cx="125" cy="381" r="2"/>
+  </g>
+  <path d="M480 150c-53 62-66 157-61 262l61 68 61-68c5-105-8-200-61-262Z" fill="url(#body)"/>
+  <path d="M480 150c-53 62-66 157-61 262l61 68V150Z" fill="#FFF" fill-opacity=".28"/>
+  <path d="m420 337-54 94 53-19m121-75 54 94-53-19" fill="#C9F36C"/>
+  <path d="M460 474v48l20 31 20-31v-48" fill="#F1A469"/>
+  <path d="M470 474v48l10 31v-79" fill="#FFCB70"/>
+  <circle cx="480" cy="282" r="19" fill="#45483D"/>
+  <circle cx="480" cy="282" r="11" fill="#9AB6AE"/>
+  <path d="M110 560h740" stroke="#F4F4E9" stroke-opacity=".2"/>
+  <text x="110" y="594" fill="#D3D5C9" font-family="Arial,sans-serif" font-size="12" letter-spacing="3">ROCKET IMAGE UNAVAILABLE</text>
+</svg>

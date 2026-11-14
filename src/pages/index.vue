@@ -1,7 +1,51 @@
 <template>
-  <HelloWorld />
+  <main class="page-shell">
+    <header class="topbar"><RouterLink to="/" class="brand"><span class="brand-mark"><v-icon icon="mdi-rocket-launch" size="18" /></span><span>ALLO<span class="brand-light"> / FLIGHT DECK</span></span></RouterLink><span class="topbar-note"><span class="status-dot" /> SPACE X CONFIGURATIONS</span></header>
+
+    <section class="hero">
+      <div class="eyebrow"><span>01</span><span class="eyebrow-rule" /> THE FLEET</div>
+      <div class="hero-main"><div><h1>Built to go<br><span>further.</span></h1><p class="hero-copy">A closer look at the machines carrying humanity<br class="desktop-break"> beyond the edge of our world.</p></div><div class="hero-count"><strong>{{ String(rockets.length).padStart(2, '0') }}</strong><span>VEHICLES<br>IN THE FLEET</span></div></div>
+      <div class="hero-bottom"><span>SPACE X · LAUNCH VEHICLES</span><span>EST. 2002 <i>↗</i></span></div>
+    </section>
+
+    <section class="fleet-section">
+      <div class="section-heading"><div><div class="eyebrow dark"><span>01—13</span><span class="eyebrow-rule" /> VEHICLE INDEX</div><h2>The collection<span class="period">.</span></h2></div><button class="add-button" @click="showForm = !showForm"><v-icon :icon="showForm ? 'mdi-minus' : 'mdi-plus'" size="17" /> {{ showForm ? 'CLOSE FORM' : 'ADD A VEHICLE' }}</button></div>
+
+      <form v-if="showForm" class="add-form" @submit.prevent="submitRocket"><div class="form-heading"><strong>ADD TO THE FLEET</strong><span>LOCAL ENTRY · THIS SESSION</span></div><div class="form-fields"><label>ROCKET NAME<input v-model.trim="draft.name" placeholder="e.g. Starship" required></label><label>DESCRIPTION<input v-model.trim="draft.description" placeholder="A short description" required></label><label>IMAGE URL <span class="optional">OPTIONAL</span><input v-model.trim="draft.image" type="url" placeholder="https://..."></label><button class="submit-button" type="submit">ADD ROCKET <v-icon icon="mdi-arrow-right" size="16" /></button></div></form>
+
+      <div class="filter-row"><label class="search-box"><v-icon icon="mdi-magnify" size="19" /><input v-model="query" placeholder="Search the fleet..." aria-label="Filter rockets by name or description"><kbd>⌘ K</kbd></label><span class="result-count">{{ filteredRockets.length }} RESULTS <span>·</span> SORTED BY NAME</span></div>
+
+      <div v-if="status === 'loading'" class="state-panel"><v-progress-circular indeterminate color="grey-darken-2" size="28" /><span>Retrieving fleet data...</span></div>
+      <div v-else-if="status === 'error'" class="state-panel error-state"><v-icon icon="mdi-alert-circle-outline" size="30" /><strong>We couldn't reach the fleet.</strong><span>{{ error }}</span><button class="submit-button" @click="loadRockets(true)">TRY AGAIN <v-icon icon="mdi-refresh" size="16" /></button></div>
+      <div v-else-if="status === 'success' && filteredRockets.length" class="rocket-grid"><RocketCard v-for="(rocket, index) in filteredRockets" :key="rocket.id" :rocket="rocket" :index-label="String(index + 1).padStart(2, '0')" /></div>
+      <div v-else-if="status === 'success'" class="state-panel"><v-icon icon="mdi-magnify" size="30" /><strong>No vehicles found.</strong><span>Try another name or description.</span></div>
+      <footer class="page-footer"><span>ALL SYSTEMS NOMINAL <i class="status-dot" /></span><span>DATA PROVIDED BY THE SPACE DEVS · LL2 API</span></footer>
+    </section>
+  </main>
 </template>
 
-<script lang="ts" setup>
-  //
+<script setup lang="ts">
+import { onMounted, reactive, ref } from 'vue'
+import RocketCard from '@/components/RocketCard.vue'
+import { useRocketFilter, useRockets } from '@/composables/useRockets'
+import type { Rocket } from '@/types/rocket'
+
+const { rockets, status, error, loadRockets, addRocket } = useRockets()
+const { query, filteredRockets } = useRocketFilter()
+const showForm = ref(false)
+const draft = reactive({ name: '', description: '', image: '' })
+function submitRocket() {
+  const rocket: Rocket = { id: '', full_name: draft.name, description: draft.description, image_url: draft.image || null }
+  addRocket(rocket)
+  draft.name = ''; draft.description = ''; draft.image = ''; showForm.value = false
+}
+onMounted(() => loadRockets())
 </script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
+:root{font-family:'Manrope',sans-serif;color:#181916;background:#f7f7f3;font-synthesis:none}*{box-sizing:border-box}body{margin:0;min-width:320px}.v-application{font-family:'Manrope',sans-serif!important;background:#f7f7f3!important}.page-shell{max-width:1440px;margin:0 auto}.topbar{height:70px;border-bottom:1px solid #e4e4de;display:flex;justify-content:space-between;align-items:center;padding:0 8.3%;font-size:11px;font-weight:800;letter-spacing:.06em}.brand{display:flex;align-items:center;gap:10px;color:#1e201c;text-decoration:none}.brand-mark{width:28px;height:28px;display:grid;place-items:center;background:#caff58;border-radius:50%}.brand-light{font-weight:500;color:#77776e}.topbar-note,.hero-bottom,.eyebrow,.result-count,.page-footer,.form-heading,.form-fields label{font:10px 'DM Mono',monospace;letter-spacing:.1em}.topbar-note{display:flex;align-items:center;gap:8px;color:#6e6f66}.status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#b6f14e}.hero{background:#20211e;color:#f5f5ed;padding:74px 12% 23px;position:relative;overflow:hidden}.hero:after{content:'✳';font-size:400px;line-height:1;position:absolute;right:9%;top:-2%;color:#ffffff06;pointer-events:none}.eyebrow{display:flex;align-items:center;gap:13px;color:#b6f14e}.eyebrow-rule{height:1px;width:35px;background:currentColor;opacity:.7}.hero-main{display:flex;justify-content:space-between;align-items:flex-end;padding:34px 0 60px;position:relative;z-index:1}.hero h1{font-size:clamp(58px,8vw,100px);line-height:.94;letter-spacing:-.075em;font-weight:500}.hero h1 span{color:#b6f14e}.hero-copy{font-size:14px;line-height:1.8;color:#b5b6ae;margin-top:25px}.hero-count{display:flex;gap:14px;align-items:center;margin-bottom:8px}.hero-count strong{font-size:62px;font-weight:500;letter-spacing:-.08em;color:#caff58}.hero-count span{font:9px/1.7 'DM Mono',monospace;letter-spacing:.08em;color:#b8b9b1}.hero-bottom{border-top:1px solid #ffffff28;padding-top:15px;display:flex;justify-content:space-between;color:#a4a59d}.hero-bottom i{color:#caff58;font-style:normal}.fleet-section{padding:63px 12% 25px}.section-heading{display:flex;justify-content:space-between;align-items:flex-end}.dark{color:#75766e}.section-heading h2{font-size:38px;font-weight:600;letter-spacing:-.06em;margin-top:13px}.period{color:#8ab832}.add-button{background:transparent;border:1px solid #d5d6ce;border-radius:4px;padding:11px 14px;font:10px 'DM Mono',monospace;letter-spacing:.08em;display:flex;gap:8px;align-items:center;cursor:pointer}.add-button:hover{background:#ebebe5}.filter-row{display:flex;align-items:center;justify-content:space-between;margin:31px 0 20px;border-top:1px solid #deded8;padding-top:18px}.search-box{display:flex;align-items:center;gap:10px;color:#77776e}.search-box input{border:none;outline:none;background:transparent;width:210px;font:13px 'Manrope',sans-serif;color:#20211e}.search-box kbd{font:10px 'DM Mono',monospace;border:1px solid #ddd;border-radius:3px;padding:4px 6px;color:#8c8d83}.result-count{color:#85867d}.result-count span{color:#b1b1a7;padding:0 4px}.rocket-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.state-panel{min-height:270px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;color:#77776e;font-size:13px}.state-panel strong{color:#20211e;font-size:16px}.error-state .submit-button{margin-top:5px}.add-form{background:#eeeee8;border:1px solid #e0e0d8;border-radius:6px;padding:20px;margin-top:25px}.form-heading{display:flex;justify-content:space-between;color:#20211e}.form-heading span,.optional{color:#87887f}.form-fields{display:grid;grid-template-columns:1fr 1.5fr 1fr auto;gap:12px;margin-top:17px;align-items:end}.form-fields label{display:flex;flex-direction:column;gap:8px;color:#717269;font-size:9px}.form-fields input{width:100%;border:1px solid #d8d8d0;background:#fafaf7;padding:11px 10px;border-radius:3px;font:12px 'Manrope',sans-serif;outline-color:#a9d658}.optional{font-size:8px}.submit-button{border:0;background:#252621;color:white;padding:12px 14px;border-radius:3px;font:10px 'DM Mono',monospace;display:flex;align-items:center;gap:8px;cursor:pointer;justify-content:center}.submit-button:hover{background:#44463d}.page-footer{border-top:1px solid #deded8;margin-top:45px;padding-top:17px;display:flex;justify-content:space-between;color:#85867d;font-size:9px}.page-footer .status-dot{margin-left:6px;width:6px;height:6px}
+@media(max-width:900px){.hero{padding-left:8%;padding-right:8%}.fleet-section{padding-left:8%;padding-right:8%}.rocket-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.form-fields{grid-template-columns:1fr 1fr}.form-fields label:nth-child(2){grid-column:2}.form-fields label:nth-child(3){grid-column:1}.submit-button{grid-column:2}}
+@media(max-width:560px){.topbar{padding:0 20px;height:60px}.topbar-note{font-size:8px}.hero{padding:52px 23px 20px}.hero-main{padding:27px 0 42px}.hero h1{font-size:66px}.hero-copy{font-size:12px}.hero-count{flex-direction:column;align-items:flex-start;gap:0}.hero-count strong{font-size:43px}.hero-count span{font-size:8px}.fleet-section{padding:42px 20px 22px}.section-heading h2{font-size:30px}.add-button{font-size:8px;padding:9px}.rocket-grid{grid-template-columns:1fr;gap:13px}.rocket-card__image{height:230px}.filter-row{align-items:flex-start;gap:15px;flex-direction:column}.result-count{font-size:9px}.search-box input{width:185px}.form-fields{grid-template-columns:1fr}.form-fields label:nth-child(2),.form-fields label:nth-child(3){grid-column:1}.submit-button{grid-column:1}.form-heading{gap:10px;font-size:9px}.page-footer{font-size:8px;gap:12px}.desktop-break{display:none}}
+@media(max-width:400px){.topbar-note{display:none}.page-footer{flex-wrap:wrap;row-gap:8px}.hero-count{margin-left:8px}.section-heading{align-items:center;gap:12px}.add-button{white-space:nowrap}}
+</style>
