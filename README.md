@@ -1,3 +1,94 @@
+# Launch Atlas — frontend implementation
+
+This solution extends the Allo Bank Vue starter with a SpaceX rocket catalog and a detail page. It uses Vue 3, TypeScript, Vuetify, Vite and Vue Router. The original assignment is retained below.
+
+## Run locally
+
+Use Node.js 22 LTS or newer and npm. Extract the project and open the folder containing `package.json` in VS Code. In its terminal, run each command in sequence.
+
+```sh
+npm ci
+npm run dev
+```
+
+Open the local address printed in the terminal, normally `http://127.0.0.1:3000`. Keep that terminal running. Press Ctrl+C to stop the development server. On subsequent visits, run `npm run dev` again. An internet connection is needed to obtain the initial API data and rocket images.
+
+## Production build and code checks
+
+```sh
+npm run build
+npm run lint
+npm run preview
+```
+
+Build performs TypeScript checking and creates `dist/`. Preview serves that build at the address printed in the terminal, normally port 4173. The lockfile fixes the dependency versions. TypeScript was updated to 5.9.3 for compatibility with the starter's Node 22 TypeScript configuration.
+
+## Features
+
+- The list page displays the rocket image, name and description from Launch Library 2.
+- Search matches rocket names without case sensitivity. A family filter works together with search.
+- Clicking a card opens `/rockets/:id`, with name, description, image, launch cost, country and first-flight date.
+- Add rocket opens a labeled, keyboard-accessible dialog. A name is required. Image URL, description, cost, country code and first flight are optional.
+- New rockets receive a unique local ID and immediately appear in the catalog. Filters reset after an addition so the new item is visible.
+- A new rocket's detail page reads the same session state. Local additions are cleared by a page refresh.
+- Both screens display loading, failure with a working retry button, and successful results. The list also handles no results and an empty API response.
+- Missing text, null values and broken images use readable fallbacks. Zero launch cost is displayed as zero.
+- The responsive layout supports desktop and mobile screens. The dialog supports keyboard focus and Escape to close.
+
+## API and data mapping
+
+Requests use the development host and version specified by the assignment.
+
+```text
+GET https://lldev.thespacedevs.com/2.2.0/config/launcher/?manufacturer__name=SpaceX&mode=detailed&limit=20
+GET https://lldev.thespacedevs.com/2.2.0/config/launcher/:id/?mode=detailed
+```
+
+| API field | UI value |
+| --- | --- |
+| image_url | Rocket photo |
+| full_name | Rocket name |
+| description | Description |
+| launch_cost | Cost per launch in USD |
+| manufacturer.country_code | Country code |
+| maiden_flight | First flight |
+
+The catalog loads once per running app and keeps its data in memory. Detail navigation reuses loaded detailed data. Opening a remote detail URL directly fetches that rocket. Requests time out after 20 seconds and allow retry. Loading a local ID after a refresh displays an explanation and a link back to the catalog.
+
+## Code structure
+
+| File | Responsibility |
+| --- | --- |
+| src/services/rockets.ts | Fetch, timeout handling and normalization of API responses |
+| src/stores/rockets.ts | Shared reactive state, list caching, filters, local additions and detail cache |
+| src/router/index.ts | List and detail routes |
+| src/pages/index.vue | Catalog, search and family filter |
+| src/pages/RocketDetail.vue | Detail loading and display |
+| src/components/AddRocketDialog.vue | Form and input validation |
+| src/components/RocketCard.vue | Reusable list card |
+| src/components/RocketImage.vue | Image and missing/broken-image fallback |
+| src/components/RequestState.vue | Loading and error/retry states |
+| src/utils/format.ts | Cost and date display |
+
+State management uses Vue's `reactive`, `readonly` and `computed` APIs in a shared store. The list starts fetching in `onMounted`. The detail page watches the route ID immediately and guards against responses arriving out of order. A history-mode deployment must route unknown application paths to `index.html`.
+
+## Verification
+
+The implementation was checked with a production build, TypeScript and ESLint. Browser checks covered the live API list and direct detail URL, combined filters and back navigation, local creation and detail navigation, zero and nonzero costs, blank-name rejection, mobile layout, missing fields and image fallbacks. Simulated API failures verified retry on both pages. Simulated delayed and empty responses verified loading and empty-state rendering.
+
+## Submit using the original repository
+
+1. Fork `allobankdev/allo-frontend-test` into your own GitHub account.
+2. Clone your fork and create the branch `feat/allo-spacex`.
+3. Copy this solution's files into the cloned project. Put `package.json` and `src/` at the repository root.
+4. Run `npm ci`, `npm run build` and `npm run lint`.
+5. Commit and push the feature branch to your fork.
+6. Open a Pull Request from that branch to `allobankdev/allo-frontend-test`.
+7. Fill in the submission form linked in the assignment and send the frontend link to HR.
+
+
+---
+
 # Allo Bank Frontend Technical Assignment
 
 In this assignment, you’re assigned to create a website that displays rockets. This website only has two screens: rocket list screen and rocket detail screen. Here are the requirements:
