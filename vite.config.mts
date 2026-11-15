@@ -26,10 +26,25 @@ export default defineConfig({
     Components(),
     ViteFonts({
       google: {
-        families: [ {
-          name: 'Roboto',
-          styles: 'wght@100;300;400;500;700;900',
-        }],
+        families: [
+          {
+            name: 'Roboto',
+            styles: 'wght@100;300;400;500;700;900',
+          },
+          // App typography (see tailwind.config.js)
+          {
+            name: 'Barlow Condensed',
+            styles: 'wght@500;600;700',
+          },
+          {
+            name: 'IBM Plex Sans',
+            styles: 'wght@400;500;600',
+          },
+          {
+            name: 'IBM Plex Mono',
+            styles: 'wght@400;500',
+          },
+        ],
       },
     }),
   ],

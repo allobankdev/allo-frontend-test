@@ -1,0 +1,88 @@
+/**
+ * src/styles/tailwind.css
+ *
+ * Tailwind entry. Imported after Vuetify styles so utilities win the cascade.
+ * Small, repeated UI patterns live in the components layer to avoid duplication.
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-space-950 font-sans text-slate-300 antialiased;
+  }
+
+  ::selection {
+    @apply bg-flare-500/30 text-white;
+  }
+}
+
+@layer components {
+  /* Static starfield: two offset tiles of tiny radial dots so the repeat isn't obvious. */
+  .starfield {
+    background-color: theme('colors.space.950');
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgb(27 38 64 / 0.55), transparent 70%),
+      radial-gradient(1px 1px at 23px 41px, rgb(255 255 255 / 0.55), transparent 100%),
+      radial-gradient(1px 1px at 131px 97px, rgb(255 255 255 / 0.35), transparent 100%),
+      radial-gradient(1.5px 1.5px at 197px 13px, rgb(255 255 255 / 0.5), transparent 100%),
+      radial-gradient(1px 1px at 61px 181px, rgb(255 255 255 / 0.3), transparent 100%),
+      radial-gradient(1px 1px at 173px 211px, rgb(255 220 200 / 0.4), transparent 100%),
+      radial-gradient(1px 1px at 89px 307px, rgb(255 255 255 / 0.25), transparent 100%),
+      radial-gradient(1.5px 1.5px at 281px 263px, rgb(200 220 255 / 0.45), transparent 100%),
+      radial-gradient(1px 1px at 347px 59px, rgb(255 255 255 / 0.3), transparent 100%),
+      radial-gradient(1px 1px at 313px 379px, rgb(255 255 255 / 0.35), transparent 100%);
+    background-size: 100% 100%, 240px 240px, 240px 240px, 240px 240px, 240px 240px, 240px 240px, 410px 410px, 410px 410px, 410px 410px, 410px 410px;
+    background-repeat: no-repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat, repeat;
+  }
+
+  .panel {
+    @apply rounded-lg border border-space-700/80 bg-space-900/85;
+  }
+
+  /* Small uppercase monospace label used for section kickers and data labels. */
+  .eyebrow {
+    @apply font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-flare-400;
+  }
+
+  .data-label {
+    @apply font-mono text-[11px] uppercase tracking-[0.14em] text-slate-500;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition
+      focus:outline-none focus-visible:ring-2 focus-visible:ring-flare-400 focus-visible:ring-offset-2 focus-visible:ring-offset-space-950
+      disabled:cursor-not-allowed disabled:opacity-40;
+  }
+
+  .btn-primary {
+    @apply btn bg-flare-500 text-space-950 hover:bg-flare-400;
+  }
+
+  .btn-secondary {
+    @apply btn border border-space-600 bg-space-900 text-slate-200 hover:border-slate-500 hover:text-white;
+  }
+
+  .btn-ghost {
+    @apply btn text-slate-400 hover:bg-space-800 hover:text-white;
+  }
+
+  .form-input {
+    @apply block w-full rounded-md border border-space-700 bg-space-950 px-3 py-2 text-sm text-slate-100
+      placeholder:text-slate-600 focus:border-flare-500 focus:outline-none focus:ring-1 focus:ring-flare-500;
+  }
+
+  .form-input-invalid {
+    @apply border-rose-500/80 focus:border-rose-500 focus:ring-rose-500;
+  }
+
+  .badge {
+    @apply inline-flex shrink-0 items-center gap-1.5 rounded-sm border px-1.5 py-0.5 font-mono text-[10px] font-medium uppercase tracking-wider;
+  }
+
+  .badge-local {
+    @apply badge border-flare-500/50 text-flare-300;
+  }
+}
