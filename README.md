@@ -1,79 +1,89 @@
-# Allo Bank Frontend Technical Assignment
+# SpaceX Rocket Explorer — Allo Bank Frontend Challenge
 
-In this assignment, you’re assigned to create a website that displays rockets. This website only has two screens: rocket list screen and rocket detail screen. Here are the requirements:
+A web app for browsing, filtering, and locally adding SpaceX rocket data, built as a submission for the Allo Bank frontend technical assignment. Data comes from the Launch Library 2 API.
 
-### Functional Requirements
-- As a user, I want to see a list of rockets in the rocket list screen (Show each rocket image, rocket name, and rocket description)
-- As a user, I want to be able to filter the rockets in the rocket list screen
-- As a user, I want to be able to add the new rocket in the rocket list screen (the API is read-only, so the new rocket only needs to appear in the running app)
-- As a user, I want to be able to see the rocket detail by clicking a rocket in the rocket list screen (Show rocket image, rocket name, rocket description, cost per launch, country, first flight)
-- As a user, I want both screens to still display correctly when some rocket data is missing
+**Stack:** Vue 3 + TypeScript + Vite + Vuetify. State management uses a lightweight composable store (no Pinia), and navigation uses file-based routing (`unplugin-vue-router`).
 
-### API
+## Features
 
-Use the Launch Library 2 API by The Space Devs for rocket data.
-Docs: https://thespacedevs.com/llapi
+- **Rocket list** — responsive card grid showing each rocket's image, name, and description. Missing images fall back to a placeholder icon, missing text falls back to a default message.
+- **Filter** — client-side filtering by rocket name, with an empty state when nothing matches.
+- **Add rocket (local)** — a validated form (name and description required, image URL optional) that adds a rocket to app state only, since the API is read-only. New rockets appear at the top of the list.
+- **UI states** — loading indicator, error message with a Retry button, success, and empty states.
 
-Rocket list (returns all 13 SpaceX rockets in a single request):
+## Screenshots
 
-    GET https://lldev.thespacedevs.com/2.2.0/config/launcher/?manufacturer__name=SpaceX&mode=detailed&limit=20
+Current state of the app, captured before further improvements (source files in [`dokumentasi_projek/`](./dokumentasi_projek)):
 
-Single rocket:
+![Rocket list](dokumentasi_projek/01-rocket-list.png)
+*Rocket list — all 13 SpaceX rockets from the API*
 
-    GET https://lldev.thespacedevs.com/2.2.0/config/launcher/:id/
+![Filter](dokumentasi_projek/02-filter-falcon.png)
+*Client-side filtering — searching "falcon"*
 
-`mode=detailed` is required — without it the response omits `description`
-and the other detail fields. `limit=20` is required too — the default page size
-is 10, so without it you get 10 rockets and a `next` page instead of all 13.
+![Empty state](dokumentasi_projek/03-filter-empty.png)
+*Empty state — no rocket matches the keyword*
 
-**API version:** use `2.2.0` as shown above. The docs site now showcases
-`2.3.0`, but `2.2.0` is still live with no announced end-of-life, and the field
-names in the table below are the `2.2.0` ones. Don't migrate: `2.3.0` renames
-the endpoint to `/2.3.0/launcher_configurations/` and moves several of these
-fields (`image_url` becomes `image.image_url`, `manufacturer.country_code`
-becomes a `manufacturer.country` array). Both versions return the same 13
-rockets.
+![Add rocket](dokumentasi_projek/04-add-rocket-form.png)
+*Add rocket form — validated, new rocket appears at the top of the list*
 
-| Requirement      | Field                              |
-| ---------------- | ---------------------------------- |
-| rocket image     | `image_url`                        |
-| rocket name      | `full_name`                        |
-| description      | `description`                      |
-| cost per launch  | `launch_cost`                      |
-| country          | `manufacturer.country_code`        |
-| first flight     | `maiden_flight`                    |
+![Rocket details](dokumentasi_projek/05-rocket-details.png)
+*Rocket detail — full fields with fallbacks (Starship V3: placeholder image, no cost)*
 
-**Rate limit:** the API allows 15 requests/hour for anonymous users. Use the
-`lldev.thespacedevs.com` host shown above during development — it serves the
-same data with a far more generous limit. The production host,
-`ll.thespacedevs.com`, will throttle you quickly.
+## Learnings
 
-Note that some rockets have missing values for `launch_cost`, `maiden_flight`,
-and `image_url`.
+### Requirement data
 
-### Non-Functional Requirements
-- Use the Launch Library 2 API (see the API section above) for getting the rocket data
-- Implement routers
-- Implement state management
-- Implement lifecycles
-- Create components based will be + points
-- UI states (Loading, Fail/Retry, and Success)
-- Show loading when waiting response from API
-- If an error occurred, user can retry by pressing retry button
-- Show result when get response from API
+Reading the API documentation before writing code mattered: the LL2 `2.2.0` list endpoint requires `mode=detailed&limit=20` to return descriptions and all 13 SpaceX rockets in one request. Several fields (`launch_cost`, `image_url`, `maiden_flight`) can be `null`, so every UI field needs a fallback path.
 
-### Nice to have characteristics
-Responsive design
-You don’t need to worry about the detailed design, we’re not interested in your artistic prowess (for now), put your efforts on creating a readable/clean/maintainable source code.
+### Data fetching
 
-### Submission
+A small typed `getJson<T>` wrapper checks `response.ok` before parsing JSON, keeping HTTP error handling in one place. The API base URL is read from the `VITE_API_BASE` environment variable with a hardcoded fallback, so the app runs with zero configuration while still being configurable per environment.
 
-1.  **Fork** this repository.
+### Rocket list
 
-2.  Implement your solution on a dedicated feature branch (e.g., `feat/allo-spacex`).
+API types (`LauncherConfigApi`) are kept separate from UI types (`Rocket`) through a mapper in the service layer, so components never depend on the API's raw shape. `RocketCard` is a reusable component; the list page only composes store state and handles layout.
 
-3.  When complete, submit your solution via a **Pull Request (PR)** back to the main repository.
-   
-4.  Please complete the form to submit your technical test: [Click Here](https://forms.gle/YAbAQxPuJAdDYmRW7)
+### Rocket detail
 
-Good luck with your assignment! Don't hesitate to contact us if you have any questions about the assignment process.
+The detail page reuses data instead of re-fetching blindly. On load it first
+checks the rocket list already held in the store — so clicking a card (including
+locally added rockets) opens instantly with zero API calls. Only when the id is
+not in the list (for example on a hard page refresh of a detail URL) does it
+fall back to a single request to `/config/launcher/:id/`. Costs are formatted
+with `toLocaleString` (`"7000000"` → `$7,000,000`), and missing fields render
+as a placeholder image or `—` instead of crashing the view.
+
+### Integration
+
+Clear layering: `services/` (fetching + mapping) → `stores/` (state, actions) → `components/` and `pages/` (UI only). `import type` is used everywhere because of `verbatimModuleSyntax`, keeping type imports erased at compile time.
+
+## Usage
+
+## Usage
+
+```bash
+npm install
+npm run dev
+npm run type-check
+npm run build
+Required configuration via .env:
+
+VITE_API_BASE=https://lldev.thespacedevs.com/2.2.0
+The app fails fast if this variable is missing. Note: VITE_API_BASE is not
+a secret mechanism — everything shipped to the browser is public. It exists
+purely for per-environment configuration.
+
+Optional configuration via `.env`:
+
+```
+VITE_API_BASE=https://lldev.thespacedevs.com/2.2.0
+```
+
+If unset, the app falls back to the LL2 dev host above. The dev host serves the same data as production (`ll.thespacedevs.com`) with a much more generous rate limit for development.
+
+## Next improvements
+
+- Rocket detail page (`/rockets/:id`) — in progress
+- Image URL validation on the add form
+- Unit tests for the service and store layers
