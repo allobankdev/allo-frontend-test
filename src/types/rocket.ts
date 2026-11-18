@@ -26,3 +26,12 @@ export interface RocketListResponse {
     next: string | null
     results: RocketRaw[]
 }
+
+export interface NewRocketInput {
+    name: string
+    description: string
+    imageUrl?: string | null
+    country?: string | null
+    costPerLaunch?: number | null
+    firstFlight?: string | null
+}
