@@ -1,13 +1,25 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useRocketStore } from '@/stores/rockets'
 import type { LoadStatus } from '@/stores/rockets'
 import type { Rocket } from '@/types/rocket'
 import { formatCost, formatCountry, formatFirstFlight } from '@/utils/format'
 
 const route = useRoute('/rockets/[id]')
+const router = useRouter()
 const store = useRocketStore()
+
+function goBack(): void {
+  // Use the browser history when possible so the list's scroll position is
+  // restored; fall back to a normal push for direct visits to this page.
+  if (router.options.history.state.back) {
+    router.back()
+    return
+  }
+
+  void router.push('/')
+}
 
 const rocket = ref<Rocket | null>(null)
 const status = ref<LoadStatus>('idle')
@@ -60,10 +72,10 @@ const details = computed(() => {
     class="py-8"
   >
     <v-btn
-      to="/"
       variant="text"
       prepend-icon="mdi-arrow-left"
       class="mb-4"
+      @click="goBack"
     >
       Back to rockets
     </v-btn>

@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRocketStore } from '@/stores/rockets'
-import AddRocketDialog from '@/components/AddRocketDialog.vue'
+import AddRocketDialog from '@/components/rocket/AddRocketDialog.vue'
 
 const store = useRocketStore()
 const isDialogOpen = ref<boolean>(false)

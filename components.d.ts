@@ -7,11 +7,11 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    AddRocketDialog: typeof import('./src/components/AddRocketDialog.vue')['default']
+    AddRocketDialog: typeof import('./src/components/rocket/AddRocketDialog.vue')['default']
     AddRockets: typeof import('./src/components/AddRockets.vue')['default']
-    RocketCard: typeof import('./src/components/RocketCard.vue')['default']
-    RocketFilterBar: typeof import('./src/components/RocketFilterBar.vue')['default']
-    RocketImage: typeof import('./src/components/RocketImage.vue')['default']
+    RocketCard: typeof import('./src/components/rocket/RocketCard.vue')['default']
+    RocketFilterBar: typeof import('./src/components/rocket/RocketFilterBar.vue')['default']
+    RocketImage: typeof import('./src/components/rocket/RocketImage.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     StateWrapper: typeof import('./src/components/StateWrapper.vue')['default']

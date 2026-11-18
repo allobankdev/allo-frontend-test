@@ -6,6 +6,24 @@ import { computed, ref } from "vue";
 export type LoadStatus = 'idle' | 'loading' | 'success' | 'error'
 export type StatusFilter = 'all' | 'active' | 'retired'
 
+export function matchesRocketFilter(
+    rocket: Rocket,
+    query: string,
+    status: StatusFilter,
+): boolean {
+    const normalizedQuery = query.trim().toLowerCase()
+
+    const matchesQuery =
+        normalizedQuery === ''
+        || rocket.name.toLowerCase().includes(normalizedQuery)
+        || rocket.description.toLowerCase().includes(normalizedQuery)
+
+    const matchesStatus =
+        status === 'all' || (status === 'active' ? rocket.active : !rocket.active)
+
+    return matchesQuery && matchesStatus
+}
+
 export const useRocketStore = defineStore('rockets', () => {
     const fetchedRockets = ref<Rocket[]>([])
     const addedRockets = ref<Rocket[]>([])
@@ -16,17 +34,13 @@ export const useRocketStore = defineStore('rockets', () => {
 
     const rockets = computed<Rocket[]>(() => [...addedRockets.value, ...fetchedRockets.value])
 
-    const filteredRockets = computed<Rocket[]>(() => {
-        const query = searchQuery.value.trim().toLowerCase()
-        return rockets.value.filter((rocket) => {
-            const matchesQuery =
-                query === '' || rocket.name.toLowerCase().includes(query) || rocket.description.toLowerCase().includes(query)
-            const matchesStatus =
-                statusFilter.value === 'all' || (statusFilter.value === 'active' ? rocket.active : !rocket.active)
-
-            return matchesQuery && matchesStatus
-        })
-    })
+    const filteredRockets = computed<Rocket[]>(() =>
+        rockets.value.filter((rocket) => matchesRocketFilter(
+            rocket,
+            searchQuery.value,
+            statusFilter.value,
+        )),
+    )
 
     const hasActiveFilter = computed(
         () => searchQuery.value.trim() !== '' || statusFilter.value !== 'all',
