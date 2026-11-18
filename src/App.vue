@@ -18,19 +18,12 @@
           SpaceX Explorer
         </router-link>
       </v-app-bar-title>
-      <v-chip
-        size="small"
-        variant="tonal"
-        color="primary"
-        prepend-icon="mdi-database"
-        class="me-4"
-      >
-        Launch Library
-      </v-chip>
     </v-app-bar>
 
     <v-main>
       <router-view />
     </v-main>
+
+    <AppToaster />
   </v-app>
 </template>

@@ -1,9 +1,11 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
 import { useRocketStore } from '@/stores/rockets'
+import { useToast } from '@/hooks/useToast'
 
 const open = defineModel<boolean>({ required: true })
 const store = useRocketStore()
+const toast = useToast()
 
 const formRef = ref<{ validate: () => Promise<{ valid: boolean }> } | null>(null)
 const isSaving = ref(false)
@@ -57,7 +59,7 @@ async function submit(): Promise<void> {
     isSaving.value = true
 
     try {
-        store.addRocket({
+        const rocket = store.addRocket({
             name: form.value.name,
             description: form.value.description,
             imageUrl: form.value.imageUrl || null,
@@ -65,7 +67,12 @@ async function submit(): Promise<void> {
             costPerLaunch: form.value.costPerLaunch ? Number(form.value.costPerLaunch) : null,
             firstFlight: form.value.firstFlight || null,
         })
+        toast.success(`"${rocket.name}" added to your rockets.`)
         open.value = false
+    } catch (error) {
+        toast.error(
+            error instanceof Error ? error.message : 'Failed to add rocket. Please try again.',
+        )
     } finally {
         isSaving.value = false
     }
