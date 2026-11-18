@@ -1,0 +1,17 @@
+services:
+  allo-frontend-test:
+    build:
+      context: .
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL}
+    image: ghcr.io/potasticmaeve/allo-frontend-test:v1.0.0
+    container_name: allo-frontend-test
+    ports:
+      - "8085:80"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
