@@ -1,8 +1,9 @@
 import { fetchRocketById, fetchRockets } from '@/services/rockets'
 import type { Rocket } from '@/types/rocket'
 import { createPinia, setActivePinia } from 'pinia'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { matchesRocketFilter, useRocketStore } from '../rockets'
+import { nextTick } from 'vue'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { ADDED_ROCKETS_STORAGE_KEY, matchesRocketFilter, useRocketStore } from '../rockets'
 
 vi.mock('@/services/rockets', () => ({
     fetchRockets: vi.fn(),
@@ -199,5 +200,116 @@ describe('filtering', () => {
 
     it('treats a blank query as no filter', () => {
         expect(matchesRocketFilter(falcon9, '   ', 'all')).toBe(true)
+    })
+})
+
+function createStorageMock(): Storage {
+    const data = new Map<string, string>()
+
+    return {
+        getItem: (key: string) => data.get(key) ?? null,
+        setItem: (key: string, value: string) => {
+            data.set(key, value)
+        },
+        removeItem: (key: string) => {
+            data.delete(key)
+        },
+        clear: () => data.clear(),
+        key: (index: number) => [...data.keys()][index] ?? null,
+        get length() {
+            return data.size
+        },
+    }
+}
+
+describe('added rocket persistence', () => {
+    beforeEach(() => {
+        vi.stubGlobal('localStorage', createStorageMock())
+    })
+
+    afterEach(() => {
+        vi.unstubAllGlobals()
+    })
+
+    it('restores rockets added in a previous session', async () => {
+        const first = useRocketStore()
+        const created = first.addRocket({
+            name: 'Nusantara HLV',
+            description: 'A medium-heavy launch vehicle.',
+            country: 'IDN',
+        })
+        await nextTick()
+
+        setActivePinia(createPinia())
+        const second = useRocketStore()
+
+        expect(second.rockets.map((rocket) => rocket.id)).toContain(created.id)
+        expect(second.rockets[0]?.name).toBe('Nusantara HLV')
+        expect(second.rockets[0]?.isLocal).toBe(true)
+    })
+
+    it('persists the rocket so its detail page works after a reload', async () => {
+        const first = useRocketStore()
+        const created = first.addRocket({ name: 'Nusantara HLV', description: 'Demo rocket.' })
+        await nextTick()
+
+        setActivePinia(createPinia())
+        const second = useRocketStore()
+
+        await expect(second.getRocket(created.id)).resolves.toMatchObject({ id: created.id })
+        expect(fetchRocketById).not.toHaveBeenCalled()
+    })
+
+    it('ignores a corrupted storage payload instead of crashing', () => {
+        localStorage.setItem(ADDED_ROCKETS_STORAGE_KEY, '{not json')
+
+        const store = useRocketStore()
+
+        expect(store.rockets).toEqual([])
+    })
+
+    it('drops entries that do not look like a rocket', () => {
+        localStorage.setItem(ADDED_ROCKETS_STORAGE_KEY, JSON.stringify([
+            { id: 'local-1', name: 'Valid', description: 'Kept.' },
+            { id: 42, name: 'Invalid', description: 'Missing string id.' },
+            null,
+        ]))
+
+        const store = useRocketStore()
+
+        expect(store.rockets.map((rocket) => rocket.id)).toEqual(['local-1'])
+    })
+
+    it('normalises missing optional fields on restored rockets', () => {
+        localStorage.setItem(ADDED_ROCKETS_STORAGE_KEY, JSON.stringify([
+            { id: 'local-2', name: 'Sparse', description: 'Only the required fields.' },
+        ]))
+
+        const store = useRocketStore()
+
+        expect(store.rockets[0]).toMatchObject({
+            imageUrl: null,
+            costPerLaunch: null,
+            country: null,
+            firstFlight: null,
+            active: false,
+            isLocal: true,
+        })
+    })
+
+    it('keeps working when the browser blocks storage', () => {
+        vi.stubGlobal('localStorage', {
+            getItem: () => {
+                throw new Error('blocked')
+            },
+            setItem: () => {
+                throw new Error('blocked')
+            },
+        })
+
+        const store = useRocketStore()
+
+        expect(() => store.addRocket({ name: 'Offline rocket', description: 'Still in memory.' })).not.toThrow()
+        expect(store.rockets).toHaveLength(1)
     })
 })

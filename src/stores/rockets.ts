@@ -1,10 +1,37 @@
 import { fetchRocketById, fetchRockets } from "@/services/rockets";
 import type { NewRocketInput, Rocket } from "@/types/rocket";
+import { readJson, writeJson } from "@/utils/storage";
 import { defineStore } from "pinia";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 
 export type LoadStatus = 'idle' | 'loading' | 'success' | 'error'
 export type StatusFilter = 'all' | 'active' | 'retired'
+
+export const ADDED_ROCKETS_STORAGE_KEY = 'rockets:added'
+
+function isStoredRocket(value: unknown): value is Rocket {
+    if (!value || typeof value !== 'object') return false
+
+    const rocket = value as Partial<Rocket>
+    return typeof rocket.id === 'string'
+        && typeof rocket.name === 'string'
+        && typeof rocket.description === 'string'
+}
+
+export function loadStoredRockets(): Rocket[] {
+    const stored = readJson<unknown>(ADDED_ROCKETS_STORAGE_KEY, [])
+    if (!Array.isArray(stored)) return []
+
+    return stored.filter(isStoredRocket).map((rocket) => ({
+        ...rocket,
+        imageUrl: rocket.imageUrl ?? null,
+        costPerLaunch: typeof rocket.costPerLaunch === 'number' ? rocket.costPerLaunch : null,
+        country: rocket.country ?? null,
+        firstFlight: rocket.firstFlight ?? null,
+        active: Boolean(rocket.active),
+        isLocal: true,
+    }))
+}
 
 export function matchesRocketFilter(
     rocket: Rocket,
@@ -26,7 +53,7 @@ export function matchesRocketFilter(
 
 export const useRocketStore = defineStore('rockets', () => {
     const fetchedRockets = ref<Rocket[]>([])
-    const addedRockets = ref<Rocket[]>([])
+    const addedRockets = ref<Rocket[]>(loadStoredRockets())
     const status = ref<LoadStatus>('idle')
     const errorMessage = ref('')
     const searchQuery = ref('')
@@ -44,6 +71,12 @@ export const useRocketStore = defineStore('rockets', () => {
 
     const hasActiveFilter = computed(
         () => searchQuery.value.trim() !== '' || statusFilter.value !== 'all',
+    )
+
+    watch(
+        addedRockets,
+        (value) => writeJson(ADDED_ROCKETS_STORAGE_KEY, value),
+        { deep: true },
     )
 
     async function loadRockets(force = false): Promise<void> {
@@ -74,7 +107,7 @@ export const useRocketStore = defineStore('rockets', () => {
 
     function addRocket(input: NewRocketInput): Rocket {
         const rocket: Rocket = {
-            id: `local-${Date.now()}`,
+            id: `local-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
             name: input.name.trim(),
             description: input.description.trim(),
             imageUrl: input.imageUrl?.trim() || null,

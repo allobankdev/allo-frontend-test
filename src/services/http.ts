@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL
+const DEFAULT_API_BASE = 'https://lldev.thespacedevs.com/2.2.0'
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || DEFAULT_API_BASE).replace(/\/+$/, '')
 const REQUEST_TIMEOUT_MS = 10_000
 
 export const http = axios.create({
