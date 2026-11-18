@@ -34,4 +34,5 @@ export interface NewRocketInput {
     country?: string | null
     costPerLaunch?: number | null
     firstFlight?: string | null
+    active?: boolean
 }

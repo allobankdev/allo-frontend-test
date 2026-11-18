@@ -17,6 +17,7 @@ const form = ref({
     country: '',
     costPerLaunch: '',
     firstFlight: '',
+    active: true,
 })
 
 function resetForm(): void {
@@ -27,6 +28,7 @@ function resetForm(): void {
         country: '',
         costPerLaunch: '',
         firstFlight: '',
+        active: true,
     }
 }
 
@@ -66,6 +68,7 @@ async function submit(): Promise<void> {
             country: form.value.country || null,
             costPerLaunch: form.value.costPerLaunch ? Number(form.value.costPerLaunch) : null,
             firstFlight: form.value.firstFlight || null,
+            active: form.value.active,
         })
         toast.success(`"${rocket.name}" added to your rockets.`)
         open.value = false
@@ -167,6 +170,15 @@ async function submit(): Promise<void> {
               />
             </v-col>
           </v-row>
+
+          <v-switch
+            v-model="form.active"
+            label="Active rocket"
+            color="primary"
+            density="comfortable"
+            hide-details
+            class="mb-1"
+          />
         </v-form>
       </v-card-text>
 

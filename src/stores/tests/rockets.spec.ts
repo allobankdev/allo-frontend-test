@@ -143,6 +143,26 @@ describe('addRocket', () => {
         expect(created.imageUrl).toBeNull()
         expect(created.costPerLaunch).toBeNull()
     })
+
+    it('marks the rocket as active when no status is provided', () => {
+        const store = useRocketStore()
+
+        const created = store.addRocket({ name: 'Falcon 9', description: 'The workhorse fleet.' })
+
+        expect(created.active).toBe(true)
+    })
+
+    it('keeps a rocket inactive when active is false', () => {
+        const store = useRocketStore()
+
+        const created = store.addRocket({
+            name: 'Falcon 1',
+            description: 'The retired first rocket.',
+            active: false,
+        })
+
+        expect(created.active).toBe(false)
+    })
 })
 
 describe('filtering', () => {

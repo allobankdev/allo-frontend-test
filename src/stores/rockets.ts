@@ -114,7 +114,7 @@ export const useRocketStore = defineStore('rockets', () => {
             costPerLaunch: input.costPerLaunch ?? null,
             country: input.country?.trim() || null,
             firstFlight: input.firstFlight || null,
-            active: true,
+            active: input.active ?? true,
             isLocal: true,
         }
 
