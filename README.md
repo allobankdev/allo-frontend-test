@@ -1,79 +1,73 @@
-# Allo Bank Frontend Technical Assignment
+# Allo Rockets — Frontend
 
-In this assignment, you’re assigned to create a website that displays rockets. This website only has two screens: rocket list screen and rocket detail screen. Here are the requirements:
+A web app that lists rockets and shows their details, built with **Vue 3 + Vite + TypeScript + Vuetify**. Data comes from [Launch Library 2](https://thespacedevs.com/llapi) (API 2.2.0).
 
-### Functional Requirements
-- As a user, I want to see a list of rockets in the rocket list screen (Show each rocket image, rocket name, and rocket description)
-- As a user, I want to be able to filter the rockets in the rocket list screen
-- As a user, I want to be able to add the new rocket in the rocket list screen (the API is read-only, so the new rocket only needs to appear in the running app)
-- As a user, I want to be able to see the rocket detail by clicking a rocket in the rocket list screen (Show rocket image, rocket name, rocket description, cost per launch, country, first flight)
-- As a user, I want both screens to still display correctly when some rocket data is missing
+## Features
 
-### API
+- **Rocket list** with image, name, and description
+- **Filter** by name, description, or country (no extra request)
+- **Add rocket** through a form. Added rockets only exist in memory and are lost when the page is reloaded
+- **Rocket detail** with image, name, description, cost per launch, country, and first flight
+- **Missing data** is shown as "Not available" or an image placeholder, without breaking the page
+- **UI states**: loading, error with a *Try again* button, and success
+- **Responsive** layout with the Vuetify grid (1, 2, 3, or 4 columns)
 
-Use the Launch Library 2 API by The Space Devs for rocket data.
-Docs: https://thespacedevs.com/llapi
+## Running
 
-Rocket list (returns all 13 SpaceX rockets in a single request):
+Requires Node.js 20 or newer.
 
-    GET https://lldev.thespacedevs.com/2.2.0/config/launcher/?manufacturer__name=SpaceX&mode=detailed&limit=20
+```bash
+npm install
+npm run dev
+```
 
-Single rocket:
+Open **http://localhost:3000**.
 
-    GET https://lldev.thespacedevs.com/2.2.0/config/launcher/:id/
+Optional configuration is in `.env.example`. By default the app uses the `lldev.thespacedevs.com` host, which has a much higher rate limit than `ll.thespacedevs.com` (15 requests per hour for anonymous users).
 
-`mode=detailed` is required — without it the response omits `description`
-and the other detail fields. `limit=20` is required too — the default page size
-is 10, so without it you get 10 rockets and a `next` page instead of all 13.
+## Scripts
 
-**API version:** use `2.2.0` as shown above. The docs site now showcases
-`2.3.0`, but `2.2.0` is still live with no announced end-of-life, and the field
-names in the table below are the `2.2.0` ones. Don't migrate: `2.3.0` renames
-the endpoint to `/2.3.0/launcher_configurations/` and moves several of these
-fields (`image_url` becomes `image.image_url`, `manufacturer.country_code`
-becomes a `manufacturer.country` array). Both versions return the same 13
-rockets.
+| Script | Purpose |
+|---|---|
+| `npm run dev` | Dev server |
+| `npm run build` | Type-check, then production build |
+| `npm run preview` | Serve the production build |
+| `npm test` | Unit tests (Vitest) |
+| `npm run lint` | ESLint with auto-fix |
 
-| Requirement      | Field                              |
-| ---------------- | ---------------------------------- |
-| rocket image     | `image_url`                        |
-| rocket name      | `full_name`                        |
-| description      | `description`                      |
-| cost per launch  | `launch_cost`                      |
-| country          | `manufacturer.country_code`        |
-| first flight     | `maiden_flight`                    |
+## Structure
 
-**Rate limit:** the API allows 15 requests/hour for anonymous users. Use the
-`lldev.thespacedevs.com` host shown above during development — it serves the
-same data with a far more generous limit. The production host,
-`ll.thespacedevs.com`, will throttle you quickly.
+```
+src/
+├── api/launchLibrary.ts     # HTTP client for Launch Library 2 (pagination, errors)
+├── components/
+│   ├── AppStateView.vue     # Loading / error + retry / slot for success
+│   ├── RocketCard.vue       # Rocket card in the list
+│   ├── RocketFormDialog.vue # Add-rocket form with validation
+│   └── RocketImage.vue      # Image with fallback when empty or failed to load
+├── pages/
+│   ├── index.vue            # Rocket list + filter + add
+│   └── rockets/[id].vue     # Rocket detail
+├── stores/rockets.ts        # State (Pinia): list, detail, filter, local rockets
+├── types/
+│   ├── rocket.ts            # UI types
+│   └── mappers.ts           # API → UI mapping (missing values become null)
+└── utils/format.ts          # Cost (USD) and date formatting
+```
 
-Note that some rockets have missing values for `launch_cost`, `maiden_flight`,
-and `image_url`.
+Routing uses file-based routing from `unplugin-vue-router`: `pages/index.vue` becomes `/`, and `pages/rockets/[id].vue` becomes `/rockets/:id`.
 
-### Non-Functional Requirements
-- Use the Launch Library 2 API (see the API section above) for getting the rocket data
-- Implement routers
-- Implement state management
-- Implement lifecycles
-- Create components based will be + points
-- UI states (Loading, Fail/Retry, and Success)
-- Show loading when waiting response from API
-- If an error occurred, user can retry by pressing retry button
-- Show result when get response from API
+## Design decisions
 
-### Nice to have characteristics
-Responsive design
-You don’t need to worry about the detailed design, we’re not interested in your artistic prowess (for now), put your efforts on creating a readable/clean/maintainable source code.
+- **Store (Pinia)** keeps the load status for the list and the detail. The list is fetched once unless the user presses *Try again*. The detail uses data already in the list, and only calls the API when the rocket is not cached (for example when opening a link directly).
+- **Race condition**: a late detail response for a rocket the user has already left is ignored.
+- **Lifecycle**: the list loads in `onMounted`, and the detail reloads when the route parameter changes (`watch`).
+- **API mapping** lives outside the components, so every missing value becomes `null` in one place.
 
-### Submission
+## Tests
 
-1.  **Fork** this repository.
+```bash
+npm test
+```
 
-2.  Implement your solution on a dedicated feature branch (e.g., `feat/allo-spacex`).
-
-3.  When complete, submit your solution via a **Pull Request (PR)** back to the main repository.
-   
-4.  Please complete the form to submit your technical test: [Click Here](https://forms.gle/YAbAQxPuJAdDYmRW7)
-
-Good luck with your assignment! Don't hesitate to contact us if you have any questions about the assignment process.
+20 unit tests cover mapping incomplete data, cost and date formatting, and the store: retry after an error, filtering, caching, 404, and late responses.
