@@ -1,8 +1,18 @@
 # Allo Bank Frontend Technical Assignment
 
+## How to run
+
+```bash
+npm install
+npm run dev
+```
+
+Then open the local URL printed by Vite (this project uses `http://localhost:3000`).
+
 In this assignment, you’re assigned to create a website that displays rockets. This website only has two screens: rocket list screen and rocket detail screen. Here are the requirements:
 
 ### Functional Requirements
+
 - As a user, I want to see a list of rockets in the rocket list screen (Show each rocket image, rocket name, and rocket description)
 - As a user, I want to be able to filter the rockets in the rocket list screen
 - As a user, I want to be able to add the new rocket in the rocket list screen (the API is read-only, so the new rocket only needs to appear in the running app)
@@ -34,14 +44,14 @@ fields (`image_url` becomes `image.image_url`, `manufacturer.country_code`
 becomes a `manufacturer.country` array). Both versions return the same 13
 rockets.
 
-| Requirement      | Field                              |
-| ---------------- | ---------------------------------- |
-| rocket image     | `image_url`                        |
-| rocket name      | `full_name`                        |
-| description      | `description`                      |
-| cost per launch  | `launch_cost`                      |
-| country          | `manufacturer.country_code`        |
-| first flight     | `maiden_flight`                    |
+| Requirement     | Field                       |
+| --------------- | --------------------------- |
+| rocket image    | `image_url`                 |
+| rocket name     | `full_name`                 |
+| description     | `description`               |
+| cost per launch | `launch_cost`               |
+| country         | `manufacturer.country_code` |
+| first flight    | `maiden_flight`             |
 
 **Rate limit:** the API allows 15 requests/hour for anonymous users. Use the
 `lldev.thespacedevs.com` host shown above during development — it serves the
@@ -52,6 +62,7 @@ Note that some rockets have missing values for `launch_cost`, `maiden_flight`,
 and `image_url`.
 
 ### Non-Functional Requirements
+
 - Use the Launch Library 2 API (see the API section above) for getting the rocket data
 - Implement routers
 - Implement state management
@@ -63,6 +74,7 @@ and `image_url`.
 - Show result when get response from API
 
 ### Nice to have characteristics
+
 Responsive design
 You don’t need to worry about the detailed design, we’re not interested in your artistic prowess (for now), put your efforts on creating a readable/clean/maintainable source code.
 
@@ -73,7 +85,7 @@ You don’t need to worry about the detailed design, we’re not interested in y
 2.  Implement your solution on a dedicated feature branch (e.g., `feat/allo-spacex`).
 
 3.  When complete, submit your solution via a **Pull Request (PR)** back to the main repository.
-   
+
 4.  Please complete the form to submit your technical test: [Click Here](https://forms.gle/YAbAQxPuJAdDYmRW7)
 
 Good luck with your assignment! Don't hesitate to contact us if you have any questions about the assignment process.
