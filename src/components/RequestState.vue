@@ -29,6 +29,7 @@
         {{ errorMessage || "Something went wrong" }}
       </p>
       <v-btn
+        v-if="showRetry"
         color="primary"
         prepend-icon="mdi-refresh"
         @click="emit('retry')"
@@ -66,12 +67,14 @@
       isEmpty?: boolean;
       loadingMessage?: string;
       emptyMessage?: string;
+      showRetry?: boolean;
     }>(),
     {
       errorMessage: null,
       isEmpty: false,
       loadingMessage: "Loading rockets...",
       emptyMessage: "No rockets found",
+      showRetry: true,
     },
   );
 

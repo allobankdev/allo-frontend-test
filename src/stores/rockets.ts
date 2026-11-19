@@ -4,6 +4,8 @@ import { createLocalRocket } from "@/mappers";
 import type { AddRocketPayload, RequestStatus, Rocket } from "@/types";
 import { getErrorMessage, isNotFoundError, isRequestCanceled } from "@/utils";
 
+let detailRequestSeq = 0;
+
 function matchesFilter(rocket: Rocket, query: string): boolean {
   if (!query) return true;
   const q = query.toLowerCase();
@@ -45,6 +47,12 @@ export const useRocketStore = defineStore("rockets", {
         );
       };
     },
+
+    isDetailNotFound(state): boolean {
+      return (
+        state.detailStatus === "error" && state.detailError === "Rocket not found"
+      );
+    },
   },
 
   actions: {
@@ -78,19 +86,23 @@ export const useRocketStore = defineStore("rockets", {
 
     async loadRocketDetail(id: string | number, signal?: AbortSignal) {
       const key = String(id);
-      this.detailStatus = "loading";
+      const requestId = ++detailRequestSeq;
       this.detailError = null;
-      this.selectedRocket = null;
 
-      const cached = this.getRocketById(key);
-      if (cached?.isLocal) {
-        this.selectedRocket = cached;
+      const localRocket = this.localRockets.find((rocket) => rocket.id === key);
+      if (localRocket) {
+        this.selectedRocket = localRocket;
         this.detailStatus = "success";
         return;
       }
 
+      this.detailStatus = "loading";
+      this.selectedRocket = null;
+
       try {
         const rocket = await fetchRocketById(key, signal);
+        if (requestId !== detailRequestSeq) return;
+
         this.selectedRocket = rocket;
 
         const index = this.rockets.findIndex((item) => item.id === rocket.id);
@@ -103,6 +115,7 @@ export const useRocketStore = defineStore("rockets", {
         this.detailStatus = "success";
       } catch (err) {
         if (isRequestCanceled(err)) return;
+        if (requestId !== detailRequestSeq) return;
 
         this.selectedRocket = null;
         this.detailStatus = "error";

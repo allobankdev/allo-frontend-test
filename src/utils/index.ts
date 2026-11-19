@@ -1,3 +1,3 @@
 export { getErrorMessage, isNotFoundError, isRequestCanceled } from "./http-error";
-export { displayDescription, displayValue } from "./display";
+export { displayDescription, displayValue, formatLaunchCost } from "./display";
 
