@@ -29,7 +29,7 @@ export const useRocketStore = defineStore("rockets", {
 
   getters: {
     allRockets(state): Rocket[] {
-      return [...state.rockets, ...state.localRockets];
+      return [...state.localRockets, ...state.rockets];
     },
 
     filteredRockets(): Rocket[] {
@@ -39,7 +39,8 @@ export const useRocketStore = defineStore("rockets", {
 
     isDetailNotFound(state): boolean {
       return (
-        state.detailStatus === "error" && state.detailError === "Rocket not found"
+        state.detailStatus === "error" &&
+        state.detailError === "Rocket not found"
       );
     },
   },
@@ -51,13 +52,12 @@ export const useRocketStore = defineStore("rockets", {
 
     addRocket(payload: AddRocketPayload): Rocket {
       const rocket = createLocalRocket(payload);
-      this.localRockets.push(rocket);
+      this.localRockets.unshift(rocket);
       return rocket;
     },
 
     async loadRockets(signal?: AbortSignal) {
-      const hasData =
-        this.rockets.length > 0 || this.localRockets.length > 0;
+      const hasData = this.rockets.length > 0 || this.localRockets.length > 0;
 
       if (!hasData) {
         this.listStatus = "loading";

@@ -1,48 +1,46 @@
 <template>
-  <v-container class="py-8">
-    <v-row
-      align="center"
-      class="mb-6"
-      justify="space-between"
-    >
-      <v-col
-        cols="12"
-        md="8"
-      >
-        <h1 class="text-h4 font-weight-bold mb-1">
+  <v-container class="py-8 page-shell">
+    <header class="page-header mb-8">
+      <div class="page-header__copy">
+        <p class="text-overline text-primary mb-1">
+          Launch Library
+        </p>
+        <h1 class="text-h4 text-md-h3 font-weight-bold mb-2">
           SpaceX Rockets
         </h1>
         <p class="text-body-1 text-medium-emphasis mb-0">
-          Browse launcher configurations from Launch Library.
+          Browse launcher configurations, filter by name or description, and add a local rocket.
         </p>
-      </v-col>
+      </div>
 
-      <v-col
-        cols="12"
-        md="auto"
+      <v-btn
+        class="page-header__action"
+        color="primary"
+        prepend-icon="mdi-plus"
+        size="large"
+        variant="flat"
+        @click="showAddDialog = true"
       >
-        <v-btn
-          color="primary"
-          prepend-icon="mdi-plus"
-          @click="showAddDialog = true"
-        >
-          Add rocket
-        </v-btn>
-      </v-col>
-    </v-row>
+        Add rocket
+      </v-btn>
+    </header>
 
-    <v-row class="mb-4">
-      <v-col cols="12">
-        <RocketFilter
-          :model-value="store.filterQuery"
-          @update:model-value="store.setFilterQuery"
-        />
-      </v-col>
-    </v-row>
+    <v-sheet
+      border
+      class="mb-6 pa-4"
+      color="surface"
+      rounded="lg"
+    >
+      <RocketFilter
+        :model-value="store.filterQuery"
+        @update:model-value="store.setFilterQuery"
+      />
+    </v-sheet>
 
     <v-alert
       v-if="showListErrorBanner"
-      class="mb-4"
+      border="start"
+      class="mb-6"
       type="error"
       variant="tonal"
     >
@@ -125,3 +123,26 @@
     abortController?.abort();
   });
 </script>
+
+<style scoped>
+  .page-shell {
+    max-width: 1120px;
+  }
+
+  .page-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.25rem;
+  }
+
+  .page-header__copy {
+    min-width: min(100%, 28rem);
+    flex: 1 1 18rem;
+  }
+
+  .page-header__action {
+    flex: 0 0 auto;
+  }
+</style>

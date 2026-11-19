@@ -1,9 +1,10 @@
 <template>
-  <v-container class="py-8">
+  <v-container class="py-8 page-shell">
     <v-btn
       class="mb-6"
+      color="primary"
       prepend-icon="mdi-arrow-left"
-      variant="text"
+      variant="tonal"
       :to="{ path: '/' }"
     >
       Back to list
@@ -52,3 +53,9 @@
     abortController?.abort();
   });
 </script>
+
+<style scoped>
+  .page-shell {
+    max-width: 1120px;
+  }
+</style>

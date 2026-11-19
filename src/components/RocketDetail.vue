@@ -8,16 +8,19 @@
         <v-img
           v-if="rocket.imageUrl"
           :alt="rocket.fullName"
+          :aspect-ratio="4 / 3"
           :src="rocket.imageUrl"
           cover
-          max-height="360"
-          min-height="240"
         >
           <template #error>
             <div class="rocket-detail__fallback">
-              <v-icon size="64">
+              <v-icon
+                color="primary"
+                size="56"
+              >
                 mdi-rocket-outline
               </v-icon>
+              <span class="text-body-2 mt-2">Image unavailable</span>
             </div>
           </template>
         </v-img>
@@ -25,9 +28,13 @@
           v-else
           class="rocket-detail__fallback"
         >
-          <v-icon size="64">
+          <v-icon
+            color="primary"
+            size="56"
+          >
             mdi-rocket-outline
           </v-icon>
+          <span class="text-body-2 mt-2">No image</span>
         </div>
       </div>
     </v-col>
@@ -36,8 +43,12 @@
       cols="12"
       md="7"
     >
-      <div class="d-flex align-center flex-wrap ga-2 mb-2">
-        <h1 class="text-h4 font-weight-bold mb-0">
+      <p class="text-overline text-primary mb-1">
+        Rocket details
+      </p>
+
+      <div class="d-flex align-center flex-wrap ga-2 mb-4">
+        <h1 class="text-h4 text-md-h3 font-weight-bold mb-0">
           {{ rocket.fullName }}
         </h1>
         <v-chip
@@ -51,34 +62,51 @@
         </v-chip>
       </div>
 
-      <p class="text-body-1 text-medium-emphasis mb-6">
-        {{ description }}
-      </p>
+      <section class="mb-8">
+        <h2 class="text-subtitle-2 text-medium-emphasis text-uppercase mb-2">
+          Description
+        </h2>
+        <p class="text-body-1 mb-0">
+          {{ description }}
+        </p>
+      </section>
 
-      <v-list
-        bg-color="transparent"
-        class="pa-0"
-        lines="two"
-      >
-        <v-list-item
-          class="px-0"
-          prepend-icon="mdi-currency-usd"
-          subtitle="Cost per launch"
-          :title="launchCost"
-        />
-        <v-list-item
-          class="px-0"
-          prepend-icon="mdi-earth"
-          subtitle="Country"
-          :title="country"
-        />
-        <v-list-item
-          class="px-0"
-          prepend-icon="mdi-calendar"
-          subtitle="First flight"
-          :title="firstFlight"
-        />
-      </v-list>
+      <section>
+        <h2 class="text-subtitle-2 text-medium-emphasis text-uppercase mb-3">
+          Specs
+        </h2>
+
+        <v-row dense>
+          <v-col
+            v-for="item in specs"
+            :key="item.label"
+            cols="12"
+            sm="4"
+          >
+            <v-sheet
+              border
+              class="rocket-detail__spec pa-4 h-100"
+              color="surface"
+              rounded="lg"
+            >
+              <div class="d-flex align-center ga-2 mb-2">
+                <v-icon
+                  color="primary"
+                  size="18"
+                >
+                  {{ item.icon }}
+                </v-icon>
+                <span class="text-caption text-medium-emphasis text-uppercase">
+                  {{ item.label }}
+                </span>
+              </div>
+              <p class="text-body-1 font-weight-medium mb-0">
+                {{ item.value }}
+              </p>
+            </v-sheet>
+          </v-col>
+        </v-row>
+      </section>
     </v-col>
   </v-row>
 </template>
@@ -97,22 +125,49 @@
   }>();
 
   const description = computed(() => displayDescription(props.rocket.description));
-  const launchCost = computed(() => formatLaunchCost(props.rocket.launchCost));
-  const country = computed(() => displayValue(props.rocket.countryCode));
-  const firstFlight = computed(() => displayValue(props.rocket.maidenFlight));
+
+  const specs = computed(() => [
+    {
+      label: "Cost per launch",
+      value: formatLaunchCost(props.rocket.launchCost),
+      icon: "mdi-currency-usd",
+    },
+    {
+      label: "Country",
+      value: displayValue(props.rocket.countryCode),
+      icon: "mdi-earth",
+    },
+    {
+      label: "First flight",
+      value: displayValue(props.rocket.maidenFlight),
+      icon: "mdi-calendar",
+    },
+  ]);
 </script>
 
 <style scoped>
   .rocket-detail__media {
-    background: rgba(var(--v-theme-surface-variant), 0.35);
+    aspect-ratio: 4 / 3;
+    background:
+      linear-gradient(
+        160deg,
+        rgba(var(--v-theme-primary), 0.08),
+        rgba(var(--v-theme-surface-variant), 0.9)
+      );
   }
 
   .rocket-detail__fallback {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 240px;
+    width: 100%;
     height: 100%;
-    color: rgba(var(--v-theme-on-surface), 0.45);
+    min-height: 240px;
+    color: rgba(var(--v-theme-on-surface), 0.55);
+  }
+
+  .rocket-detail__spec {
+    background: rgb(var(--v-theme-surface));
   }
 </style>

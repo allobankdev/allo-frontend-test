@@ -5,6 +5,7 @@
     density="comfortable"
     hide-details
     label="Filter by name or description"
+    placeholder="Search rockets..."
     prepend-inner-icon="mdi-magnify"
     variant="outlined"
     @update:model-value="onUpdate"

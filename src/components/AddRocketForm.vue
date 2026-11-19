@@ -4,12 +4,15 @@
     max-width="560"
     @update:model-value="emit('update:modelValue', $event)"
   >
-    <v-card rounded="lg">
-      <v-card-title class="text-h6">
+    <v-card>
+      <v-card-title class="text-h6 font-weight-bold pt-6 px-6">
         Add rocket
       </v-card-title>
+      <v-card-subtitle class="px-6 pb-2">
+        Saved locally in this session only.
+      </v-card-subtitle>
 
-      <v-card-text>
+      <v-card-text class="px-6">
         <v-form
           ref="formRef"
           @submit.prevent="onSubmit"
@@ -62,7 +65,7 @@
         </v-form>
       </v-card-text>
 
-      <v-card-actions class="px-6 pb-4">
+      <v-card-actions class="px-6 pb-6">
         <v-spacer />
         <v-btn
           variant="text"
@@ -72,6 +75,7 @@
         </v-btn>
         <v-btn
           color="primary"
+          prepend-icon="mdi-plus"
           variant="flat"
           @click="onSubmit"
         >

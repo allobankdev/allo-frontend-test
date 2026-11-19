@@ -2,36 +2,54 @@
   <div>
     <div
       v-if="status === 'loading' || status === 'idle'"
-      class="text-center py-12"
+      class="request-state text-center"
     >
       <v-progress-circular
         color="primary"
         indeterminate
         size="48"
+        width="3"
       />
-      <p class="mt-4 text-medium-emphasis">
+      <p class="mt-4 text-body-1 text-medium-emphasis mb-0">
         {{ loadingMessage }}
       </p>
     </div>
 
     <div
       v-else-if="status === 'error'"
-      class="text-center py-12"
+      class="request-state text-center"
     >
-      <v-icon
-        class="mb-3"
+      <v-avatar
+        class="mb-4"
         color="error"
-        size="48"
+        size="64"
+        variant="tonal"
       >
-        mdi-alert-circle-outline
-      </v-icon>
-      <p class="text-body-1 mb-4">
+        <v-icon size="32">
+          mdi-alert-circle-outline
+        </v-icon>
+      </v-avatar>
+      <h2 class="text-h6 font-weight-bold mb-2">
         {{ errorMessage || "Something went wrong" }}
+      </h2>
+      <p
+        v-if="showRetry"
+        class="text-body-2 text-medium-emphasis mb-6"
+      >
+        Check your connection, then try again.
+      </p>
+      <p
+        v-else
+        class="text-body-2 text-medium-emphasis mb-6"
+      >
+        Use Back to list to continue browsing.
       </p>
       <v-btn
         v-if="showRetry"
         color="primary"
         prepend-icon="mdi-refresh"
+        size="large"
+        variant="flat"
         @click="emit('retry')"
       >
         Retry
@@ -40,16 +58,26 @@
 
     <div
       v-else-if="isEmpty"
-      class="text-center py-12"
+      class="request-state text-center"
     >
-      <v-icon
-        class="mb-3"
-        size="48"
+      <v-avatar
+        class="mb-4"
+        color="primary"
+        size="64"
+        variant="tonal"
       >
-        mdi-rocket-outline
-      </v-icon>
-      <p class="text-body-1 text-medium-emphasis">
+        <v-icon size="32">
+          mdi-rocket-outline
+        </v-icon>
+      </v-avatar>
+      <h2 class="text-h6 font-weight-bold mb-2">
         {{ emptyMessage }}
+      </h2>
+      <p
+        v-if="emptyHint"
+        class="text-body-2 text-medium-emphasis mb-0"
+      >
+        {{ emptyHint }}
       </p>
     </div>
 
@@ -67,6 +95,7 @@
       isEmpty?: boolean;
       loadingMessage?: string;
       emptyMessage?: string;
+      emptyHint?: string;
       showRetry?: boolean;
     }>(),
     {
@@ -74,6 +103,7 @@
       isEmpty: false,
       loadingMessage: "Loading rockets...",
       emptyMessage: "No rockets found",
+      emptyHint: "Try a different filter or add a local rocket.",
       showRetry: true,
     },
   );
@@ -82,3 +112,9 @@
     retry: [];
   }>();
 </script>
+
+<style scoped>
+  .request-state {
+    padding: 4rem 1rem;
+  }
+</style>
