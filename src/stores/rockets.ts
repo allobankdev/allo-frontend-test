@@ -37,17 +37,6 @@ export const useRocketStore = defineStore("rockets", {
       return this.allRockets.filter((rocket) => matchesFilter(rocket, query));
     },
 
-    getRocketById(state) {
-      return (id: string | number): Rocket | undefined => {
-        const key = String(id);
-        return (
-          state.localRockets.find((rocket) => rocket.id === key) ??
-          state.rockets.find((rocket) => rocket.id === key) ??
-          (state.selectedRocket?.id === key ? state.selectedRocket : undefined)
-        );
-      };
-    },
-
     isDetailNotFound(state): boolean {
       return (
         state.detailStatus === "error" && state.detailError === "Rocket not found"
@@ -67,7 +56,12 @@ export const useRocketStore = defineStore("rockets", {
     },
 
     async loadRockets(signal?: AbortSignal) {
-      this.listStatus = "loading";
+      const hasData =
+        this.rockets.length > 0 || this.localRockets.length > 0;
+
+      if (!hasData) {
+        this.listStatus = "loading";
+      }
       this.listError = null;
 
       try {
@@ -80,18 +74,17 @@ export const useRocketStore = defineStore("rockets", {
       }
     },
 
-    async retryLoadRockets(signal?: AbortSignal) {
-      return this.loadRockets(signal);
-    },
-
     async loadRocketDetail(id: string | number, signal?: AbortSignal) {
       const key = String(id);
       const requestId = ++detailRequestSeq;
       this.detailError = null;
 
-      const localRocket = this.localRockets.find((rocket) => rocket.id === key);
-      if (localRocket) {
-        this.selectedRocket = localRocket;
+      const cachedRocket =
+        this.localRockets.find((rocket) => rocket.id === key) ??
+        this.rockets.find((rocket) => rocket.id === key);
+
+      if (cachedRocket) {
+        this.selectedRocket = cachedRocket;
         this.detailStatus = "success";
         return;
       }
@@ -123,10 +116,6 @@ export const useRocketStore = defineStore("rockets", {
           ? "Rocket not found"
           : getErrorMessage(err, "Failed to load rocket detail");
       }
-    },
-
-    async retryLoadRocketDetail(id: string | number, signal?: AbortSignal) {
-      return this.loadRocketDetail(id, signal);
     },
   },
 });

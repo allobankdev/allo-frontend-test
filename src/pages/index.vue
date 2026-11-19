@@ -40,10 +40,29 @@
       </v-col>
     </v-row>
 
+    <v-alert
+      v-if="showListErrorBanner"
+      class="mb-4"
+      type="error"
+      variant="tonal"
+    >
+      <div class="d-flex flex-wrap align-center justify-space-between ga-3">
+        <span>{{ store.listError || "Failed to load rockets" }}</span>
+        <v-btn
+          color="error"
+          prepend-icon="mdi-refresh"
+          variant="flat"
+          @click="retryLoad"
+        >
+          Retry
+        </v-btn>
+      </div>
+    </v-alert>
+
     <RequestState
       :error-message="store.listError"
       :is-empty="isEmptyList"
-      :status="store.listStatus"
+      :status="listViewStatus"
       empty-message="No rockets found"
       @retry="retryLoad"
     >
@@ -67,9 +86,21 @@
 
   let abortController: AbortController | null = null;
 
+  const listViewStatus = computed(() => {
+    if (store.listStatus === "error" && store.allRockets.length > 0) {
+      return "success";
+    }
+    return store.listStatus;
+  });
+
+  const showListErrorBanner = computed(
+    () => store.listStatus === "error" && store.allRockets.length > 0,
+  );
+
   const isEmptyList = computed(
     () =>
-      store.listStatus === "success" && store.filteredRockets.length === 0,
+      listViewStatus.value === "success" &&
+      store.filteredRockets.length === 0,
   );
 
   function load() {

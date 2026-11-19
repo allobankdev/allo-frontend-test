@@ -29,7 +29,7 @@
   import { useRoute } from "vue-router";
   import { useRocketStore } from "@/stores";
 
-  const route = useRoute();
+  const route = useRoute("/rockets/[id]");
   const store = useRocketStore();
 
   const id = computed(() => String(route.params.id));
