@@ -18,13 +18,31 @@ export default defineConfig({
     // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#readme
     Vuetify({
       autoImport: true,
-      styles: {
-        configFile: 'src/styles/settings.scss',
-      },
     }),
     Components(),
   ],
   define: { 'process.env': {} },
+  optimizeDeps: {
+    include: [
+      'vuetify',
+      'vuetify/components/VApp',
+      'vuetify/components/VAppBar',
+      'vuetify/components/VBtn',
+      'vuetify/components/VBtnToggle',
+      'vuetify/components/VCard',
+      'vuetify/components/VDialog',
+      'vuetify/components/VFooter',
+      'vuetify/components/VForm',
+      'vuetify/components/VIcon',
+      'vuetify/components/VImg',
+      'vuetify/components/VMain',
+      'vuetify/components/VSelect',
+      'vuetify/components/VSnackbar',
+      'vuetify/components/VSwitch',
+      'vuetify/components/VTextarea',
+      'vuetify/components/VTextField',
+    ],
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
@@ -44,8 +62,13 @@ export default defineConfig({
   },
   css: {
     preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler',
+        silenceDeprecations: ['legacy-js-api'],
+      },
       sass: {
         api: 'modern-compiler',
+        silenceDeprecations: ['legacy-js-api'],
       },
     },
   },
