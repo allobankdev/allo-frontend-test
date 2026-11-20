@@ -1,328 +1,160 @@
 <template>
-  <v-container
-    class="py-8"
-    max-width="1100"
-  >
-    <!-- Navigation Back Button -->
-    <div class="mb-6">
-      <v-btn
-        variant="tonal"
-        color="primary"
-        prepend-icon="mdi-arrow-left"
-        @click="router.push('/')"
-      >
-        Back to Fleet List
-      </v-btn>
-    </div>
+  <div class="u-container detail">
+    <router-link
+      to="/"
+      class="back u-mono"
+    >
+      <span aria-hidden="true">←</span> Fleet index
+    </router-link>
 
-    <!-- UI State 1: Loading -->
     <LoadingState
       v-if="store.loading"
-      message="Fetching launch vehicle specifications..."
+      variant="detail"
     />
 
-    <!-- UI State 2: Error with Retry -->
     <ErrorState
       v-else-if="store.error"
       :message="store.error"
       @retry="loadRocketDetail"
     />
 
-    <!-- UI State 3: Detail Content -->
-    <div v-else-if="rocket">
-      <!-- Main Rocket Showcase Card -->
-      <v-card
-        rounded="xl"
-        elevation="3"
-        class="overflow-hidden mb-8"
-      >
-        <!-- Hero Header Image -->
+    <article
+      v-else-if="rocket"
+      class="detail__grid"
+    >
+      <div class="detail__media">
         <v-img
-          :src="rocket.image_url || fallbackImage"
-          height="400"
+          v-if="rocket.image_url"
+          :src="rocket.image_url"
+          :alt="name"
+          class="detail__img"
           cover
-          class="bg-grey-darken-4 align-end"
         >
-          <template #placeholder>
-            <div class="d-flex align-center justify-center fill-height">
-              <v-progress-circular
-                color="primary"
-                indeterminate
-                size="48"
-              />
-            </div>
-          </template>
           <template #error>
-            <div class="d-flex flex-column align-center justify-center fill-height bg-grey-darken-3 text-grey">
-              <v-icon
-                icon="mdi-rocket"
-                size="72"
-                class="mb-2"
-              />
-              <span class="text-subtitle-1">No Image Available for this Vehicle</span>
+            <div class="detail__media-empty">
+              <span class="u-mono">IMAGE UNAVAILABLE</span>
             </div>
           </template>
-
-          <!-- Gradient Overlay with Title -->
-          <div class="detail-hero-gradient px-6 py-6">
-            <div class="d-flex flex-wrap align-center ga-3 mb-2">
-              <v-chip
-                v-if="rocket.is_custom"
-                color="amber-darken-2"
-                size="small"
-                variant="flat"
-                class="font-weight-bold"
-              >
-                Custom Added
-              </v-chip>
-              <v-chip
-                :color="rocket.active ? 'success' : 'grey'"
-                size="small"
-                variant="flat"
-                class="font-weight-bold"
-              >
-                {{ rocket.active ? 'ACTIVE STATUS' : 'RETIRED' }}
-              </v-chip>
-              <v-chip
-                v-if="rocket.reusable !== undefined"
-                color="info"
-                size="small"
-                variant="tonal"
-              >
-                {{ rocket.reusable ? 'REUSABLE' : 'EXPENDABLE' }}
-              </v-chip>
-            </div>
-
-            <h1 class="text-h3 font-weight-black text-white">
-              {{ rocket.full_name || rocket.name || 'Unnamed Vehicle' }}
-            </h1>
-          </div>
         </v-img>
+        <div
+          v-else
+          class="detail__media-empty"
+        >
+          <span class="u-mono">NO IMAGE IN ARCHIVE</span>
+        </div>
 
-        <!-- Main Body -->
-        <v-card-text class="pa-8">
-          <!-- Required Core Info Grid -->
-          <h2 class="text-h6 font-weight-bold mb-4 text-primary">
-            <v-icon
-              icon="mdi-information-outline"
-              class="mr-1"
-            />
-            Key Specifications
-          </h2>
-
-          <v-row class="mb-6">
-            <!-- 1. Cost per Launch (Required) -->
-            <v-col
-              cols="12"
-              sm="6"
-              md="4"
-            >
-              <v-card
-                variant="tonal"
-                rounded="lg"
-                class="pa-4 text-center h-100"
-              >
-                <v-icon
-                  icon="mdi-currency-usd"
-                  color="success"
-                  size="36"
-                  class="mb-1"
-                />
-                <div class="text-caption text-medium-emphasis text-uppercase">
-                  Cost Per Launch
-                </div>
-                <div class="text-h6 font-weight-bold mt-1">
-                  {{ displayCost(rocket.launch_cost) }}
-                </div>
-              </v-card>
-            </v-col>
-
-            <!-- 2. Country (Required) -->
-            <v-col
-              cols="12"
-              sm="6"
-              md="4"
-            >
-              <v-card
-                variant="tonal"
-                rounded="lg"
-                class="pa-4 text-center h-100"
-              >
-                <v-icon
-                  icon="mdi-flag-outline"
-                  color="purple-lighten-2"
-                  size="36"
-                  class="mb-1"
-                />
-                <div class="text-caption text-medium-emphasis text-uppercase">
-                  Manufacturer Country
-                </div>
-                <div class="text-h6 font-weight-bold mt-1">
-                  {{ displayCountry(rocket.manufacturer) }}
-                </div>
-              </v-card>
-            </v-col>
-
-            <!-- 3. First Flight (Required) -->
-            <v-col
-              cols="12"
-              sm="6"
-              md="4"
-            >
-              <v-card
-                variant="tonal"
-                rounded="lg"
-                class="pa-4 text-center h-100"
-              >
-                <v-icon
-                  icon="mdi-calendar-star"
-                  color="amber-lighten-1"
-                  size="36"
-                  class="mb-1"
-                />
-                <div class="text-caption text-medium-emphasis text-uppercase">
-                  First Flight Date
-                </div>
-                <div class="text-h6 font-weight-bold mt-1">
-                  {{ displayFlightDate(rocket.maiden_flight) }}
-                </div>
-              </v-card>
-            </v-col>
-          </v-row>
-
-          <v-divider class="my-6" />
-
-          <!-- Description Section (Required) -->
-          <h2 class="text-h6 font-weight-bold mb-3 text-primary">
-            <v-icon
-              icon="mdi-text-box-outline"
-              class="mr-1"
-            />
-            Vehicle Overview
-          </h2>
-          <p
-            class="text-body-1 text-medium-emphasis line-height-relaxed mb-6"
-            style="line-height: 1.8"
+        <div class="detail__caption u-mono">
+          <span
+            class="detail__status"
+            :class="{ 'is-retired': rocket.active === false }"
           >
-            {{ rocket.description || 'No detailed description has been documented for this vehicle configuration.' }}
-          </p>
+            <span class="detail__dot" />
+            {{ statusLabel }}
+          </span>
+          <span v-if="rocket.is_custom">Custom entry</span>
+        </div>
+      </div>
 
-          <!-- Additional Stats (Bonus / Good Polish) -->
-          <v-expansion-panels
-            variant="accordion"
-            class="mt-4"
+      <div class="detail__data">
+        <p class="u-label">
+          Configuration dossier
+        </p>
+        <h1>{{ name }}</h1>
+        <p class="detail__desc">
+          {{ rocket.description || 'No description has been documented for this configuration.' }}
+        </p>
+
+        <dl class="specs">
+          <div
+            v-for="spec in specs"
+            :key="spec.label"
           >
-            <v-expansion-panel
-              title="Additional Technical & Mission Statistics"
-              rounded="lg"
-            >
-              <v-expansion-panel-text>
-                <v-row
-                  dense
-                  class="pt-2"
-                >
-                  <v-col
-                    cols="6"
-                    sm="4"
-                  >
-                    <div class="text-caption text-disabled">
-                      Manufacturer
-                    </div>
-                    <div class="text-body-2 font-weight-medium">
-                      {{ rocket.manufacturer?.name || 'SpaceX' }}
-                    </div>
-                  </v-col>
+            <dt class="u-label">
+              {{ spec.label }}
+            </dt>
+            <dd class="u-mono">
+              {{ spec.value }}
+            </dd>
+          </div>
+        </dl>
 
-                  <v-col
-                    cols="6"
-                    sm="4"
-                  >
-                    <div class="text-caption text-disabled">
-                      Length
-                    </div>
-                    <div class="text-body-2 font-weight-medium">
-                      {{ rocket.length ? `${rocket.length} m` : 'N/A' }}
-                    </div>
-                  </v-col>
-
-                  <v-col
-                    cols="6"
-                    sm="4"
-                  >
-                    <div class="text-caption text-disabled">
-                      Diameter
-                    </div>
-                    <div class="text-body-2 font-weight-medium">
-                      {{ rocket.diameter ? `${rocket.diameter} m` : 'N/A' }}
-                    </div>
-                  </v-col>
-
-                  <v-col
-                    cols="6"
-                    sm="4"
-                    class="mt-3"
-                  >
-                    <div class="text-caption text-disabled">
-                      LEO Payload Capacity
-                    </div>
-                    <div class="text-body-2 font-weight-medium">
-                      {{ rocket.leo_capacity ? `${rocket.leo_capacity.toLocaleString()} kg` : 'N/A' }}
-                    </div>
-                  </v-col>
-
-                  <v-col
-                    cols="6"
-                    sm="4"
-                    class="mt-3"
-                  >
-                    <div class="text-caption text-disabled">
-                      Total Launches
-                    </div>
-                    <div class="text-body-2 font-weight-medium">
-                      {{ rocket.total_launch_count ?? 'N/A' }}
-                    </div>
-                  </v-col>
-
-                  <v-col
-                    cols="6"
-                    sm="4"
-                    class="mt-3"
-                  >
-                    <div class="text-caption text-disabled">
-                      Successful Launches
-                    </div>
-                    <div class="text-body-2 font-weight-medium">
-                      {{ rocket.successful_launches ?? 'N/A' }}
-                    </div>
-                  </v-col>
-                </v-row>
-              </v-expansion-panel-text>
-            </v-expansion-panel>
-          </v-expansion-panels>
-        </v-card-text>
-      </v-card>
-    </div>
-  </v-container>
+        <p
+          v-if="rocket.is_custom"
+          class="detail__note"
+        >
+          This configuration was added locally and is not part of the Launch
+          Library dataset.
+        </p>
+      </div>
+    </article>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { computed, onMounted, onUnmounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { useRocketStore } from '@/stores/rocketStore';
 import type { Manufacturer } from '@/types/rocket';
 
 const route = useRoute();
-const router = useRouter();
 const store = useRocketStore();
 
-const fallbackImage = 'https://images.unsplash.com/photo-1517976487507-5b3a4a9d7008?auto=format&fit=crop&w=1200&q=80';
-
-// Current active rocket from store
 const rocket = computed(() => store.selectedRocket);
+const name = computed(
+  () => rocket.value?.full_name || rocket.value?.name || 'Unnamed configuration'
+);
+
+const statusLabel = computed(() => {
+  if (rocket.value?.active === true) return 'Active configuration';
+  if (rocket.value?.active === false) return 'Retired configuration';
+  return 'Status not disclosed';
+});
+
+const specs = computed(() => {
+  const vehicle = rocket.value;
+  if (!vehicle) return [];
+
+  return [
+    { label: 'Cost per launch', value: formatCost(vehicle.launch_cost) },
+    { label: 'Country', value: displayCountry(vehicle.manufacturer) },
+    { label: 'First flight', value: displayFlightDate(vehicle.maiden_flight) },
+    { label: 'Manufacturer', value: vehicle.manufacturer?.name || 'Not disclosed' },
+    { label: 'Height', value: vehicle.length ? `${vehicle.length} m` : 'Not disclosed' },
+    { label: 'Diameter', value: vehicle.diameter ? `${vehicle.diameter} m` : 'Not disclosed' },
+    {
+      label: 'LEO payload',
+      value: vehicle.leo_capacity
+        ? `${vehicle.leo_capacity.toLocaleString('en-US')} kg`
+        : 'Not disclosed',
+    },
+    {
+      label: 'Total launches',
+      value: vehicle.total_launch_count ?? 'Not disclosed',
+    },
+    {
+      label: 'Successful launches',
+      value: vehicle.successful_launches ?? 'Not disclosed',
+    },
+  ];
+});
 
 onMounted(() => {
   loadRocketDetail();
 });
+
+onUnmounted(() => {
+  document.title = 'SpaceX Fleet — Launch Archive';
+});
+
+watch(
+  rocket,
+  (vehicle) => {
+    if (vehicle) {
+      document.title = `${vehicle.full_name || vehicle.name} — SpaceX Fleet`;
+    }
+  },
+  { immediate: true }
+);
 
 function loadRocketDetail() {
   const id = route.params.id as string;
@@ -331,41 +163,176 @@ function loadRocketDetail() {
   }
 }
 
-// Formatters handling missing/empty data gracefully
-function displayCost(cost?: string | number | null): string {
+function formatCost(cost?: string | number | null): string {
   if (cost === undefined || cost === null || cost === '' || cost === '0') {
-    return 'Not Disclosed';
+    return 'Not disclosed';
   }
-  const num = Number(cost);
-  if (isNaN(num)) return String(cost);
-  return `$${num.toLocaleString('en-US')} USD`;
+  const parsed = Number(cost);
+  if (Number.isNaN(parsed)) return String(cost);
+  return `$${parsed.toLocaleString('en-US')}`;
 }
 
 function displayCountry(manufacturer?: Manufacturer | null): string {
-  if (!manufacturer) return 'United States (USA)';
-  const code = manufacturer.country_code || manufacturer.country;
-  if (!code) return 'United States (USA)';
+  const code = manufacturer?.country_code || manufacturer?.country;
+  if (!code) return 'Not disclosed';
   return Array.isArray(code) ? code.join(', ') : code;
 }
 
-function displayFlightDate(dateStr?: string | null): string {
-  if (!dateStr) return 'No Flight Recorded';
-  try {
-    const d = new Date(dateStr);
-    return d.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-  } catch {
-    return dateStr;
-  }
+function displayFlightDate(dateValue?: string | null): string {
+  if (!dateValue) return 'Not disclosed';
+  const date = new Date(dateValue);
+  if (Number.isNaN(date.getTime())) return 'Not disclosed';
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
 }
 </script>
 
 <style scoped>
-.detail-hero-gradient {
-  background: linear-gradient(to top, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.4) 60%, rgba(0, 0, 0, 0) 100%);
+.detail {
+  padding-block: clamp(24px, 4vw, 40px) clamp(40px, 6vw, 80px);
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: clamp(20px, 3vw, 32px);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: rgba(var(--v-theme-on-surface), 0.62);
+}
+
+.back:hover {
+  color: rgb(var(--v-theme-primary));
+}
+
+.detail__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: clamp(24px, 5vw, 64px);
+  align-items: start;
+}
+
+.detail__media {
+  position: sticky;
+  top: 88px;
+  border: 1px solid var(--fleet-hairline);
+  background: rgb(var(--v-theme-surface-variant));
+  overflow: hidden;
+}
+
+.detail__img,
+.detail__media-empty {
+  aspect-ratio: 4 / 3;
   width: 100%;
+}
+
+.detail__media-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: repeating-linear-gradient(
+    135deg,
+    transparent 0 9px,
+    rgba(var(--v-theme-on-surface), 0.05) 9px 10px
+  );
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: rgba(var(--v-theme-on-surface), 0.58);
+}
+
+.detail__caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--fleet-hairline);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(var(--v-theme-on-surface), 0.6);
+}
+
+.detail__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.detail__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgb(var(--v-theme-primary));
+}
+
+.detail__status.is-retired .detail__dot {
+  background: rgba(var(--v-theme-on-surface), 0.35);
+}
+
+.detail__data h1 {
+  margin: 14px 0 20px;
+  font-size: clamp(30px, 4.4vw, 52px);
+  font-weight: 600;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+}
+
+.detail__desc {
+  margin: 0;
+  max-width: 65ch;
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgba(var(--v-theme-on-surface), 0.72);
+}
+
+.specs {
+  margin: 28px 0 0;
+  border-top: 1px solid var(--fleet-hairline);
+}
+
+.specs > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 16px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--fleet-hairline);
+}
+
+.specs dt {
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+}
+
+.specs dd {
+  margin: 0;
+  font-size: 12px;
+  text-align: right;
+}
+
+.detail__note {
+  margin: 20px 0 0;
+  padding-left: 12px;
+  border-left: 2px solid rgb(var(--v-theme-primary));
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: rgba(var(--v-theme-on-surface), 0.62);
+}
+
+@media (max-width: 900px) {
+  .detail__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .detail__media {
+    position: static;
+  }
 }
 </style>

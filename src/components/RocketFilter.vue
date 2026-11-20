@@ -1,110 +1,70 @@
 <template>
-  <v-card
-    class="mb-6 pa-4"
-    elevation="1"
-    rounded="lg"
-  >
-    <v-row
-      align="center"
-      dense
-    >
-      <!-- Search Input -->
-      <v-col
-        cols="12"
-        md="4"
-      >
+  <section class="filters">
+    <div class="u-container filters__inner">
+      <div class="filters__search">
         <v-text-field
           v-model="search"
-          label="Search rockets..."
-          placeholder="e.g. Falcon 9, Starship, Heavy..."
+          aria-label="Search rockets"
+          density="compact"
+          hide-details
+          placeholder="Search Falcon, Starship, Heavy…"
           prepend-inner-icon="mdi-magnify"
           variant="outlined"
-          density="comfortable"
           clearable
-          hide-details
           @update:model-value="onSearchUpdate"
         />
-      </v-col>
+      </div>
 
-      <!-- Status Filter -->
-      <v-col
-        cols="12"
-        sm="6"
-        md="3"
+      <div
+        class="filters__status"
+        role="group"
+        aria-label="Filter by configuration status"
       >
         <v-btn-toggle
           v-model="status"
           mandatory
-          divided
-          variant="outlined"
-          density="comfortable"
+          class="status-toggle"
           color="primary"
-          class="w-100 d-flex"
+          density="compact"
+          variant="text"
           @update:model-value="onStatusUpdate"
         >
-          <v-btn
-            value="all"
-            class="flex-grow-1"
-            size="small"
-          >
+          <v-btn value="all">
             All
           </v-btn>
-          <v-btn
-            value="active"
-            class="flex-grow-1"
-            size="small"
-          >
+          <v-btn value="active">
             Active
           </v-btn>
-          <v-btn
-            value="retired"
-            class="flex-grow-1"
-            size="small"
-          >
+          <v-btn value="retired">
             Retired
           </v-btn>
         </v-btn-toggle>
-      </v-col>
+      </div>
 
-      <!-- Sort Selection -->
-      <v-col
-        cols="12"
-        sm="6"
-        md="3"
-      >
+      <div class="filters__sort">
         <v-select
           v-model="sort"
+          aria-label="Sort rockets"
+          density="compact"
+          hide-details
           :items="sortOptions"
           item-title="title"
           item-value="value"
-          label="Sort by"
-          prepend-inner-icon="mdi-sort"
           variant="outlined"
-          density="comfortable"
-          hide-details
           @update:model-value="onSortUpdate"
         />
-      </v-col>
+      </div>
 
-      <!-- Add Rocket Button -->
-      <v-col
-        cols="12"
-        md="2"
-        class="text-right"
+      <v-btn
+        class="filters__add"
+        color="primary"
+        prepend-icon="mdi-plus"
+        @click="$emit('open-add-dialog')"
       >
-        <v-btn
-          color="primary"
-          variant="flat"
-          prepend-icon="mdi-plus"
-          block
-          size="large"
-          @click="$emit('open-add-dialog')"
-        >
-          Add Rocket
-        </v-btn>
-      </v-col>
-    </v-row>
-  </v-card>
+        Add rocket
+      </v-btn>
+    </div>
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -128,9 +88,9 @@ const status = ref<'all' | 'active' | 'retired'>(props.initialStatus || 'all');
 const sort = ref<'name' | 'flight' | 'cost'>(props.initialSort || 'name');
 
 const sortOptions = [
-  { title: 'Name (A - Z)', value: 'name' },
-  { title: 'First Flight (Newest)', value: 'flight' },
-  { title: 'Launch Cost (Highest)', value: 'cost' },
+  { title: 'Name A–Z', value: 'name' },
+  { title: 'Newest first', value: 'flight' },
+  { title: 'Highest cost', value: 'cost' },
 ];
 
 function onSearchUpdate(val: string | null) {
@@ -145,3 +105,100 @@ function onSortUpdate(val: 'name' | 'flight' | 'cost') {
   emit('update:sort', val);
 }
 </script>
+
+<style scoped>
+.filters {
+  border-bottom: 1px solid var(--fleet-hairline);
+  background: rgba(var(--v-theme-surface), 0.6);
+}
+
+.filters__inner {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) auto 190px auto;
+  gap: 12px;
+  align-items: center;
+  padding-block: 16px;
+}
+
+.filters__search :deep(.v-field) {
+  background: rgb(var(--v-theme-surface));
+}
+
+.filters__status :deep(.status-toggle) {
+  border: 1px solid var(--fleet-hairline);
+  background: rgb(var(--v-theme-surface));
+  height: 40px;
+}
+
+.filters__status :deep(.v-btn) {
+  font-family: var(--fleet-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 0 !important;
+  padding-inline: 16px;
+  height: 40px;
+  min-width: 76px;
+}
+
+.filters__status :deep(.v-btn + .v-btn) {
+  border-left: 1px solid var(--fleet-hairline);
+}
+
+.filters__status :deep(.v-btn.v-btn--active) {
+  background: rgb(var(--v-theme-primary)) !important;
+  color: rgb(var(--v-theme-on-primary)) !important;
+  opacity: 1;
+}
+
+.filters__status :deep(.v-btn.v-btn--active:hover) {
+  background: rgb(var(--v-theme-primary)) !important;
+}
+
+.filters__sort :deep(.v-field) {
+  background: rgb(var(--v-theme-surface));
+}
+
+.filters__add {
+  height: 40px;
+  font-family: var(--fleet-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+@media (max-width: 960px) {
+  .filters__inner {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .filters__search {
+    grid-column: 1 / -1;
+  }
+
+  .filters__add {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 600px) {
+  .filters__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .filters__status {
+    width: 100%;
+  }
+
+  .filters__status :deep(.status-toggle) {
+    display: flex;
+    width: 100%;
+  }
+
+  .filters__status :deep(.v-btn) {
+    flex: 1;
+  }
+}
+</style>

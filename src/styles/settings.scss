@@ -4,7 +4,9 @@
  * Configures SASS variables and Vuetify overwrites
  */
 
-// https://vuetifyjs.com/features/sass-variables/`
-// @use 'vuetify/settings' with (
-//   $color-pack: false
-// );
+// https://vuetifyjs.com/features/sass-variables/
+@use 'vuetify/settings' with (
+  $body-font-family: ('Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif),
+  $heading-font-family: ('Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif),
+  $border-radius-root: 2px
+);

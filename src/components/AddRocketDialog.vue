@@ -1,201 +1,146 @@
 <template>
   <v-dialog
     :model-value="modelValue"
-    max-width="650"
+    max-width="680"
     persistent
     @update:model-value="$emit('update:modelValue', $event)"
   >
-    <v-card rounded="lg">
-      <v-toolbar
-        color="primary"
-        density="comfortable"
-      >
-        <v-icon
-          icon="mdi-rocket-launch"
-          class="ml-4 mr-2"
-        />
-        <v-toolbar-title class="font-weight-bold">
-          Add New Rocket
-        </v-toolbar-title>
+    <v-card class="dialog-card">
+      <div class="dialog__head">
+        <div>
+          <p class="u-label">
+            Local session entry
+          </p>
+          <h2>Add a rocket</h2>
+        </div>
         <v-btn
-          icon="mdi-close"
+          aria-label="Close dialog"
+          icon
+          size="small"
           variant="text"
           @click="closeDialog"
-        />
-      </v-toolbar>
-
-      <v-card-text class="pa-6">
-        <v-alert
-          type="info"
-          variant="tonal"
-          density="compact"
-          class="mb-4"
-          icon="mdi-information-outline"
         >
-          Since the Launch Library API is read-only, this newly added rocket will immediately be displayed in your current active session.
-        </v-alert>
+          <v-icon
+            icon="mdi-close"
+            size="20"
+          />
+        </v-btn>
+      </div>
 
-        <v-form
-          ref="formRef"
-          v-model="isFormValid"
-          @submit.prevent="handleSubmit"
-        >
-          <v-row dense>
-            <!-- Rocket Full Name -->
-            <v-col
-              cols="12"
-              sm="8"
-            >
-              <v-text-field
-                v-model="formData.full_name"
-                label="Rocket Full Name *"
-                placeholder="e.g. Falcon Heavy Block 5"
-                variant="outlined"
-                density="comfortable"
-                :rules="[rules.required]"
-              />
-            </v-col>
+      <p class="dialog__note">
+        The Launch Library API is read-only. New rockets are stored in this
+        session only and disappear on reload.
+      </p>
 
-            <!-- Short Name -->
-            <v-col
-              cols="12"
-              sm="4"
-            >
-              <v-text-field
-                v-model="formData.name"
-                label="Short Name"
-                placeholder="e.g. Falcon Heavy"
-                variant="outlined"
-                density="comfortable"
-              />
-            </v-col>
+      <v-form
+        ref="formRef"
+        v-model="isFormValid"
+        @submit.prevent="handleSubmit"
+      >
+        <div class="dialog__grid">
+          <div class="span-7">
+            <v-text-field
+              v-model="formData.full_name"
+              label="Rocket full name *"
+              placeholder="e.g. Falcon Heavy Block 5"
+              :rules="[rules.required]"
+            />
+          </div>
 
-            <!-- Description -->
-            <v-col cols="12">
-              <v-textarea
-                v-model="formData.description"
-                label="Description *"
-                placeholder="Describe the launch vehicle, configuration, or mission capabilities..."
-                variant="outlined"
-                density="comfortable"
-                rows="3"
-                :rules="[rules.required]"
-              />
-            </v-col>
+          <div class="span-5">
+            <v-text-field
+              v-model="formData.name"
+              label="Short name"
+              placeholder="e.g. Falcon Heavy"
+            />
+          </div>
 
-            <!-- Launch Cost -->
-            <v-col
-              cols="12"
-              sm="6"
-            >
-              <v-text-field
-                v-model="formData.launch_cost"
-                label="Estimated Launch Cost (USD)"
-                placeholder="e.g. 62000000"
-                type="number"
-                prefix="$"
-                variant="outlined"
-                density="comfortable"
-                hint="Cost in USD per launch"
-                persistent-hint
-              />
-            </v-col>
+          <div class="span-12">
+            <v-textarea
+              v-model="formData.description"
+              label="Description *"
+              placeholder="Describe the launch vehicle, configuration, or mission capabilities…"
+              rows="3"
+              :rules="[rules.required]"
+            />
+          </div>
 
-            <!-- Country Code -->
-            <v-col
-              cols="12"
-              sm="6"
-            >
-              <v-text-field
-                v-model="formData.country_code"
-                label="Manufacturer Country"
-                placeholder="e.g. USA"
-                variant="outlined"
-                density="comfortable"
-                hint="e.g. USA, IDN, EUR"
-                persistent-hint
-              />
-            </v-col>
+          <div class="span-6">
+            <v-text-field
+              v-model="formData.launch_cost"
+              label="Launch cost (USD)"
+              placeholder="e.g. 62000000"
+              prefix="$"
+              type="number"
+              hint="Cost per launch in US dollars"
+              persistent-hint
+            />
+          </div>
 
-            <!-- Maiden Flight -->
-            <v-col
-              cols="12"
-              sm="6"
-              class="mt-2"
-            >
-              <v-text-field
-                v-model="formData.maiden_flight"
-                label="First Flight Date"
-                type="date"
-                variant="outlined"
-                density="comfortable"
-              />
-            </v-col>
+          <div class="span-6">
+            <v-text-field
+              v-model="formData.country_code"
+              label="Manufacturer country"
+              placeholder="e.g. USA"
+              hint="ISO code, e.g. USA, IDN, EUR"
+              persistent-hint
+            />
+          </div>
 
-            <!-- Image URL -->
-            <v-col
-              cols="12"
-              sm="6"
-              class="mt-2"
-            >
-              <v-text-field
-                v-model="formData.image_url"
-                label="Image URL"
-                placeholder="https://..."
-                variant="outlined"
-                density="comfortable"
-                prepend-inner-icon="mdi-image"
-              />
-            </v-col>
+          <div class="span-6">
+            <v-text-field
+              v-model="formData.maiden_flight"
+              label="First flight date"
+              type="date"
+            />
+          </div>
 
-            <!-- Checkboxes -->
-            <v-col cols="6">
-              <v-switch
-                v-model="formData.active"
-                label="Vehicle is Active"
-                color="success"
-                hide-details
-                density="compact"
-              />
-            </v-col>
-            <v-col cols="6">
-              <v-switch
-                v-model="formData.reusable"
-                label="Reusable Stages"
-                color="info"
-                hide-details
-                density="compact"
-              />
-            </v-col>
-          </v-row>
-        </v-form>
-      </v-card-text>
+          <div class="span-6">
+            <v-text-field
+              v-model="formData.image_url"
+              label="Image URL"
+              placeholder="https://…"
+              prepend-inner-icon="mdi-image-outline"
+            />
+          </div>
 
-      <v-divider />
+          <div class="span-6">
+            <v-switch
+              v-model="formData.active"
+              label="Vehicle is active"
+            />
+          </div>
 
-      <v-card-actions class="pa-4 bg-surface-variant">
-        <v-spacer />
+          <div class="span-6">
+            <v-switch
+              v-model="formData.reusable"
+              label="Reusable stages"
+            />
+          </div>
+        </div>
+      </v-form>
+
+      <div class="dialog__actions">
         <v-btn
-          variant="outlined"
+          variant="text"
           @click="closeDialog"
         >
           Cancel
         </v-btn>
         <v-btn
           color="primary"
-          variant="flat"
           :disabled="!isFormValid"
           @click="handleSubmit"
         >
-          Save Rocket
+          Save rocket
         </v-btn>
-      </v-card-actions>
+      </div>
     </v-card>
   </v-dialog>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import type { Rocket } from '@/types/rocket';
 
 defineProps<{
@@ -262,3 +207,77 @@ function handleSubmit() {
   closeDialog();
 }
 </script>
+
+<style scoped>
+.dialog-card {
+  max-height: 90dvh;
+  overflow-y: auto;
+  padding: clamp(20px, 3vw, 32px);
+  background: rgb(var(--v-theme-surface));
+  border: 1px solid var(--fleet-hairline);
+}
+
+.dialog__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.dialog__head h2 {
+  margin: 8px 0 0;
+  font-size: clamp(22px, 3vw, 28px);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.dialog__note {
+  margin: 16px 0 24px;
+  padding: 12px 14px;
+  border-left: 2px solid rgb(var(--v-theme-primary));
+  background: rgba(var(--v-theme-primary), 0.07);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: rgba(var(--v-theme-on-surface), 0.7);
+}
+
+.dialog__grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.span-5 {
+  grid-column: span 5;
+}
+
+.span-6 {
+  grid-column: span 6;
+}
+
+.span-7 {
+  grid-column: span 7;
+}
+
+.span-12 {
+  grid-column: span 12;
+}
+
+.dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--fleet-hairline);
+}
+
+@media (max-width: 600px) {
+  .span-5,
+  .span-6,
+  .span-7,
+  .span-12 {
+    grid-column: span 12;
+  }
+}
+</style>

@@ -1,173 +1,303 @@
 <template>
-  <v-card
-    class="rocket-card h-100 d-flex flex-column"
-    elevation="2"
-    hover
-    rounded="lg"
-    @click="navigateToDetail"
+  <router-link
+    :to="`/rockets/${rocket.id}`"
+    class="card"
+    :aria-label="`Open dossier for ${name}`"
   >
-    <!-- Rocket Image with Fallback -->
-    <v-img
-      :src="rocket.image_url || fallbackImage"
-      cover
-      height="220"
-      class="bg-grey-darken-4 align-end"
-    >
-      <template #placeholder>
-        <div class="d-flex align-center justify-center fill-height">
-          <v-progress-circular
-            color="primary"
-            indeterminate
-            size="32"
-          />
-        </div>
-      </template>
-      <template #error>
-        <div class="d-flex flex-column align-center justify-center fill-height bg-grey-darken-3 text-grey">
-          <v-icon
-            icon="mdi-rocket"
-            size="48"
-            class="mb-1"
-          />
-          <span class="text-caption">No Image Available</span>
-        </div>
-      </template>
-
-      <!-- Gradient Overlay & Title -->
-      <div class="image-gradient px-4 py-2">
-        <div class="d-flex align-center justify-space-between">
-          <span class="text-subtitle-1 font-weight-bold text-white text-truncate">
-            {{ rocket.full_name || rocket.name || 'Unnamed Rocket' }}
-          </span>
-          <v-chip
-            v-if="rocket.is_custom"
-            color="amber-darken-2"
-            size="x-small"
-            variant="flat"
-            class="font-weight-bold ml-2"
-          >
-            Custom
-          </v-chip>
-        </div>
-      </div>
-    </v-img>
-
-    <!-- Card Content -->
-    <v-card-text class="flex-grow-1 pb-2">
-      <!-- Badges / Chips -->
-      <div class="d-flex flex-wrap ga-1 mb-3">
-        <v-chip
-          :color="rocket.active ? 'success' : 'grey'"
-          size="x-small"
-          variant="tonal"
-          prepend-icon="mdi-circle-medium"
-        >
-          {{ rocket.active ? 'Active' : 'Retired / Inactive' }}
-        </v-chip>
-
-        <v-chip
-          v-if="rocket.reusable !== undefined"
-          color="info"
-          size="x-small"
-          variant="outlined"
-          prepend-icon="mdi-recycle"
-        >
-          {{ rocket.reusable ? 'Reusable' : 'Expendable' }}
-        </v-chip>
-
-        <v-chip
-          v-if="countryDisplay"
-          color="purple-lighten-2"
-          size="x-small"
-          variant="tonal"
-          prepend-icon="mdi-earth"
-        >
-          {{ countryDisplay }}
-        </v-chip>
-      </div>
-
-      <!-- Description -->
-      <p class="text-body-2 text-medium-emphasis description-clamp">
-        {{ rocket.description || 'No detailed description available for this vehicle.' }}
-      </p>
-    </v-card-text>
-
-    <!-- Card Footer / Actions -->
-    <v-divider />
-    <v-card-actions class="px-4 py-2 bg-surface-variant">
-      <span class="text-caption text-medium-emphasis">
-        <v-icon
-          icon="mdi-cash"
-          size="14"
-          class="mr-1"
-        />
-        {{ formatCost(rocket.launch_cost) }}
-      </span>
-      <v-spacer />
-      <v-btn
-        color="primary"
-        variant="text"
-        size="small"
-        append-icon="mdi-arrow-right"
+    <div class="card__media">
+      <v-img
+        v-if="rocket.image_url"
+        :src="rocket.image_url"
+        :alt="name"
+        class="card__img"
+        cover
+        loading="lazy"
       >
-        View Details
-      </v-btn>
-    </v-card-actions>
-  </v-card>
+        <template #error>
+          <div class="card__media-empty">
+            <span class="u-mono">IMAGE UNAVAILABLE</span>
+          </div>
+        </template>
+      </v-img>
+      <div
+        v-else
+        class="card__media-empty"
+      >
+        <span class="u-mono">NO IMAGE IN ARCHIVE</span>
+      </div>
+
+      <span
+        v-if="rocket.is_custom"
+        class="card__tag u-mono"
+      >
+        CUSTOM ENTRY
+      </span>
+    </div>
+
+    <div class="card__body">
+      <div class="card__top u-mono">
+        <span>CFG {{ indexLabel }}</span>
+        <span
+          class="card__status"
+          :class="{ 'is-retired': rocket.active === false }"
+        >
+          <span class="card__dot" />
+          {{ statusLabel }}
+        </span>
+      </div>
+
+      <h2 class="card__title">
+        {{ name }}
+      </h2>
+
+      <dl class="card__meta">
+        <div>
+          <dt class="u-label">
+            Cost / launch
+          </dt>
+          <dd class="u-mono">
+            {{ costLabel }}
+          </dd>
+        </div>
+        <div>
+          <dt class="u-label">
+            First flight
+          </dt>
+          <dd class="u-mono">
+            {{ firstFlightLabel }}
+          </dd>
+        </div>
+        <div>
+          <dt class="u-label">
+            Origin
+          </dt>
+          <dd class="u-mono">
+            {{ countryLabel }}
+          </dd>
+        </div>
+      </dl>
+
+      <p class="card__desc">
+        {{ rocket.description || 'No description has been documented for this configuration.' }}
+      </p>
+
+      <span class="card__cta u-mono">
+        OPEN DOSSIER
+        <span
+          class="card__arrow"
+          aria-hidden="true"
+        >→</span>
+      </span>
+    </div>
+  </router-link>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useRouter } from 'vue-router';
 import type { Rocket } from '@/types/rocket';
 
 const props = defineProps<{
   rocket: Rocket;
+  index?: number;
 }>();
 
-const router = useRouter();
+const name = computed(
+  () => props.rocket.full_name || props.rocket.name || 'Unnamed configuration'
+);
 
-// Fallback image using a high quality public SpaceX rocket visual
-const fallbackImage = 'https://images.unsplash.com/photo-1517976487507-5b3a4a9d7008?auto=format&fit=crop&w=600&q=80';
+const indexLabel = computed(() =>
+  String(props.index ?? 0).padStart(2, '0')
+);
 
-const countryDisplay = computed(() => {
-  const c = props.rocket.manufacturer?.country_code;
-  if (!c) return null;
-  return Array.isArray(c) ? c.join(', ') : c;
+const statusLabel = computed(() => {
+  if (props.rocket.active === true) return 'ACTIVE';
+  if (props.rocket.active === false) return 'RETIRED';
+  return 'STATUS N/A';
 });
 
-function formatCost(cost?: string | number | null): string {
-  if (cost === undefined || cost === null || cost === '' || cost === '0') {
-    return 'Cost: N/A';
-  }
-  const num = Number(cost);
-  if (isNaN(num)) return `Cost: ${cost}`;
-  return `$${(num / 1_000_000).toFixed(1)}M / launch`;
-}
+const countryLabel = computed(() => {
+  const code =
+    props.rocket.manufacturer?.country_code || props.rocket.manufacturer?.country;
+  if (!code) return '—';
+  return Array.isArray(code) ? code.join(' / ') : code;
+});
 
-function navigateToDetail() {
-  router.push(`/rockets/${props.rocket.id}`);
-}
+const costLabel = computed(() => {
+  const value = props.rocket.launch_cost;
+  if (value === undefined || value === null || value === '' || value === '0') {
+    return 'NOT DISCLOSED';
+  }
+  const parsed = Number(value);
+  if (Number.isNaN(parsed)) return String(value);
+  return `$${(parsed / 1_000_000).toFixed(1)}M`;
+});
+
+const firstFlightLabel = computed(() => {
+  const value = props.rocket.maiden_flight;
+  if (!value) return '—';
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? '—' : String(date.getFullYear());
+});
 </script>
 
 <style scoped>
-.rocket-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  cursor: pointer;
+.card {
+  display: flex;
+  flex-direction: column;
+  background: rgb(var(--v-theme-surface));
+  border: 1px solid var(--fleet-hairline);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    border-color 220ms var(--fleet-ease),
+    transform 220ms var(--fleet-ease);
 }
-.rocket-card:hover {
-  transform: translateY(-4px);
+
+.card:hover {
+  border-color: rgb(var(--v-theme-primary));
+  transform: translateY(-2px);
 }
-.image-gradient {
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0) 100%);
-  width: 100%;
+
+.card__media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: rgb(var(--v-theme-surface-variant));
 }
-.description-clamp {
+
+.card__media :deep(.v-img) {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+}
+
+.card__media :deep(.v-img__img) {
+  transition: transform 600ms var(--fleet-ease);
+}
+
+.card:hover .card__media :deep(.v-img__img) {
+  transform: scale(1.04);
+}
+
+.card__media-empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: repeating-linear-gradient(
+    135deg,
+    transparent 0 9px,
+    rgba(var(--v-theme-on-surface), 0.05) 9px 10px
+  );
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: rgba(var(--v-theme-on-surface), 0.58);
+}
+
+.card__tag {
+  position: absolute;
+  bottom: 10px;
+  left: 12px;
+  padding: 4px 8px;
+  background: rgb(var(--v-theme-surface));
+  border: 1px solid var(--fleet-hairline);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  color: rgb(var(--v-theme-primary));
+}
+
+.card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  padding: 16px 18px 18px;
+}
+
+.card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: rgba(var(--v-theme-on-surface), 0.6);
+}
+
+.card__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.card__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgb(var(--v-theme-primary));
+}
+
+.card__status.is-retired .card__dot {
+  background: rgba(var(--v-theme-on-surface), 0.35);
+}
+
+.card__title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.card__meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--fleet-hairline);
+}
+
+.card__meta dt {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+}
+
+.card__meta dd {
+  margin: 5px 0 0;
+  font-size: 11.5px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.card__desc {
+  margin: 0;
+  flex: 1;
+  font-size: 13px;
+  line-height: 1.55;
+  color: rgba(var(--v-theme-on-surface), 0.62);
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
-  min-height: 4.2em;
+}
+
+.card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: rgb(var(--v-theme-primary));
+}
+
+.card__arrow {
+  transition: transform 220ms var(--fleet-ease);
+}
+
+.card:hover .card__arrow {
+  transform: translateX(4px);
 }
 </style>

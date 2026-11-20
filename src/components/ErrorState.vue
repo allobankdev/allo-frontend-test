@@ -1,36 +1,21 @@
 <template>
-  <v-card
-    class="pa-8 my-6 text-center mx-auto"
-    max-width="600"
-    rounded="lg"
-    variant="outlined"
-    color="error"
-  >
-    <v-icon
-      icon="mdi-alert-circle-outline"
-      size="64"
-      color="error"
-      class="mb-4"
-    />
-    <h3 class="text-h5 font-weight-bold mb-2">
-      Unable to Load Rockets
-    </h3>
-    <p class="text-body-1 text-medium-emphasis mb-6">
+  <section class="error-panel">
+    <p class="u-label">
+      Request failed / LL2
+    </p>
+    <h2>Unable to load launch data.</h2>
+    <p class="error-panel__body">
       {{ message || 'An error occurred while communicating with the Launch Library API.' }}
     </p>
-
-    <div class="d-flex justify-center ga-3">
-      <v-btn
-        color="error"
-        variant="flat"
-        prepend-icon="mdi-refresh"
-        size="large"
-        @click="$emit('retry')"
-      >
-        Retry Request
-      </v-btn>
-    </div>
-  </v-card>
+    <v-btn
+      color="primary"
+      variant="outlined"
+      prepend-icon="mdi-refresh"
+      @click="$emit('retry')"
+    >
+      Retry request
+    </v-btn>
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -42,3 +27,26 @@ defineEmits<{
   (e: 'retry'): void;
 }>();
 </script>
+
+<style scoped>
+.error-panel {
+  max-width: 640px;
+  padding: clamp(28px, 5vw, 48px) 0;
+  border-top: 1px solid var(--fleet-hairline);
+}
+
+.error-panel h2 {
+  margin: 12px 0 10px;
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.error-panel__body {
+  margin: 0 0 24px;
+  max-width: 56ch;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(var(--v-theme-on-surface), 0.65);
+}
+</style>
