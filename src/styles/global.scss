@@ -1,0 +1,128 @@
+:root {
+  --fleet-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --fleet-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --fleet-hairline: rgba(var(--v-border-color), var(--v-border-opacity));
+}
+
+html:root {
+  -webkit-text-size-adjust: 100%;
+  font-family: 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+body {
+  text-rendering: optimizeLegibility;
+}
+
+.u-container {
+  width: 100%;
+  max-width: 1360px;
+  margin-inline: auto;
+  padding-inline: clamp(16px, 3.5vw, 48px);
+}
+
+.u-mono {
+  font-family: var(--fleet-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.045em;
+}
+
+.u-label {
+  font-family: var(--fleet-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  line-height: 1.45;
+  text-transform: uppercase;
+  color: rgba(var(--v-theme-on-surface), 0.62);
+}
+
+::selection {
+  background: rgb(var(--v-theme-primary));
+  color: rgb(var(--v-theme-on-primary));
+}
+
+a {
+  color: inherit;
+}
+
+:where(a, button, [tabindex]):focus-visible {
+  outline: 2px solid rgb(var(--v-theme-primary));
+  outline-offset: 3px;
+}
+
+.fleet-rise {
+  animation: fleet-rise 520ms var(--fleet-ease) both;
+}
+
+@keyframes fleet-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.u-skeleton {
+  position: relative;
+  overflow: hidden;
+  background: rgba(var(--v-theme-on-surface), 0.07);
+}
+
+.u-skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(var(--v-theme-on-surface), 0.1),
+    transparent
+  );
+  animation: fleet-shimmer 1400ms ease-in-out infinite;
+}
+
+@keyframes fleet-shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.text-action {
+  border: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  font-family: var(--fleet-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(var(--v-theme-primary));
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 2px;
+}
+
+.text-action:hover {
+  color: rgba(var(--v-theme-primary), 0.75);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fleet-rise {
+    animation: none;
+  }
+
+  .u-skeleton::after {
+    animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
