@@ -68,7 +68,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 const props = defineProps<{
   initialSearch?: string;
@@ -86,6 +86,15 @@ const emit = defineEmits<{
 const search = ref(props.initialSearch || '');
 const status = ref<'all' | 'active' | 'retired'>(props.initialStatus || 'all');
 const sort = ref<'name' | 'flight' | 'cost'>(props.initialSort || 'name');
+
+watch(
+  () => [props.initialSearch, props.initialStatus, props.initialSort] as const,
+  ([nextSearch, nextStatus, nextSort]) => {
+    search.value = nextSearch || '';
+    status.value = nextStatus || 'all';
+    sort.value = nextSort || 'name';
+  },
+);
 
 const sortOptions = [
   { title: 'Name A–Z', value: 'name' },

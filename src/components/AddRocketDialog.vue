@@ -185,21 +185,26 @@ function closeDialog() {
   emit('update:modelValue', false);
 }
 
-function handleSubmit() {
-  if (!formData.full_name || !formData.description) return;
+async function handleSubmit() {
+  const validation = await formRef.value?.validate();
+  if (!validation?.valid) return;
+
+  const fullName = formData.full_name.trim();
+  const description = formData.description.trim();
+  if (!fullName || !description) return;
 
   const rocketPayload: Omit<Rocket, 'id'> = {
-    name: formData.name || formData.full_name,
-    full_name: formData.full_name,
-    description: formData.description,
+    name: formData.name.trim() || fullName,
+    full_name: fullName,
+    description,
     launch_cost: formData.launch_cost ? formData.launch_cost : null,
     maiden_flight: formData.maiden_flight || null,
-    image_url: formData.image_url || null,
+    image_url: formData.image_url.trim() || null,
     active: formData.active,
     reusable: formData.reusable,
     manufacturer: {
       name: 'SpaceX',
-      country_code: formData.country_code || 'USA',
+      country_code: formData.country_code.trim() || 'USA',
     },
   };
 
