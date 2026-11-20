@@ -1,19 +1,29 @@
 /**
  * plugins/vuetify.ts
  *
- * Framework documentation: https://vuetifyjs.com`
+ * Framework documentation: https://vuetifyjs.com
  */
 
-// Styles
-import '@mdi/font/css/materialdesignicons.css'
-import 'vuetify/styles'
+import "@mdi/font/css/materialdesignicons.css";
+import "vuetify/styles";
+import { createVuetify } from "vuetify";
 
-// Composables
-import { createVuetify } from 'vuetify'
-
-// https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
   theme: {
-    defaultTheme: 'dark',
+    defaultTheme: "missionSlate",
+    themes: {
+      missionSlate: {
+        dark: true,
+        colors: {
+          background: "#0B1017",
+          surface: "#131B24",
+          "surface-variant": "#1A2430",
+          primary: "#3B82F6",
+          "on-background": "#F1F5F9",
+          "on-surface": "#F1F5F9",
+          error: "#EF4444",
+        },
+      },
+    },
   },
-})
+});

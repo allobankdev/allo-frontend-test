@@ -1,0 +1,19 @@
+:root {
+  --app-border: rgba(148, 163, 184, 0.14);
+  --app-border-strong: rgba(148, 163, 184, 0.24);
+  --app-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.app-main {
+  background-image: radial-gradient(
+    ellipse 80% 420px at 50% -120px,
+    rgba(59, 130, 246, 0.08),
+    transparent 70%
+  );
+  background-repeat: no-repeat;
+}
