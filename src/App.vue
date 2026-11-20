@@ -1,10 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar
-      flat
-      height="72"
-      class="app-header"
-    >
+    <v-app-bar flat height="72" class="app-header">
       <v-container
         class="d-flex align-center justify-space-between py-0"
         max-width="1200"
@@ -17,13 +13,11 @@
             class="brand-badge d-inline-flex align-center justify-center"
             aria-hidden="true"
           >
-            <v-icon
-              icon="mdi-rocket-launch"
-              color="primary"
-              size="20"
-            />
+            <v-icon icon="mdi-rocket-launch" color="primary" size="20" />
           </span>
-          <span class="brand-title text-h6 font-weight-bold">{{ APP_TITLE }}</span>
+          <span class="brand-title text-h6 font-weight-bold">{{
+            APP_TITLE
+          }}</span>
         </router-link>
 
         <v-btn
@@ -47,15 +41,15 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
-import { APP_TITLE } from '@/constants/app'
-import { useRocketStore } from '@/stores/rockets'
+import { computed } from "vue";
+import { useRoute } from "vue-router";
+import { APP_TITLE } from "@/constants/app";
+import { useRocketStore } from "@/stores/rockets";
 
-const route = useRoute()
-const { setAddDialogOpen } = useRocketStore()
+const route = useRoute();
+const { setAddDialogOpen } = useRocketStore();
 
-const isListPage = computed(() => route.path === '/')
+const isListPage = computed(() => route.path === "/");
 </script>
 
 <style scoped>
@@ -102,8 +96,12 @@ const isListPage = computed(() => route.path === '/')
         transparent 100%
       ),
       linear-gradient(#cbd5e1, #cbd5e1);
-    background-size: 220% 100%, 100% 100%;
-    background-position: 160% 0, 0 0;
+    background-size:
+      220% 100%,
+      100% 100%;
+    background-position:
+      160% 0,
+      0 0;
     background-repeat: no-repeat;
     background-clip: text;
     -webkit-background-clip: text;
@@ -115,11 +113,15 @@ const isListPage = computed(() => route.path === '/')
 
 @keyframes brand-shine {
   0% {
-    background-position: 160% 0, 0 0;
+    background-position:
+      160% 0,
+      0 0;
   }
   18%,
   100% {
-    background-position: -160% 0, 0 0;
+    background-position:
+      -160% 0,
+      0 0;
   }
 }
 

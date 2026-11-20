@@ -1,8 +1,5 @@
 <template>
-  <v-container
-    class="py-8"
-    max-width="1200"
-  >
+  <v-container class="py-8" max-width="1200">
     <RocketFilterBar
       :search-query="state.searchQuery"
       :country-filter="state.countryFilter"
@@ -36,13 +33,7 @@
 
     <!-- Loading State -->
     <v-row v-if="state.listStatus === 'loading' && rockets.length === 0">
-      <v-col
-        v-for="n in 6"
-        :key="n"
-        cols="12"
-        sm="6"
-        md="4"
-      >
+      <v-col v-for="n in 6" :key="n" cols="12" sm="6" md="4">
         <v-skeleton-loader
           type="image, article"
           class="rounded-xl skeleton-card"
@@ -52,7 +43,10 @@
 
     <!-- Empty Filter State -->
     <EmptyState
-      v-else-if="filteredRockets.length === 0 && (state.listStatus === 'success' || rockets.length > 0)"
+      v-else-if="
+        filteredRockets.length === 0 &&
+        (state.listStatus === 'success' || rockets.length > 0)
+      "
       title="No matching rockets"
       description="Try adjusting your search or filter criteria."
       action-label="Reset filters"
@@ -96,11 +90,7 @@
         >
           View
         </v-btn>
-        <v-btn
-          variant="text"
-          class="text-none"
-          @click="snackbar.open = false"
-        >
+        <v-btn variant="text" class="text-none" @click="snackbar.open = false">
           Dismiss
         </v-btn>
       </template>
@@ -109,17 +99,17 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive } from 'vue'
-import { useRouter } from 'vue-router'
-import AddRocketDialog from '@/components/AddRocketDialog.vue'
-import EmptyState from '@/components/EmptyState.vue'
-import ErrorAlert from '@/components/ErrorAlert.vue'
-import RocketCard from '@/components/RocketCard.vue'
-import RocketFilterBar from '@/components/RocketFilterBar.vue'
-import { useRocketStore } from '@/stores/rockets'
-import type { NewRocketInput } from '@/types/rocket'
+import { onMounted, reactive } from "vue";
+import { useRouter } from "vue-router";
+import AddRocketDialog from "@/components/AddRocketDialog.vue";
+import EmptyState from "@/components/EmptyState.vue";
+import ErrorAlert from "@/components/ErrorAlert.vue";
+import RocketCard from "@/components/RocketCard.vue";
+import RocketFilterBar from "@/components/RocketFilterBar.vue";
+import { useRocketStore } from "@/stores/rockets";
+import type { NewRocketInput } from "@/types/rocket";
 
-const router = useRouter()
+const router = useRouter();
 
 const {
   state,
@@ -134,33 +124,33 @@ const {
   setSortBy,
   resetFilters,
   setAddDialogOpen,
-} = useRocketStore()
+} = useRocketStore();
 
 const snackbar = reactive({
   open: false,
-  text: '',
-  rocketId: '',
-})
+  text: "",
+  rocketId: "",
+});
 
 onMounted(() => {
-  void loadRockets()
-})
+  void loadRockets();
+});
 
-function handleAddRocket (payload: NewRocketInput) {
-  const created = addRocket(payload)
-  if (!filteredRockets.value.some(r => r.id === created.id)) {
-    resetFilters()
+function handleAddRocket(payload: NewRocketInput) {
+  const created = addRocket(payload);
+  if (!filteredRockets.value.some((r) => r.id === created.id)) {
+    resetFilters();
   }
-  snackbar.text = `Added "${created.fullName}"`
-  snackbar.rocketId = created.id
-  snackbar.open = true
+  snackbar.text = `Added "${created.fullName}"`;
+  snackbar.rocketId = created.id;
+  snackbar.open = true;
 }
 
-function viewCreatedRocket () {
-  if (!snackbar.rocketId) return
-  const targetId = snackbar.rocketId
-  snackbar.open = false
-  void router.push(`/rockets/${targetId}`)
+function viewCreatedRocket() {
+  if (!snackbar.rocketId) return;
+  const targetId = snackbar.rocketId;
+  snackbar.open = false;
+  void router.push(`/rockets/${targetId}`);
 }
 </script>
 

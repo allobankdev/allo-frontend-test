@@ -11,15 +11,14 @@
         :alt="rocket.fullName"
         :height="200"
       />
-      <div
-        class="rocket-card-scrim"
-        aria-hidden="true"
-      />
+      <div class="rocket-card-scrim" aria-hidden="true" />
     </div>
 
     <v-card-item class="pt-4 pb-1 px-5">
       <div class="d-flex align-center justify-space-between ga-2">
-        <v-card-title class="rocket-card-title text-subtitle-1 font-weight-bold text-truncate pa-0">
+        <v-card-title
+          class="rocket-card-title text-subtitle-1 font-weight-bold text-truncate pa-0"
+        >
           {{ rocket.fullName }}
         </v-card-title>
         <v-chip
@@ -34,7 +33,9 @@
       </div>
     </v-card-item>
 
-    <v-card-text class="text-body-2 text-medium-emphasis pt-1 pb-5 px-5 flex-grow-1">
+    <v-card-text
+      class="text-body-2 text-medium-emphasis pt-1 pb-5 px-5 flex-grow-1"
+    >
       <p class="rocket-description mb-0">
         {{ formatDescription(rocket.description) }}
       </p>
@@ -43,13 +44,13 @@
 </template>
 
 <script setup lang="ts">
-import RocketImage from '@/components/RocketImage.vue'
-import type { Rocket } from '@/types/rocket'
-import { formatDescription } from '@/utils/formatters'
+import RocketImage from "@/components/RocketImage.vue";
+import type { Rocket } from "@/types/rocket";
+import { formatDescription } from "@/utils/formatters";
 
 defineProps<{
-  rocket: Rocket
-}>()
+  rocket: Rocket;
+}>();
 </script>
 
 <style scoped>
@@ -64,7 +65,7 @@ defineProps<{
 }
 
 .rocket-card::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;

@@ -1,20 +1,12 @@
 <template>
-  <v-sheet
-    rounded="xl"
-    class="empty-state pa-10 text-center bg-surface"
-  >
-    <div class="empty-icon-badge d-inline-flex align-center justify-center mb-4">
-      <v-icon
-        :icon="icon"
-        size="28"
-        color="primary"
-      />
+  <v-sheet rounded="xl" class="empty-state pa-10 text-center bg-surface">
+    <div
+      class="empty-icon-badge d-inline-flex align-center justify-center mb-4"
+    >
+      <v-icon :icon="icon" size="28" color="primary" />
     </div>
 
-    <component
-      :is="headingTag"
-      class="text-h6 font-weight-bold mb-1"
-    >
+    <component :is="headingTag" class="text-h6 font-weight-bold mb-1">
       {{ title }}
     </component>
 
@@ -39,28 +31,28 @@
 <script setup lang="ts">
 const props = withDefaults(
   defineProps<{
-    title: string
-    description: string
-    icon?: string
-    actionLabel?: string
-    actionTo?: string
-    headingTag?: 'h1' | 'h2'
+    title: string;
+    description: string;
+    icon?: string;
+    actionLabel?: string;
+    actionTo?: string;
+    headingTag?: "h1" | "h2";
   }>(),
   {
-    icon: 'mdi-rocket-outline',
+    icon: "mdi-rocket-outline",
     actionLabel: undefined,
     actionTo: undefined,
-    headingTag: 'h2',
+    headingTag: "h2",
   },
-)
+);
 
 const emit = defineEmits<{
-  action: []
-}>()
+  action: [];
+}>();
 
-function handleAction () {
+function handleAction() {
   if (!props.actionTo) {
-    emit('action')
+    emit("action");
   }
 }
 </script>

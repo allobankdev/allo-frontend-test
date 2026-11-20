@@ -1,19 +1,13 @@
 <template>
-  <v-alert
-    type="error"
-    variant="tonal"
-    rounded="xl"
-    class="error-alert"
-  >
-    <div class="d-flex flex-column flex-sm-row align-sm-center justify-space-between ga-4">
+  <v-alert type="error" variant="tonal" rounded="xl" class="error-alert">
+    <div
+      class="d-flex flex-column flex-sm-row align-sm-center justify-space-between ga-4"
+    >
       <div>
         <div class="text-subtitle-1 font-weight-bold">
           {{ title }}
         </div>
-        <div
-          v-if="message"
-          class="text-body-2 mt-1"
-        >
+        <div v-if="message" class="text-body-2 mt-1">
           {{ message }}
         </div>
       </div>
@@ -34,11 +28,11 @@
 
 <script setup lang="ts">
 defineProps<{
-  title: string
-  message: string | null
-}>()
+  title: string;
+  message: string | null;
+}>();
 
 defineEmits<{
-  retry: []
-}>()
+  retry: [];
+}>();
 </script>

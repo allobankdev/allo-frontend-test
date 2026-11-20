@@ -5,12 +5,7 @@
     scrim="rgba(5, 8, 13, 0.72)"
     @update:model-value="$emit('update:modelValue', $event)"
   >
-    <v-card
-      color="surface"
-      rounded="xl"
-      elevation="16"
-      class="dialog-card"
-    >
+    <v-card color="surface" rounded="xl" elevation="16" class="dialog-card">
       <div class="d-flex align-center justify-space-between px-6 py-5">
         <div class="d-flex align-center ga-3">
           <span
@@ -44,10 +39,7 @@
 
       <v-divider />
 
-      <v-form
-        ref="formRef"
-        @submit.prevent="submit"
-      >
+      <v-form ref="formRef" @submit.prevent="submit">
         <v-card-text class="px-6 py-5 d-flex flex-column ga-4">
           <v-text-field
             v-model="form.fullName"
@@ -97,17 +89,16 @@
           </div>
 
           <div class="section-divider d-flex align-center ga-3 pt-1">
-            <span class="text-caption text-medium-emphasis font-weight-medium text-no-wrap flex-shrink-0">
+            <span
+              class="text-caption text-medium-emphasis font-weight-medium text-no-wrap flex-shrink-0"
+            >
               Optional specifications
             </span>
             <v-divider class="flex-grow-1" />
           </div>
 
           <v-row dense>
-            <v-col
-              cols="12"
-              sm="6"
-            >
+            <v-col cols="12" sm="6">
               <v-text-field
                 v-model="form.launchCost"
                 label="Cost per launch"
@@ -122,10 +113,7 @@
               />
             </v-col>
 
-            <v-col
-              cols="12"
-              sm="6"
-            >
+            <v-col cols="12" sm="6">
               <v-text-field
                 v-model="form.countryCode"
                 label="Country"
@@ -137,10 +125,7 @@
               />
             </v-col>
 
-            <v-col
-              cols="12"
-              class="pt-3"
-            >
+            <v-col cols="12" class="pt-3">
               <v-text-field
                 v-model="form.maidenFlight"
                 label="First flight"
@@ -156,12 +141,7 @@
         <v-divider />
 
         <v-card-actions class="px-6 py-4 justify-end ga-2">
-          <v-btn
-            variant="text"
-            rounded="lg"
-            class="text-none"
-            @click="close"
-          >
+          <v-btn variant="text" rounded="lg" class="text-none" @click="close">
             Cancel
           </v-btn>
           <v-btn
@@ -180,86 +160,87 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref, watch } from 'vue'
-import RocketImage from '@/components/RocketImage.vue'
-import type { NewRocketInput } from '@/types/rocket'
+import { computed, reactive, ref, watch } from "vue";
+import RocketImage from "@/components/RocketImage.vue";
+import type { NewRocketInput } from "@/types/rocket";
 import {
   optionalHttpUrlRule,
   optionalNonNegativeNumberRule,
   requiredRule,
-} from '@/utils/validators'
+} from "@/utils/validators";
 
 interface FormInstance {
-  validate: () => Promise<{ valid: boolean }>
-  resetValidation: () => void
+  validate: () => Promise<{ valid: boolean }>;
+  resetValidation: () => void;
 }
 
 const props = defineProps<{
-  modelValue: boolean
-}>()
+  modelValue: boolean;
+}>();
 
 const emit = defineEmits<{
-  'update:modelValue': [value: boolean]
-  submit: [payload: NewRocketInput]
-}>()
+  "update:modelValue": [value: boolean];
+  submit: [payload: NewRocketInput];
+}>();
 
-const formRef = ref<FormInstance | null>(null)
+const formRef = ref<FormInstance | null>(null);
 
 const form = reactive({
-  fullName: '',
-  description: '',
-  imageUrl: '',
-  launchCost: '',
-  countryCode: 'USA',
-  maidenFlight: '',
-})
+  fullName: "",
+  description: "",
+  imageUrl: "",
+  launchCost: "",
+  countryCode: "USA",
+  maidenFlight: "",
+});
 
 const previewImageUrl = computed<string | null>(() => {
-  const trimmed = form.imageUrl.trim()
+  const trimmed = form.imageUrl.trim();
   if (!trimmed || optionalHttpUrlRule(trimmed) !== true) {
-    return null
+    return null;
   }
-  return trimmed
-})
+  return trimmed;
+});
 
-function resetForm () {
-  form.fullName = ''
-  form.description = ''
-  form.imageUrl = ''
-  form.launchCost = ''
-  form.countryCode = 'USA'
-  form.maidenFlight = ''
-  formRef.value?.resetValidation()
+function resetForm() {
+  form.fullName = "";
+  form.description = "";
+  form.imageUrl = "";
+  form.launchCost = "";
+  form.countryCode = "USA";
+  form.maidenFlight = "";
+  formRef.value?.resetValidation();
 }
 
 watch(
   () => props.modelValue,
   (open) => {
     if (!open) {
-      resetForm()
+      resetForm();
     }
   },
-)
+);
 
-function close () {
-  emit('update:modelValue', false)
+function close() {
+  emit("update:modelValue", false);
 }
 
-async function submit () {
-  const result = await formRef.value?.validate()
-  if (!result?.valid) return
+async function submit() {
+  const result = await formRef.value?.validate();
+  if (!result?.valid) return;
 
-  const parsedCost = form.launchCost === '' ? null : Number(form.launchCost)
+  const parsedCost = form.launchCost === "" ? null : Number(form.launchCost);
 
-  emit('submit', {
+  emit("submit", {
     fullName: form.fullName.trim(),
     description: form.description.trim(),
     imageUrl: form.imageUrl.trim() || undefined,
-    launchCost: parsedCost !== null && Number.isFinite(parsedCost) ? parsedCost : null,
+    launchCost:
+      parsedCost !== null && Number.isFinite(parsedCost) ? parsedCost : null,
     countryCode: form.countryCode.trim() || undefined,
     maidenFlight: form.maidenFlight.trim() || undefined,
-  })
-  close()
+  });
+  close();
 }
 </script>
 
