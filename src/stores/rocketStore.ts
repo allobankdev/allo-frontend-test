@@ -46,7 +46,12 @@ export const useRocketStore = defineStore('rocket', () => {
       rockets.value = [...local, ...fetched]
       status.value = 'success'
     } catch (e) {
-      if (isAbort(e)) return // cancelled on purpose, not a failure
+      if (isAbort(e)) {
+        // Cancelled on purpose (the user left the page). Go back to idle so the
+        // next visit fetches again instead of staying stuck on "loading".
+        status.value = 'idle'
+        return
+      }
       error.value = toMessage(e)
       status.value = 'error'
     }
