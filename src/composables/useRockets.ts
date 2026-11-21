@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/vue-query";
-import { computed } from "vue";
-import { fetchRockets } from "@/services/api";
-import { mapRockets } from "@/utils/";
+import { computed, toValue, type MaybeRefOrGetter } from "vue";
+import { useRocketStore } from "@/stores/rockets";
+import { fetchRocketById, fetchRockets } from "@/services/api";
+import { mapRocket, mapRockets } from "@/utils/";
 
 export const useRockets = () => {
   const query = useQuery({
@@ -15,6 +16,36 @@ export const useRockets = () => {
 
   return {
     rockets,
+    isLoading: query.isLoading,
+    isError: query.isError,
+    error: query.error,
+    refetch: query.refetch,
+  };
+};
+
+export const useRocket = (id: MaybeRefOrGetter<string>) => {
+  const rocketId = computed(() => toValue(id));
+  const store = useRocketStore();
+
+  const query = useQuery({
+    queryKey: computed(() => ["rocket", rocketId.value]),
+    queryFn: async () => {
+      const localRocket = store.getLocalRocketById(rocketId.value);
+      if (localRocket) {
+        return localRocket;
+      }
+
+      return mapRocket(await fetchRocketById(rocketId.value));
+    },
+    enabled: computed(() => Boolean(rocketId.value)),
+  });
+
+  const rocket = computed(() => {
+    return query.data.value ?? null;
+  });
+
+  return {
+    rocket,
     isLoading: query.isLoading,
     isError: query.isError,
     error: query.error,
