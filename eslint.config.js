@@ -23,6 +23,11 @@ export default [
 
   {
     rules: {
+      indent: ['error', 2],
+      semi: ["error", "never"],
+      "max-len": ["error",{"code": 250}],
+      "eol-last": ["error","always"],
+      "comma-dangle": ["error", "never"],
       '@typescript-eslint/no-unused-expressions': [
         'error',
         {

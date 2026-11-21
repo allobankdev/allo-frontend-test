@@ -5,12 +5,29 @@
  */
 
 // Composables
-import { createRouter, createWebHistory } from 'vue-router/auto'
-import { routes } from 'vue-router/auto-routes'
+import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
+
+const routes: RouteRecordRaw[] = [
+  {
+    path: '/',
+    redirect: '/rockets'
+  },
+  {
+    path: '/rockets',
+    name: 'RocketList',
+    component: () => import("@/pages/rockets/index.vue")
+  },
+  {
+    path: '/rockets/:id',
+    name: 'RocketDetail',
+    component: () => import("@/pages/rockets/[id].vue"),
+    props: true
+  }
+]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes,
+  routes
 })
 
 // Workaround for https://github.com/vitejs/vite/issues/11804
