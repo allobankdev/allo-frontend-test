@@ -1,16 +1,27 @@
 <template>
   <div
-    class="d-flex flex-column align-center justify-center py-12"
+    class="py-6"
     role="status"
   >
-    <v-progress-circular
-      color="primary"
-      indeterminate
-      size="48"
-    />
-    <p class="text-body-1 text-medium-emphasis mt-4">
+    <p class="text-body-2 text-medium-emphasis mb-4">
       {{ label }}
     </p>
+    <v-row>
+      <v-col
+        v-for="item in 4"
+        :key="item"
+        cols="12"
+        lg="3"
+        md="4"
+        sm="6"
+      >
+        <v-skeleton-loader
+          class="rounded-lg"
+          elevation="2"
+          type="card"
+        />
+      </v-col>
+    </v-row>
   </div>
 </template>
 

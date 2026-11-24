@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
-import { fetchRocketById, fetchRockets } from '@/api/rocketApi'
+import { fetchRocketById, fetchRockets, ROCKET_NOT_FOUND_MESSAGE } from '@/api/rocketApi'
 import type { LoadStatus, NewRocketInput, Rocket } from '@/types/rocket'
 import { isAbortError, toErrorMessage } from '@/utils/errorMessage'
 
@@ -105,7 +105,7 @@ export const useRocketStore = defineStore('rockets', () => {
     }
 
     if (id.startsWith('local-')) {
-      detailError.value = 'Rocket not found.'
+      detailError.value = ROCKET_NOT_FOUND_MESSAGE
       detailStatus.value = 'error'
       return
     }

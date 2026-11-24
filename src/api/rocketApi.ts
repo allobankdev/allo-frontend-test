@@ -3,6 +3,7 @@ import { mapRocketDto } from '@/utils/rocketMapper'
 
 const BASE_URL = 'https://lldev.thespacedevs.com/2.2.0'
 const INVALID_RESPONSE_MESSAGE = 'Received an invalid response from the server.'
+export const ROCKET_NOT_FOUND_MESSAGE = 'Rocket not found.'
 
 export class ApiError extends Error {
   readonly status: number
@@ -19,7 +20,7 @@ function buildErrorMessage (status: number, isDetail = false): string {
     return 'Too many requests. Please try again later.'
   }
   if (isDetail && status === 404) {
-    return 'Rocket not found.'
+    return ROCKET_NOT_FOUND_MESSAGE
   }
   return `Failed to load rockets (HTTP ${status}).`
 }
