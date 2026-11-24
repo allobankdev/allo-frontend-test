@@ -31,3 +31,14 @@ export interface Rocket {
   maidenFlight: string | null
   isLocal: boolean
 }
+
+export type LoadStatus = 'idle' | 'loading' | 'success' | 'error'
+
+export interface NewRocketInput {
+  name: string
+  description: string | null
+  imageUrl: string | null
+  launchCost: number | null
+  country: string | null
+  maidenFlight: string | null
+}

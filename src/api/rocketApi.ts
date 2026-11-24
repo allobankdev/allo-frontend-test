@@ -2,6 +2,7 @@ import type { Rocket, RocketApiDto, RocketListResponse } from '@/types/rocket'
 import { mapRocketDto } from '@/utils/rocketMapper'
 
 const BASE_URL = 'https://lldev.thespacedevs.com/2.2.0'
+const INVALID_RESPONSE_MESSAGE = 'Received an invalid response from the server.'
 
 export class ApiError extends Error {
   readonly status: number
@@ -23,6 +24,41 @@ function buildErrorMessage (status: number, isDetail = false): string {
   return `Failed to load rockets (HTTP ${status}).`
 }
 
+async function getJson<T> (url: string, signal?: AbortSignal, isDetail = false): Promise<T> {
+  let response: Response
+
+  try {
+    response = await fetch(url, {
+      signal,
+      headers: {
+        Accept: 'application/json',
+      },
+    })
+  } catch (error: unknown) {
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw error
+    }
+    throw new ApiError('Network error. Please check your connection and try again.', 0)
+  }
+
+  if (!response.ok) {
+    throw new ApiError(buildErrorMessage(response.status, isDetail), response.status)
+  }
+
+  let data: unknown
+  try {
+    data = await response.json()
+  } catch {
+    throw new ApiError(INVALID_RESPONSE_MESSAGE, 502)
+  }
+
+  if (typeof data !== 'object' || data === null) {
+    throw new ApiError(INVALID_RESPONSE_MESSAGE, 502)
+  }
+
+  return data as T
+}
+
 export async function fetchRockets (signal?: AbortSignal): Promise<Rocket[]> {
   const params = new URLSearchParams({
     manufacturer__name: 'SpaceX',
@@ -30,20 +66,17 @@ export async function fetchRockets (signal?: AbortSignal): Promise<Rocket[]> {
     limit: '20',
   })
 
-  const response = await fetch(`${BASE_URL}/config/launcher/?${params.toString()}`, {
+  const data = await getJson<RocketListResponse>(
+    `${BASE_URL}/config/launcher/?${params.toString()}`,
     signal,
-    headers: {
-      Accept: 'application/json',
-    },
-  })
+    false,
+  )
 
-  if (!response.ok) {
-    throw new ApiError(buildErrorMessage(response.status, false), response.status)
+  if (!Array.isArray(data.results)) {
+    throw new ApiError(INVALID_RESPONSE_MESSAGE, 502)
   }
 
-  const data = (await response.json()) as RocketListResponse
-  const results = Array.isArray(data.results) ? data.results : []
-  return results.map(mapRocketDto)
+  return data.results.map(mapRocketDto)
 }
 
 export async function fetchRocketById (id: string, signal?: AbortSignal): Promise<Rocket> {
@@ -52,17 +85,11 @@ export async function fetchRocketById (id: string, signal?: AbortSignal): Promis
   })
 
   const encodedId = encodeURIComponent(id)
-  const response = await fetch(`${BASE_URL}/config/launcher/${encodedId}/?${params.toString()}`, {
+  const dto = await getJson<RocketApiDto>(
+    `${BASE_URL}/config/launcher/${encodedId}/?${params.toString()}`,
     signal,
-    headers: {
-      Accept: 'application/json',
-    },
-  })
+    true,
+  )
 
-  if (!response.ok) {
-    throw new ApiError(buildErrorMessage(response.status, true), response.status)
-  }
-
-  const dto = (await response.json()) as RocketApiDto
   return mapRocketDto(dto)
 }
