@@ -4,6 +4,14 @@
       <h1 class="text-h4 font-weight-bold">
         SpaceX Rockets
       </h1>
+      <v-btn
+        color="primary"
+        :disabled="listStatus !== 'success'"
+        prepend-icon="mdi-plus"
+        @click="isAddDialogOpen = true"
+      >
+        Add rocket
+      </v-btn>
     </div>
 
     <div class="mb-6">
@@ -73,13 +81,26 @@
         </v-col>
       </v-row>
     </div>
+
+    <AddRocketDialog
+      v-model="isAddDialogOpen"
+      @submit="onAddRocket"
+    />
+
+    <v-snackbar
+      v-model="isSnackbarOpen"
+      :timeout="3000"
+    >
+      {{ snackbarMessage }}
+    </v-snackbar>
   </v-container>
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRocketStore } from '@/stores/rocketStore'
+import type { NewRocketInput } from '@/types/rocket'
 
 const rocketStore = useRocketStore()
 const {
@@ -91,12 +112,31 @@ const {
   searchQuery,
 } = storeToRefs(rocketStore)
 
+const isAddDialogOpen = ref(false)
+const isSnackbarOpen = ref(false)
+const snackbarMessage = ref('')
+
 const searchFilter = computed<string>({
   get: () => rocketStore.searchQuery,
   set: (value: string | null) => {
     rocketStore.searchQuery = value ?? ''
   },
 })
+
+function onAddRocket (input: NewRocketInput): void {
+  try {
+    const rocket = rocketStore.addLocalRocket(input)
+    isAddDialogOpen.value = false
+    rocketStore.searchQuery = ''
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    snackbarMessage.value = `"${rocket.name}" was added.`
+    isSnackbarOpen.value = true
+  } catch (error: unknown) {
+    snackbarMessage.value =
+      error instanceof Error ? error.message : 'Could not add rocket.'
+    isSnackbarOpen.value = true
+  }
+}
 
 onMounted(() => {
   void rocketStore.loadRockets()
