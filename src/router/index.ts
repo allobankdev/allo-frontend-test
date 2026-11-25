@@ -1,11 +1,10 @@
 /**
- * router/index.ts
- *
- * Automatic routes for `./src/pages/*.vue`
+ * Fungsi: Setup Vue Router otomatis dari folder src/pages/ (unplugin-vue-router).
+ *         Route `/` buat list roket, `/rockets/:id` buat detail roket.
+ * Dipakai di:
+ *  - src/plugins/index.ts (didaftarin ke app Vue)
  */
-
-// Composables
-import { createRouter, createWebHistory } from 'vue-router/auto'
+import { createRouter, createWebHistory } from 'vue-router'
 import { routes } from 'vue-router/auto-routes'
 
 const router = createRouter({
