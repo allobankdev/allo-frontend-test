@@ -1,3 +1,4 @@
+
 // Plugins
 import Components from 'unplugin-vue-components/vite'
 import Vue from '@vitejs/plugin-vue'
@@ -12,11 +13,14 @@ import { fileURLToPath, URL } from 'node:url'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    VueRouter(),
-    Vue({
-      template: { transformAssetUrls },
+    VueRouter({
+      dts: 'src/typed-router.d.ts',
     }),
-    // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#readme
+    Vue({
+      template: {
+        transformAssetUrls,
+      },
+    }),
     Vuetify({
       autoImport: true,
       styles: {
@@ -26,7 +30,7 @@ export default defineConfig({
     Components(),
     ViteFonts({
       google: {
-        families: [ {
+        families: [{
           name: 'Roboto',
           styles: 'wght@100;300;400;500;700;900',
         }],
