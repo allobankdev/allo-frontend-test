@@ -1,0 +1,55 @@
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+}
+
+.page-container {
+  width: 100%;
+  max-width: 1200px !important;
+  margin-inline: auto;
+}
+
+.app-bar {
+  border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+}
+
+.app-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: rgb(var(--v-theme-on-surface));
+}
+
+.app-main {
+  min-height: calc(100vh - 64px);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(var(--v-theme-primary), 0.12), transparent 35rem),
+    rgb(var(--v-theme-background));
+}
+
+.app-footer {
+  border-top: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+}
+
+.rocket-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  gap: 24px;
+}
+
+.state-panel {
+  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+}
+
+@media (max-width: 600px) {
+  .page-container {
+    padding-inline: 16px !important;
+  }
+}

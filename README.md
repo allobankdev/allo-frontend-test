@@ -77,3 +77,46 @@ You don’t need to worry about the detailed design, we’re not interested in y
 4.  Please complete the form to submit your technical test: [Click Here](https://forms.gle/YAbAQxPuJAdDYmRW7)
 
 Good luck with your assignment! Don't hesitate to contact us if you have any questions about the assignment process.
+
+---
+
+## Implementation notes
+
+**Stack:** Vue 3, TypeScript, Vite, Vuetify 3, Vue Router, Pinia.
+
+### Features
+
+- Rocket list with image, name, and description.
+- Search by name/description/country and filter by country.
+- Add-rocket dialog; new rockets are kept in the running app only and marked as locally added.
+- Rocket detail screen with image, name, description, cost per launch, country, and first flight.
+- Loading, error/retry, success, and empty states.
+- Graceful fallbacks for missing images, descriptions, costs, dates, and country data.
+- Responsive layout for mobile and desktop.
+
+### Commands
+
+```bash
+npm install
+npm run dev        # http://localhost:3000
+npm run type-check
+npm run lint
+npm run build
+```
+
+### Project structure
+
+```text
+src/
+├── components/    # Card, filter, form, dialog, and request-state components
+├── router/        # Explicit route definitions
+├── services/      # Launch Library 2 API client
+├── stores/        # Pinia rocket store (list, detail, local additions)
+├── styles/        # Global styles and Vuetify settings
+├── types/         # Rocket domain types
+└── views/         # Rocket list and detail screens
+```
+
+Rocket data comes from the development host `lldev.thespacedevs.com` to avoid the
+production rate limit. Local rockets live in memory, so refreshing the page
+resets them.
