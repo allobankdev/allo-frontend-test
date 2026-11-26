@@ -52,3 +52,12 @@ export interface Rocket {
   /** True for rockets added by the user in this session. */
   isCustom: boolean
 }
+
+export type NewRocketInput = Pick<Rocket, 'name'> & Partial<Omit<Rocket, 'id' | 'name' | 'isCustom'>>
+
+export type ActiveFilter = 'all' | 'active' | 'inactive'
+
+export interface RocketFilters {
+  search: string
+  active: ActiveFilter
+}
