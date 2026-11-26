@@ -5,14 +5,16 @@
  */
 
 // Plugins
-import vuetify from './vuetify'
+import { createPinia } from 'pinia'
 import router from '../router'
+import vuetify from './vuetify'
 
 // Types
 import type { App } from 'vue'
 
-export function registerPlugins (app: App) {
+export function registerPlugins(app: App) {
   app
+    .use(createPinia())
     .use(vuetify)
     .use(router)
 }
