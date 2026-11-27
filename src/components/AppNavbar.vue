@@ -2,53 +2,51 @@
   <v-app-bar
     color="#0a101d"
     elevation="2"
-    class="px-md-4 border-b-subtle"
+    density="comfortable"
+    class="px-2 px-sm-4 border-b-subtle"
   >
-    <template #prepend>
+    <div
+      class="d-flex align-center cursor-pointer flex-shrink-0 mr-auto"
+      @click="goToHome"
+    >
       <v-avatar
         color="#ffbc25"
-        size="38"
-        class="mr-3"
+        size="36"
+        class="mr-2 mr-sm-3 flex-shrink-0"
       >
         <v-icon
           icon="mdi-rocket-launch"
           color="#0a101d"
-          size="22"
+          size="20"
         />
       </v-avatar>
-    </template>
 
-    <v-app-bar-title
-      class="cursor-pointer"
-      @click="goToHome"
-    >
-      <div class="d-flex align-center">
-        <span class="text-h6 font-weight-bold text-white font-montserrat">Allo Space</span>
-        <v-chip
-          size="x-small"
-          color="#ffbc25"
-          class="ml-2 font-weight-bold text-black"
-          variant="flat"
-        >
-          SpaceX Fleet
-        </v-chip>
-      </div>
-    </v-app-bar-title>
+      <span class="text-subtitle-1 text-sm-h6 font-weight-bold text-white font-montserrat text-no-wrap">
+        Allo Space
+      </span>
 
-    <v-spacer />
-
-    <div class="d-flex align-center ga-2">
-      <v-btn
-        prepend-icon="mdi-plus-circle"
+      <v-chip
+        size="x-small"
         color="#ffbc25"
-        variant="elevated"
-        class="font-weight-bold text-black rounded-lg"
-        @click="$emit('open-add-dialog')"
+        class="ml-2 font-weight-bold text-black d-none d-sm-inline-flex"
+        variant="flat"
       >
-        <span class="d-none d-sm-inline">Add Rocket</span>
-        <span class="d-inline d-sm-none">Add</span>
-      </v-btn>
+        SpaceX Fleet
+      </v-chip>
     </div>
+
+    <v-btn
+      prepend-icon="mdi-plus"
+      color="#ffbc25"
+      variant="elevated"
+      size="small"
+      class="font-weight-bold text-black rounded-lg text-no-wrap ml-2"
+      height="36"
+      @click="$emit('open-add-dialog')"
+    >
+      <span class="d-none d-sm-inline">Add Rocket</span>
+      <span class="d-inline d-sm-none">Add</span>
+    </v-btn>
   </v-app-bar>
 </template>
 

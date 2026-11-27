@@ -30,7 +30,7 @@
       <v-col
         cols="12"
         md="6"
-        class="d-flex align-center justify-md-end flex-wrap ga-2 mt-2 mt-md-0"
+        class="d-flex align-center justify-start justify-md-end flex-wrap ga-2 mt-2 mt-md-0"
       >
         <span class="text-caption text-grey-lighten-1 mr-1">Filter:</span>
         <v-chip-group

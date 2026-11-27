@@ -4,14 +4,14 @@
     max-width="1280"
   >
     <!-- Header Hero Banner -->
-    <div class="mb-8 text-center text-md-left">
+    <div class="mb-6 mb-md-8 text-left">
       <div class="d-flex flex-column flex-md-row justify-space-between align-md-center ga-4">
         <div>
-          <h1 class="text-h4 text-md-h3 font-weight-bold text-white mb-2 tracking-tight">
+          <h1 class="text-h5 text-sm-h4 text-md-h3 font-weight-bold text-white mb-2 tracking-tight">
             SpaceX Launch Vehicles
           </h1>
           <p
-            class="text-subtitle-1 text-grey-lighten-1"
+            class="text-body-2 text-sm-subtitle-1 text-grey-lighten-1"
             style="max-width: 680px;"
           >
             Explore SpaceX rocket configurations powered by The Space Devs Launch Library 2 API.
@@ -19,13 +19,13 @@
           </p>
         </div>
 
-        <div class="d-flex align-center justify-center justify-md-end ga-3">
+        <div class="d-flex align-center justify-start justify-md-end flex-wrap ga-2 ga-sm-3">
           <v-btn
             color="#ffbc25"
             variant="elevated"
             prepend-icon="mdi-plus"
-            height="44"
-            class="font-weight-bold text-black px-5 rounded-lg"
+            height="42"
+            class="font-weight-bold text-black px-4 px-sm-5 rounded-lg flex-grow-1 flex-sm-grow-0"
             @click="rocketStore.openAddDialog()"
           >
             Add New Rocket
@@ -34,9 +34,9 @@
             icon="mdi-refresh"
             variant="tonal"
             color="grey-lighten-2"
-            height="44"
-            width="44"
-            class="rounded-lg"
+            height="42"
+            width="42"
+            class="rounded-lg flex-shrink-0"
             :loading="rocketStore.isLoading"
             title="Refresh from API"
             @click="rocketStore.fetchRockets(true)"

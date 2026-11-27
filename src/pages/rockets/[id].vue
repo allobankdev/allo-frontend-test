@@ -66,7 +66,7 @@
           >
             <v-img
               :src="imageSrc"
-              height="400"
+              :height="$vuetify.display.smAndDown ? 260 : 420"
               cover
               class="bg-grey-darken-3 h-100"
               @error="handleImageError"
@@ -87,7 +87,7 @@
           <v-col
             cols="12"
             md="6"
-            class="pa-6 pa-md-8 d-flex flex-column justify-space-between"
+            class="pa-4 pa-sm-6 pa-md-8 d-flex flex-column justify-space-between"
           >
             <div>
               <div class="d-flex align-center flex-wrap ga-2 mb-3">
