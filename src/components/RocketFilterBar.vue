@@ -12,6 +12,7 @@
         density="comfortable"
         hide-details
         label="Search rockets by name or description"
+        :loading="isSearching"
         :model-value="search"
         prepend-inner-icon="mdi-magnify"
         variant="outlined"
@@ -57,12 +58,15 @@
 <script lang="ts" setup>
   export type RocketStatusFilter = 'all' | 'active' | 'inactive'
 
-  defineProps<{
+  withDefaults(defineProps<{
     search: string
     selectedFamily: string | null
     statusFilter: RocketStatusFilter
     families: string[]
-  }>()
+    isSearching?: boolean
+  }>(), {
+    isSearching: false,
+  })
 
   defineEmits<{
     'update:search': [value: string]

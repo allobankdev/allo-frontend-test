@@ -108,6 +108,7 @@
         v-model:selected-family="selectedFamily"
         v-model:status-filter="statusFilter"
         :families="store.availableFamilies"
+        :is-searching="isSearching"
       />
 
       <p class="text-body-2 text-medium-emphasis mb-4">
@@ -161,7 +162,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, onMounted, ref } from 'vue'
+  import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
   import AddRocketDialog from '@/components/AddRocketDialog.vue'
   import RocketCard from '@/components/RocketCard.vue'
   import RocketFilterBar, { type RocketStatusFilter } from '@/components/RocketFilterBar.vue'
@@ -172,12 +173,25 @@
   const store = useRocketStore()
 
   const searchQuery = ref('')
+  const debouncedSearchQuery = ref('')
+  const isSearching = computed(() => searchQuery.value !== debouncedSearchQuery.value)
   const selectedFamily = ref<string | null>(null)
   const statusFilter = ref<RocketStatusFilter>('all')
   const isAddDialogOpen = ref(false)
 
+  let searchDebounceTimer: ReturnType<typeof setTimeout> | null = null
+
+  watch(searchQuery, newValue => {
+    if (searchDebounceTimer) {
+      clearTimeout(searchDebounceTimer)
+    }
+    searchDebounceTimer = setTimeout(() => {
+      debouncedSearchQuery.value = newValue
+    }, 500)
+  })
+
   const filteredRockets = computed(() => {
-    const query = searchQuery.value.trim().toLowerCase()
+    const query = debouncedSearchQuery.value.trim().toLowerCase()
 
     return store.allRockets.filter(rocket => {
       const matchesSearch = !query
@@ -196,7 +210,11 @@
   })
 
   function resetFilters () {
+    if (searchDebounceTimer) {
+      clearTimeout(searchDebounceTimer)
+    }
     searchQuery.value = ''
+    debouncedSearchQuery.value = ''
     selectedFamily.value = null
     statusFilter.value = 'all'
   }
@@ -207,5 +225,11 @@
 
   onMounted(() => {
     store.loadRockets()
+  })
+
+  onUnmounted(() => {
+    if (searchDebounceTimer) {
+      clearTimeout(searchDebounceTimer)
+    }
   })
 </script>
