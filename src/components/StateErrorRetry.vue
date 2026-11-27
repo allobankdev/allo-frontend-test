@@ -1,30 +1,36 @@
 <template>
-  <v-sheet
-    border
-    class="pa-8 text-center mx-auto my-8"
-    max-width="480"
-    rounded="lg"
+  <div
+    class="d-flex align-center justify-center"
+    style="min-height: 60vh;"
   >
-    <v-icon
-      color="error"
-      icon="mdi-alert-circle-outline"
-      size="56"
-    />
-    <h2 class="text-h6 mt-4 mb-2">
-      {{ title }}
-    </h2>
-    <p class="text-body-2 text-medium-emphasis mb-6">
-      {{ message || 'Something went wrong while fetching data.' }}
-    </p>
-    <v-btn
-      color="primary"
-      prepend-icon="mdi-refresh"
-      variant="flat"
-      @click="$emit('retry')"
+    <v-sheet
+      border
+      class="pa-8 text-center"
+      max-width="480"
+      rounded="lg"
+      width="100%"
     >
-      Retry
-    </v-btn>
-  </v-sheet>
+      <v-icon
+        color="error"
+        icon="mdi-alert-circle-outline"
+        size="56"
+      />
+      <h2 class="text-h6 mt-4 mb-2">
+        {{ title }}
+      </h2>
+      <p class="text-body-2 text-medium-emphasis mb-6">
+        {{ message || 'Something went wrong while fetching data.' }}
+      </p>
+      <v-btn
+        color="primary"
+        prepend-icon="mdi-refresh"
+        variant="flat"
+        @click="$emit('retry')"
+      >
+        Retry
+      </v-btn>
+    </v-sheet>
+  </div>
 </template>
 
 <script lang="ts" setup>

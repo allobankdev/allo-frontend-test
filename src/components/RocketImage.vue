@@ -2,6 +2,7 @@
   <v-img
     v-if="src && !hasError"
     :alt="alt"
+    class="flex-grow-0 flex-shrink-0"
     cover
     :height="height"
     :src="src"
@@ -20,7 +21,7 @@
 
   <div
     v-else
-    class="d-flex flex-column align-center justify-center bg-surface-variant text-medium-emphasis"
+    class="d-flex flex-column align-center justify-center bg-surface-variant text-medium-emphasis flex-grow-0 flex-shrink-0"
     :style="{ height: typeof height === 'number' ? `${height}px` : height }"
   >
     <v-icon
