@@ -19,13 +19,13 @@
           </p>
         </div>
 
-        <div class="d-flex justify-center justify-md-end ga-2">
+        <div class="d-flex align-center justify-center justify-md-end ga-3">
           <v-btn
             color="amber"
             variant="elevated"
             prepend-icon="mdi-plus"
-            size="large"
-            class="font-weight-bold"
+            height="44"
+            class="font-weight-bold px-5 rounded-lg"
             @click="rocketStore.openAddDialog()"
           >
             Add New Rocket
@@ -34,7 +34,9 @@
             icon="mdi-refresh"
             variant="tonal"
             color="grey-lighten-2"
-            size="large"
+            height="44"
+            width="44"
+            class="rounded-lg"
             :loading="rocketStore.isLoading"
             title="Refresh from API"
             @click="rocketStore.fetchRockets(true)"
