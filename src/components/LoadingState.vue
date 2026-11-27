@@ -2,7 +2,7 @@
   <div class="py-12 text-center">
     <v-progress-circular
       indeterminate
-      color="amber"
+      color="#ffbc25"
       size="64"
       width="6"
       class="mb-4"

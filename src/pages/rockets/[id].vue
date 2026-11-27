@@ -6,10 +6,10 @@
     <!-- Breadcrumbs / Back button -->
     <div class="mb-6 d-flex align-center justify-space-between">
       <v-btn
-        variant="tonal"
-        color="amber"
+        variant="elevated"
+        color="#ffbc25"
         prepend-icon="mdi-arrow-left"
-        class="font-weight-bold"
+        class="font-weight-bold text-black rounded-lg px-4"
         @click="goBack"
       >
         Back to Rocket List
@@ -19,7 +19,7 @@
         v-if="rocket"
         icon="mdi-refresh"
         variant="text"
-        color="grey-lighten-1"
+        color="#8b95a5"
         :loading="rocketStore.isLoadingDetail"
         title="Refresh details"
         @click="loadData(true)"
@@ -55,7 +55,7 @@
     <div v-else-if="rocket">
       <!-- Main Rocket Banner Card -->
       <v-card
-        class="rounded-xl overflow-hidden mb-6 bg-grey-darken-4"
+        class="rounded-xl overflow-hidden mb-6 bg-allo-card border-subtle"
         elevation="6"
       >
         <v-row no-gutters>
@@ -75,7 +75,7 @@
                 <div class="d-flex align-center justify-center fill-height bg-grey-darken-3">
                   <v-progress-circular
                     indeterminate
-                    color="amber"
+                    color="#ffbc25"
                     size="48"
                   />
                 </div>
@@ -93,16 +93,16 @@
               <div class="d-flex align-center flex-wrap ga-2 mb-3">
                 <v-chip
                   v-if="rocket.is_local"
-                  color="purple-accent-2"
+                  color="#ffbc25"
                   variant="flat"
                   size="small"
-                  class="font-weight-bold"
+                  class="font-weight-bold text-black"
                 >
                   Custom Added
                 </v-chip>
                 <v-chip
                   v-if="rocket.active !== undefined"
-                  :color="rocket.active ? 'green-accent-3' : 'grey'"
+                  :color="rocket.active ? '#17a16e' : '#8b95a5'"
                   variant="flat"
                   size="small"
                   class="font-weight-bold"
@@ -111,7 +111,7 @@
                 </v-chip>
                 <v-chip
                   v-if="rocket.reusable !== undefined"
-                  :color="rocket.reusable ? 'light-blue-accent-3' : 'grey-darken-1'"
+                  :color="rocket.reusable ? '#216ba5' : '#626b79'"
                   variant="tonal"
                   size="small"
                 >
@@ -120,7 +120,7 @@
               </div>
 
               <!-- Required: Rocket Name -->
-              <h1 class="text-h4 text-md-h3 font-weight-bold text-white mb-2">
+              <h1 class="text-h4 text-md-h3 font-weight-bold text-white mb-2 font-montserrat">
                 {{ rocket.full_name || rocket.name || 'Unnamed Rocket' }}
               </h1>
 
@@ -128,7 +128,7 @@
                 <v-icon
                   icon="mdi-factory"
                   size="20"
-                  class="mr-2 text-amber"
+                  class="mr-2 text-allo-yellow"
                 />
                 <span>{{ rocket.manufacturer?.name || 'SpaceX' }}</span>
               </div>
@@ -189,24 +189,24 @@
           md="4"
         >
           <v-card
-            class="pa-5 rounded-xl h-100 bg-grey-darken-4 border-subtle"
+            class="pa-5 rounded-xl h-100 bg-allo-card border-subtle"
             elevation="2"
           >
             <div class="d-flex align-center mb-2">
               <v-avatar
-                color="green-darken-4"
+                color="#17a16e"
                 size="36"
                 class="mr-3"
               >
                 <v-icon
                   icon="mdi-currency-usd"
-                  color="green-accent-3"
+                  color="#ffffff"
                   size="20"
                 />
               </v-avatar>
               <span class="text-caption text-grey text-uppercase font-weight-bold">Cost Per Launch</span>
             </div>
-            <div class="text-h6 font-weight-bold text-white">
+            <div class="text-h6 font-weight-bold text-white font-montserrat">
               {{ formattedCost }}
             </div>
             <div class="text-caption text-grey-darken-1 mt-1">
@@ -222,24 +222,24 @@
           md="4"
         >
           <v-card
-            class="pa-5 rounded-xl h-100 bg-grey-darken-4 border-subtle"
+            class="pa-5 rounded-xl h-100 bg-allo-card border-subtle"
             elevation="2"
           >
             <div class="d-flex align-center mb-2">
               <v-avatar
-                color="blue-darken-4"
+                color="#216ba5"
                 size="36"
                 class="mr-3"
               >
                 <v-icon
                   icon="mdi-earth"
-                  color="light-blue-accent-3"
+                  color="#ffffff"
                   size="20"
                 />
               </v-avatar>
               <span class="text-caption text-grey text-uppercase font-weight-bold">Country</span>
             </div>
-            <div class="text-h6 font-weight-bold text-white">
+            <div class="text-h6 font-weight-bold text-white font-montserrat">
               {{ countryText }}
             </div>
             <div class="text-caption text-grey-darken-1 mt-1">
@@ -255,24 +255,24 @@
           md="4"
         >
           <v-card
-            class="pa-5 rounded-xl h-100 bg-grey-darken-4 border-subtle"
+            class="pa-5 rounded-xl h-100 bg-allo-card border-subtle"
             elevation="2"
           >
             <div class="d-flex align-center mb-2">
               <v-avatar
-                color="amber-darken-4"
+                color="#ffbc25"
                 size="36"
                 class="mr-3"
               >
                 <v-icon
                   icon="mdi-calendar-star"
-                  color="amber-accent-2"
+                  color="#0a101d"
                   size="20"
                 />
               </v-avatar>
               <span class="text-caption text-grey text-uppercase font-weight-bold">First Flight (Maiden)</span>
             </div>
-            <div class="text-h6 font-weight-bold text-white">
+            <div class="text-h6 font-weight-bold text-white font-montserrat">
               {{ formattedMaidenFlight }}
             </div>
             <div class="text-caption text-grey-darken-1 mt-1">
@@ -287,11 +287,11 @@
           md="3"
         >
           <v-card
-            class="pa-4 rounded-xl h-100 bg-grey-darken-4 border-subtle"
+            class="pa-4 rounded-xl h-100 bg-allo-card border-subtle"
             elevation="1"
           >
             <span class="text-caption text-grey text-uppercase font-weight-medium">Length</span>
-            <div class="text-subtitle-1 font-weight-bold text-white mt-1">
+            <div class="text-subtitle-1 font-weight-bold text-white mt-1 font-montserrat">
               {{ rocket.length ? `${rocket.length} m` : 'N/A' }}
             </div>
           </v-card>
@@ -303,11 +303,11 @@
           md="3"
         >
           <v-card
-            class="pa-4 rounded-xl h-100 bg-grey-darken-4 border-subtle"
+            class="pa-4 rounded-xl h-100 bg-allo-card border-subtle"
             elevation="1"
           >
             <span class="text-caption text-grey text-uppercase font-weight-medium">Diameter</span>
-            <div class="text-subtitle-1 font-weight-bold text-white mt-1">
+            <div class="text-subtitle-1 font-weight-bold text-white mt-1 font-montserrat">
               {{ rocket.diameter ? `${rocket.diameter} m` : 'N/A' }}
             </div>
           </v-card>
@@ -319,11 +319,11 @@
           md="3"
         >
           <v-card
-            class="pa-4 rounded-xl h-100 bg-grey-darken-4 border-subtle"
+            class="pa-4 rounded-xl h-100 bg-allo-card border-subtle"
             elevation="1"
           >
             <span class="text-caption text-grey text-uppercase font-weight-medium">Launch Mass</span>
-            <div class="text-subtitle-1 font-weight-bold text-white mt-1">
+            <div class="text-subtitle-1 font-weight-bold text-white mt-1 font-montserrat">
               {{ rocket.launch_mass ? `${rocket.launch_mass.toLocaleString()} T` : 'N/A' }}
             </div>
           </v-card>
@@ -335,11 +335,11 @@
           md="3"
         >
           <v-card
-            class="pa-4 rounded-xl h-100 bg-grey-darken-4 border-subtle"
+            class="pa-4 rounded-xl h-100 bg-allo-card border-subtle"
             elevation="1"
           >
             <span class="text-caption text-grey text-uppercase font-weight-medium">LEO Payload</span>
-            <div class="text-subtitle-1 font-weight-bold text-white mt-1">
+            <div class="text-subtitle-1 font-weight-bold text-white mt-1 font-montserrat">
               {{ rocket.leo_capacity ? `${rocket.leo_capacity.toLocaleString()} kg` : 'N/A' }}
             </div>
           </v-card>
@@ -421,7 +421,16 @@ function goBack() {
 </script>
 
 <style scoped>
+.bg-allo-card {
+  background-color: #131c2e !important;
+}
 .border-subtle {
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+.text-allo-yellow {
+  color: #ffbc25 !important;
+}
+.font-montserrat {
+  font-family: 'Montserrat', sans-serif !important;
 }
 </style>

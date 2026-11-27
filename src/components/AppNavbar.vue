@@ -1,18 +1,19 @@
 <template>
   <v-app-bar
-    color="#0B132B"
-    elevation="3"
-    class="px-md-4"
+    color="#0a101d"
+    elevation="2"
+    class="px-md-4 border-b-subtle"
   >
     <template #prepend>
       <v-avatar
-        color="deep-purple-darken-3"
-        size="40"
+        color="#ffbc25"
+        size="38"
         class="mr-3"
       >
         <v-icon
           icon="mdi-rocket-launch"
-          color="amber"
+          color="#0a101d"
+          size="22"
         />
       </v-avatar>
     </template>
@@ -22,11 +23,11 @@
       @click="goToHome"
     >
       <div class="d-flex align-center">
-        <span class="text-h6 font-weight-bold text-white tracking-wide">Allo Space</span>
+        <span class="text-h6 font-weight-bold text-white font-montserrat">Allo Space</span>
         <v-chip
           size="x-small"
-          color="amber"
-          class="ml-2 font-weight-medium"
+          color="#ffbc25"
+          class="ml-2 font-weight-bold text-black"
           variant="flat"
         >
           SpaceX Fleet
@@ -39,9 +40,9 @@
     <div class="d-flex align-center ga-2">
       <v-btn
         prepend-icon="mdi-plus-circle"
-        color="amber"
+        color="#ffbc25"
         variant="elevated"
-        class="font-weight-bold"
+        class="font-weight-bold text-black rounded-lg"
         @click="$emit('open-add-dialog')"
       >
         <span class="d-none d-sm-inline">Add Rocket</span>
@@ -69,7 +70,11 @@ function goToHome() {
 .cursor-pointer {
   cursor: pointer;
 }
-.tracking-wide {
-  letter-spacing: 0.05em;
+.font-montserrat {
+  font-family: 'Montserrat', sans-serif !important;
+  letter-spacing: -0.01em;
+}
+.border-b-subtle {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
 </style>

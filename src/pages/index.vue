@@ -21,11 +21,11 @@
 
         <div class="d-flex align-center justify-center justify-md-end ga-3">
           <v-btn
-            color="amber"
+            color="#ffbc25"
             variant="elevated"
             prepend-icon="mdi-plus"
             height="44"
-            class="font-weight-bold px-5 rounded-lg"
+            class="font-weight-bold text-black px-5 rounded-lg"
             @click="rocketStore.openAddDialog()"
           >
             Add New Rocket

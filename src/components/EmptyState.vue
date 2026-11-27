@@ -25,9 +25,10 @@
 
     <v-btn
       v-if="showReset"
-      color="amber"
+      color="#ffbc25"
       variant="outlined"
       prepend-icon="mdi-filter-remove-outline"
+      class="rounded-lg font-weight-bold"
       @click="$emit('reset')"
     >
       Reset Filters

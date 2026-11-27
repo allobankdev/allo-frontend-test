@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class="pa-4 rounded-xl mb-6 bg-grey-darken-4"
+    class="pa-4 rounded-xl mb-6 bg-allo-card border-subtle"
     elevation="2"
   >
     <v-row
@@ -21,7 +21,7 @@
           density="comfortable"
           clearable
           hide-details
-          color="amber"
+          color="#ffbc25"
           @update:model-value="onSearchUpdate"
         />
       </v-col>
@@ -36,7 +36,7 @@
         <v-chip-group
           v-model="filterSelection"
           mandatory
-          selected-class="text-amber"
+          selected-class="text-allo-yellow font-weight-bold"
           @update:model-value="onFilterUpdate"
         >
           <v-chip
@@ -44,6 +44,7 @@
             variant="tonal"
             size="small"
             filter
+            color="#ffbc25"
           >
             All ({{ totalCount }})
           </v-chip>
@@ -52,7 +53,7 @@
             variant="tonal"
             size="small"
             filter
-            color="green"
+            color="#17a16e"
           >
             Active
           </v-chip>
@@ -61,7 +62,7 @@
             variant="tonal"
             size="small"
             filter
-            color="blue"
+            color="#216ba5"
           >
             Reusable
           </v-chip>
@@ -78,7 +79,7 @@
         v-if="hasActiveFilter"
         variant="text"
         size="x-small"
-        color="amber"
+        color="#ffbc25"
         prepend-icon="mdi-close"
         @click="resetFilters"
       >
@@ -125,6 +126,15 @@ function resetFilters() {
 </script>
 
 <style scoped>
+.bg-allo-card {
+  background-color: #131c2e !important;
+}
+.border-subtle {
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+.text-allo-yellow {
+  color: #ffbc25 !important;
+}
 .border-t {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }

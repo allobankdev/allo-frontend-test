@@ -5,23 +5,23 @@
     persistent
   >
     <v-card
-      class="rounded-xl pa-2 bg-grey-darken-4"
+      class="rounded-xl pa-2 bg-allo-card border-subtle"
       elevation="10"
     >
       <v-card-title class="d-flex align-center justify-space-between pt-4 px-4">
         <div class="d-flex align-center">
           <v-avatar
-            color="amber"
+            color="#ffbc25"
             size="36"
             class="mr-3"
           >
             <v-icon
               icon="mdi-rocket-launch"
-              color="black"
+              color="#0a101d"
               size="20"
             />
           </v-avatar>
-          <span class="text-h6 font-weight-bold text-white">Add New Rocket</span>
+          <span class="text-h6 font-weight-bold text-white font-montserrat">Add New Rocket</span>
         </div>
         <v-btn
           icon="mdi-close"
@@ -48,7 +48,7 @@
             placeholder="e.g. Starship Block 2"
             variant="outlined"
             density="comfortable"
-            color="amber"
+            color="#ffbc25"
             :rules="[rules.required]"
             prepend-inner-icon="mdi-rocket"
             class="mb-2"
@@ -61,7 +61,7 @@
             placeholder="Overview of the launch vehicle, capabilities, and purpose..."
             variant="outlined"
             density="comfortable"
-            color="amber"
+            color="#ffbc25"
             rows="3"
             prepend-inner-icon="mdi-text-box-outline"
             class="mb-2"
@@ -79,7 +79,7 @@
                 placeholder="e.g. 50000000"
                 variant="outlined"
                 density="comfortable"
-                color="amber"
+                color="#ffbc25"
                 type="number"
                 prefix="$"
                 prepend-inner-icon="mdi-currency-usd"
@@ -98,7 +98,7 @@
                 placeholder="e.g. USA"
                 variant="outlined"
                 density="comfortable"
-                color="amber"
+                color="#ffbc25"
                 prepend-inner-icon="mdi-earth"
                 class="mb-2"
               />
@@ -117,7 +117,7 @@
                 type="date"
                 variant="outlined"
                 density="comfortable"
-                color="amber"
+                color="#ffbc25"
                 prepend-inner-icon="mdi-calendar"
                 class="mb-2"
               />
@@ -134,7 +134,7 @@
                 placeholder="https://..."
                 variant="outlined"
                 density="comfortable"
-                color="amber"
+                color="#ffbc25"
                 prepend-inner-icon="mdi-image"
                 class="mb-2"
               />
@@ -154,10 +154,10 @@
           Cancel
         </v-btn>
         <v-btn
-          color="amber"
+          color="#ffbc25"
           variant="elevated"
           prepend-icon="mdi-plus"
-          class="font-weight-bold"
+          class="font-weight-bold text-black rounded-lg"
           :disabled="!isFormValid"
           @click="submit"
         >
@@ -229,3 +229,15 @@ function submit() {
   close()
 }
 </script>
+
+<style scoped>
+.bg-allo-card {
+  background-color: #131c2e !important;
+}
+.border-subtle {
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+.font-montserrat {
+  font-family: 'Montserrat', sans-serif !important;
+}
+</style>

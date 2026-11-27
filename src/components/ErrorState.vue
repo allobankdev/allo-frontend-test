@@ -1,8 +1,7 @@
 <template>
   <v-card
-    class="mx-auto my-8 pa-6 rounded-xl border border-red-darken-4"
+    class="mx-auto my-8 pa-6 rounded-xl border border-red-darken-4 bg-allo-card"
     max-width="600"
-    color="grey-darken-4"
     elevation="4"
   >
     <div class="text-center">
@@ -28,11 +27,11 @@
 
       <div class="d-flex justify-center ga-3">
         <v-btn
-          color="amber"
+          color="#ffbc25"
           variant="elevated"
           prepend-icon="mdi-refresh"
           size="large"
-          class="font-weight-bold"
+          class="font-weight-bold text-black rounded-lg px-6"
           @click="$emit('retry')"
         >
           Try Again
@@ -60,3 +59,9 @@ defineEmits<{
   (e: 'retry'): void
 }>()
 </script>
+
+<style scoped>
+.bg-allo-card {
+  background-color: #131c2e !important;
+}
+</style>
