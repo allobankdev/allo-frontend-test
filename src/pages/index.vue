@@ -1,6 +1,78 @@
 <template>
   <v-container class="py-6">
-    <div class="d-flex flex-wrap align-center justify-space-between ga-4 mb-6">
+    <!-- Loading State -->
+    <template v-if="store.listStatus === 'loading' || store.listStatus === 'idle'">
+      <div class="d-flex flex-wrap align-center justify-space-between ga-4 mb-6">
+        <div style="width: 100%; max-width: 340px;">
+          <v-skeleton-loader
+            class="bg-transparent"
+            type="heading, text"
+          />
+        </div>
+
+        <v-skeleton-loader
+          class="bg-transparent"
+          type="button"
+          width="140"
+        />
+      </div>
+
+      <v-row class="mb-4">
+        <v-col
+          cols="12"
+          md="6"
+        >
+          <v-skeleton-loader
+            height="48"
+            rounded="lg"
+            type="ossein"
+          />
+        </v-col>
+        <v-col
+          cols="12"
+          md="3"
+          sm="6"
+        >
+          <v-skeleton-loader
+            height="48"
+            rounded="lg"
+            type="ossein"
+          />
+        </v-col>
+        <v-col
+          cols="12"
+          md="3"
+          sm="6"
+        >
+          <v-skeleton-loader
+            height="48"
+            rounded="lg"
+            type="ossein"
+          />
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col
+          v-for="n in 6"
+          :key="n"
+          cols="12"
+          md="4"
+          sm="6"
+        >
+          <v-skeleton-loader
+            rounded="lg"
+            type="image, article"
+          />
+        </v-col>
+      </v-row>
+    </template>
+
+    <!-- Header (tampil saat bukan loading) -->
+    <div
+      v-else
+      class="d-flex flex-wrap align-center justify-space-between ga-4 mb-6"
+    >
       <div>
         <h1 class="text-h4 font-weight-bold">
           SpaceX Rockets
@@ -11,6 +83,7 @@
       </div>
 
       <v-btn
+        v-if="store.listStatus === 'success'"
         color="primary"
         prepend-icon="mdi-plus"
         variant="flat"
@@ -20,25 +93,9 @@
       </v-btn>
     </div>
 
-    <!-- Loading State -->
-    <v-row v-if="store.listStatus === 'loading'">
-      <v-col
-        v-for="n in 6"
-        :key="n"
-        cols="12"
-        md="4"
-        sm="6"
-      >
-        <v-skeleton-loader
-          rounded="lg"
-          type="image, article"
-        />
-      </v-col>
-    </v-row>
-
     <!-- Error / Retry State -->
     <StateErrorRetry
-      v-else-if="store.listStatus === 'error'"
+      v-if="store.listStatus === 'error'"
       :message="store.listError"
       title="Failed to load rockets"
       @retry="store.loadRockets(true)"
@@ -97,6 +154,7 @@
 
     <AddRocketDialog
       v-model="isAddDialogOpen"
+      :families="store.availableFamilies"
       @submit="handleAddRocket"
     />
   </v-container>
